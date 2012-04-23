@@ -30,7 +30,7 @@ module SDK
     # Converts values to symbols
     new_entry.collect! { |x| (x.is_a?(Symbol) ? x : x.to_s.to_sym) }
     # Enters into registry
-    @aliases[@last_script] = [] unless @aliases.has_key?(@last_script)
+    @aliases[@last_script] ||= []
     @aliases[@last_script] << value
   end
   #--------------------------------------------------------------------------
@@ -40,12 +40,12 @@ module SDK
     new_entry = [classname, methodname]
     # Converts values to symbols
     new_entry.collect! { |x| (x.is_a?(Symbol) ? x : x.to_s.to_sym)}
-    # Creates new entry
-    @overwrites[@last_script] = [] unless @overwrites.has_key?(@last_script)
+    @overwrites[@last_script] ||= []
     # Don't register if this overwrite has already been logged
-    return if @overwrites[@last_script].include?(value)
-    # Enters into registry
-    @overwrites[@last_script] << value
+    unless @overwrites[@last_script].include?(value)
+      # Enters into registry
+      @overwrites[@last_script] << value
+    end
   end
   #--------------------------------------------------------------------------
   # Enables the passed script
@@ -79,27 +79,10 @@ module SDK
     # Checks version
     missing_reqs[0] = version unless VERSION >= version
     # Checks required scripts
-    if scripts.is_a?(String)
-      unless self.enabled?(scripts)
+    for script in scripts
+      unless self.enabled?(script)
         missing_reqs[2] = [] unless missing_reqs.has_key?(2)
-        missing_reqs[2] << scripts
-      end
-    elsif scripts.is_a?(Array)
-      for script in scripts
-        unless self.enabled?(script)
-          missing_reqs[2] = [] unless missing_reqs.has_key?(2)
-          missing_reqs[2] << script
-        end
-      end
-    elsif scripts.is_a?(Hash)
-      scripts.each do |script, v|
-        if self.enabled?(script) == false
-          missing_reqs[2] = [] unless missing_reqs.has_key?(2)
-          missing_reqs[2] << script
-        elsif self.enabled?(script, v) == false
-          missing_reqs[3] = {} unless missing_reqs.has_key?(3)
-          missing_reqs[3][script] = v
-        end
+        missing_reqs[2] << script
       end
     end
     if missing_reqs.size > 0
