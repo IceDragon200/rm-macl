@@ -6,7 +6,7 @@
 class Game_Event
   
   #--------------------------------------------------------------------------
-  # Scan's the event's commencts for 'term'. May be Regexp or String.
+  # Scan's the event's comments for 'term'. May be Regexp or String.
   #--------------------------------------------------------------------------
   def search_comments(term)
     return false if @list.nil? || @list.size <= 0
