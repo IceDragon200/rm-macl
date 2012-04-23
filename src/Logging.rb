@@ -11,16 +11,14 @@ module SDK
   @enabled            = {}
   @enabled.default    = false
   @aliases            = {}
-  @aliases.default    = []
   @overwrites         = {}
-  @overwrites.default = []
   @last_script        = 'SDK'
   #-----------------------------------------------------------------------------
   # Logs a custom script
   #-----------------------------------------------------------------------------
   def self.log(script, name, ver, date)
     @list[script]    = [name, ver, date]
-    @enabled[script] = true
+    @enabled[script] = @enabled.default
     @last_script     = script
   end
   #--------------------------------------------------------------------------
