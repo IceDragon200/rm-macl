@@ -72,7 +72,7 @@ module SDK
     return @enabled[script]
   end
   #--------------------------------------------------------------------------
-  # * Checks SDK requirements
+  # Checks SDK requirements
   #--------------------------------------------------------------------------
   def self.check_requirements(version = VERSION, scripts = [])
     missing_reqs = {}
