@@ -4,6 +4,7 @@
 # TODO: Clean up and document. Uses some code taken and modified from RGSS1 SDK.
 #===============================================================================
 module SDK
+  VERSION             = 0.1
   #-----------------------------------------------------------------------------
   # * Logging registries
   #-----------------------------------------------------------------------------
@@ -59,7 +60,7 @@ module SDK
     @enabled[script] = false
   end
   #--------------------------------------------------------------------------
-  # Enabled Test
+  # Enabled test
   #--------------------------------------------------------------------------
   def self.enabled?(script, version = nil)
     # If a version was specified and this script is already registered
@@ -69,5 +70,41 @@ module SDK
     end
     # Returns whether or not the given script is enabled
     return @enabled[script]
+  end
+  #--------------------------------------------------------------------------
+  # * Checks SDK requirements
+  #--------------------------------------------------------------------------
+  def self.check_requirements(version = VERSION, scripts = [])
+    missing_reqs = {}
+    # Checks version
+    missing_reqs[0] = version unless VERSION >= version
+    # Checks required scripts
+    if scripts.is_a?(String)
+      unless self.enabled?(scripts)
+        missing_reqs[2] = [] unless missing_reqs.has_key?(2)
+        missing_reqs[2] << scripts
+      end
+    elsif scripts.is_a?(Array)
+      for script in scripts
+        unless self.enabled?(script)
+          missing_reqs[2] = [] unless missing_reqs.has_key?(2)
+          missing_reqs[2] << script
+        end
+      end
+    elsif scripts.is_a?(Hash)
+      scripts.each do |script, v|
+        if self.enabled?(script) == false
+          missing_reqs[2] = [] unless missing_reqs.has_key?(2)
+          missing_reqs[2] << script
+        elsif self.enabled?(script, v) == false
+          missing_reqs[3] = {} unless missing_reqs.has_key?(3)
+          missing_reqs[3][script] = v
+        end
+      end
+    end
+    if missing_reqs.size > 0
+      self.disable(@last_script)
+      # TODO: Add error message indicating why this script was disabled
+    end
   end
 end
