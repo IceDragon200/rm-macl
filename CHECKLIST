@@ -5,6 +5,7 @@
 Code
   * Notetag Reader (Database)
   + Comment Reader (Events)
+  * Common Tag Parser (something like a XML parser for strings)
   
 Doc
   * Standard for Script Comments / Header
