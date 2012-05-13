@@ -85,6 +85,10 @@ class Array
     self.replace(uniquesets)
     self
   end
+  # // 05/02/2012
+  def remove_this(obj,n=1)
+    n.times { (i = self.index(obj)) ? self.delete_at(i) : break }; self
+  end
 end
 #=■==========================================================================■=#
 #                           // ● End of File ● //                              #

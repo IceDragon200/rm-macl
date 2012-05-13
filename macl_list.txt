@@ -1,0 +1,17 @@
+﻿=begin
+ ──────────────────────────────────────────────────────────────────────────────
+ RGSS3-MACL
+ Version : 0.1
+ ──────────────────────────────────────────────────────────────────────────────
+=end
+#-define SRCPATH=Dir.getwd+"/src"
+#-undefine XPANLIB
+#-define STDLBEX="SRCPATH/StandardLibEx"
+#-add STDLBEX/build_order.txt
+#-ifdef XPANLIB
+#-define XPANLBEX="SRCPATH/XpanLibEx"
+#-add XPANLBEX/build_order.txt
+#-endif
+#──────────────────────────────────────────────────────────────────────────────#
+# EOF
+#──────────────────────────────────────────────────────────────────────────────#

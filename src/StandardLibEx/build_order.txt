@@ -1,0 +1,6 @@
+# // Standard Library
+#-add STDLBEX/Object_Ex.rb
+#-add STDLBEX/Kernel_Ex.rb
+#-add STDLBEX/Numeric_Ex.rb
+#-add STDLBEX/Array_Ex.rb
+#-add STDLBEX/Hash_Ex.rb

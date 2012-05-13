@@ -1,0 +1,1 @@
+src\build_tools\script_assembler macl_list.txt rgss3macl.rb

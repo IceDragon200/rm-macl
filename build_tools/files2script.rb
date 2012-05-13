@@ -1,1 +1,0 @@
-# // >.> Read a folder, and read a build_stack.ini # // Something like this:# // Header.txt# // ObjectEx.rb# // ModuleEx.rb# // Importer.rbbegin  # // I'll add code eventually its not that hard.end
