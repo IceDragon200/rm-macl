@@ -7,4 +7,9 @@ begin
   in_filename, filename = ARGV
   str = File.read(in_filename)
   File.open(filename,"w+") { |f| f.write Skinj.skinj_str(str).compile }
+  sleep 2.0
+rescue(Exception) => ex
+  p ex
+  puts ?-, ex.backtrace
+  sleep 4.0
 end  

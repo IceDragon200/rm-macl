@@ -1,0 +1,11 @@
+﻿=begin
+ ──────────────────────────────────────────────────────────────────────────────
+ RGSS3-MACL
+ Version : 0.1
+ ──────────────────────────────────────────────────────────────────────────────
+ ■ Module
+ ♥ Class
+ 
+ Data Types
+   Boolean  (TrueClass or FalseClass)
+   <Object> (Varied Object)

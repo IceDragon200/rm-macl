@@ -1,6 +1,4 @@
-﻿# // 04/12/2012
-# // 04/12/2012
-class Hash
+﻿class Hash
   def get_values(*keys);keys.collect{|a|self[a]};end
   def enum2keys
     dup.enum2keys!

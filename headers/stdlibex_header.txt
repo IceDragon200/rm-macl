@@ -1,0 +1,58 @@
+﻿ ──────────────────────────────────────────────────────────────────────────────
+Standard Library
+  ♥ Object
+    if_eql?(obj,alt=nil)
+      ● Parameters 
+          <Object> obj
+      ● Return
+          if block_given
+          <Object> from yield
+    if_neql?(obj,alt=nil)
+      ● Parameters 
+      ● Return
+    if_nil?(alt=nil)
+      ● Parameters 
+      ● Return
+    to_bool() 
+      ● Return
+          Boolean
+  ■ Kernel
+    load_data(filename) [None-RGSS2/3]
+      ● Parameters 
+          String filename
+      ● Return
+          <Object>
+    save_data(obj,filename) [None-RGSS2/3]
+      ● Parameters 
+          <Object> obj
+          String filename
+      ● Return
+          <Object>
+    load_data_cin(filename) { obj }
+      ● Parameters 
+          String filename
+      ● Return
+          <Object>
+    Boolean(obj)
+      ● Parameters 
+          Object obj 
+      ● Return
+          Boolean 
+  ♥ Numeric
+    min()
+      ● Parameters 
+      ● Return
+    max
+    minmax
+    clamp
+    pole
+    pole_inv
+  ♥ Array
+    pick
+    pick!
+    pad
+    pad!
+    uniq_arrays
+    uniq_arrays!
+    remove_this
+  ♥ Hash
