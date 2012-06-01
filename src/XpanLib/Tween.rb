@@ -27,21 +27,23 @@ class Tween
   attr_reader :end_values
   attr_reader :time
   attr_reader :maxtime
-  def self.frames_to_tt( frames )
-    frames * @@_add_time
-  end 
-  def self.f2tt( *args, &block )
-    frames_to_tt(*args, &block)
-  end  
-  def self.tt_to_frames( tt )
-    (tt * Graphics.frame_rate).to_i
-  end  
-  def self.tt2f( *args, &block )
-    tt_to_frames(*args,&block)
-  end  
-  def self._add_time
-    @@_add_time
-  end  
+  class << self
+    def frames_to_tt( frames )
+      frames * @@_add_time
+    end 
+    def f2tt( *args, &block )
+      frames_to_tt(*args, &block)
+    end  
+    def tt_to_frames( tt )
+      (tt * Graphics.frame_rate).to_i
+    end  
+    def tt2f( *args, &block )
+      tt_to_frames(*args,&block)
+    end  
+    def _add_time
+      @@_add_time
+    end  
+  end
   def initialize( start_values=[], end_values=[], easer=:linear, maxtime=1.0, extra_params=[] )
     set_and_reset( start_values, end_values, easer, maxtime, extra_params )
   end 
@@ -94,15 +96,23 @@ class Tween
   def time_to_rate(t=@time)
     t / @maxtime
   end  
+  def value_at_time( time, sv=@start_values[0], ev=@end_values[0], mt=@maxtime, exp=@extra_params )
+    easer.ease( time, sv, ev, mt, *exp )
+  end  
+  def invert
+    @start_values,@end_values = @end_values,@start_values
+    self
+  end
+  def update_to_end
+    yield self while update && !done?
+    self
+  end
   def update()
     succ_time() unless done? # // Save a little cpu..
     update_value_now()
   end  
   def update_value_now()
     update_value( @time )
-  end  
-  def value_at_time( time, sv=@start_values[0], ev=@end_values[0], mt=@maxtime, exp=@extra_params )
-    easer.ease( time, sv, ev, mt, *exp )
   end  
   def update_value( time )
     for i in 0...@start_values.size
