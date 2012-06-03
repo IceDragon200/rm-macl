@@ -1,39 +1,26 @@
-#===============================================================================
-# ? SDK
-#===============================================================================
-# TODO: Make more stuff.
-#===============================================================================
-
-module SDK
-  
-  string = "\0" * 256 
-  ini = Win32API.new('kernel32', 'GetPrivateProfileStringA', 'pppplp', 'l')
-  ini.call('Game', 'Title', '', string, 255, ".\\Game.ini")
-  win = Win32API.new('user32','FindWindowEx','llpp','l')
-  @handle = win.call(0, 0, nil, string.delete!("\0"))
-  GetClientRect = Win32API.new('user32', 'GetClientRect', 'lp', 'i')
-  GetWindowRect = Win32API.new('user32', 'GetWindowRect', 'lp', 'i')
-  
-  module_function
-  
-  #--------------------------------------------------------------------------
-  # Obtain a Rect that represents the Window's screen position
-  #--------------------------------------------------------------------------
-  def client_rect
-    final_rect = []
-    rect = [0, 0, 0, 0].pack('l4')
-    GetWindowRect.call(@handle, rect)
-    final_rect.concat(rect.unpack('l4')[0..1])
-    rect = [0, 0, 0, 0].pack('l4')
-    GetClientRect.call(@handle, rect)
-    final_rect.concat(rect.unpack('l4')[2..3])
-    Rect.new(*final_rect)
+#-inject gen_module_header 'MACL'
+class << MACL
+  def mk_null_str(size=256)
+    string = "\0" * size
   end
-  
-  #--------------------------------------------------------------------------
-  # Public Handle Accessor
-  #--------------------------------------------------------------------------
-  def handle
-    @handle
+  @w32_funcs = {
+    'GPPSA' => Win32API.new('kernel32', 'GetPrivateProfileStringA', 'pppplp', 'l'),
+    'GetClientRect' => Win32API.new('user32', 'GetClientRect', 'lp', 'i'),
+    #'GetWindowRect' => Win32API.new('user32', 'GetWindowRect', 'lp', 'i'),
+    'FindWindowEx'  => Win32API.new('user32','FindWindowEx','llpp','l')
+  }
+  def get_client
+    string = mk_null_str(256)
+    @w32_funcs['GPPSA'].call('Game','Title','',string,255,".\\Game.ini")
+    @w32_funcs['FindWindowEx'].call(0, 0, nil, string.delete!("\0"))
+  end
+  private :get_client
+  def client_rect
+    rect = [0, 0, 0, 0].pack('l4')
+    @w32_funcs['GetClientRect'].call(client, rect)
+    Rect.new(*rect.unpack('l4').map!(&:to_i))
+  end
+  def client
+    @client ||= get_client
   end
 end

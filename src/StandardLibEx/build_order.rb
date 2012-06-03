@@ -1,4 +1,7 @@
 # // Standard Library
+#-unlessdef STDLBEX
+#-define STDLBEX#=C:/Lib/Git/RGSS3-MACL/src/StandardLibEx
+#-end:
 #-include STDLBEX/Object_Ex.rb
 #-include STDLBEX/Kernel_Ex.rb
 #-include STDLBEX/Numeric_Ex.rb

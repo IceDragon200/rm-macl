@@ -1,4 +1,5 @@
-﻿class Hash
+﻿#-inject gen_class_header 'Hash'
+class Hash
   def get_values(*keys);keys.collect{|a|self[a]};end
   def enum2keys
     dup.enum2keys!

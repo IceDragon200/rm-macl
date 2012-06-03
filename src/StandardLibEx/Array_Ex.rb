@@ -7,23 +7,26 @@ module Enumerable
     if block_given? ; size.downto(0) do |i| return i if yield(self[i]) end
     else            ; size.downto(0) do |i| return i if self[i] == obj end
     end
-    nil
+    -1
   end
   def invoke meth_sym,*args 
     each { |o| o.send(meth_sym,*args) };self
   end
-  def collect_invoke meth_sym,*args
+  def invoke_collect meth_sym,*args
     collect { |o| o.send(meth_sym,*args) }
   end
 end
 #-inject gen_class_header 'Array'
 class Array
+  def pick!
+    self.delete(n=pick);n
+  end unless method_defined? :pick! 
   def pad *args,&block
     dup.pad! *args,&block
   end  
   def pad! n,obj=nil
     self.replace(self[0,n]) if self.size > n
-    self.push(block_given?() ? yield : obj) while(self.size < n)
+    self.push(block_given? ? yield : obj) while self.size < n
     self
   end 
   def uniq_arrays *args,&block
@@ -46,9 +49,6 @@ class Array
     self.replace(uniquesets)
     self
   end
-  def pick!
-    self.delete(n=pick);n
-  end unless method_defined? :pick! 
   def rotate n=1
     dup.rotate! n 
   end unless method_defined? :rotate

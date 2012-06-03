@@ -1,0 +1,594 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Scop",
+				"Scopius"
+			],
+			[
+				"serv",
+				"server_name"
+			],
+			[
+				"connect",
+				"connect_server"
+			],
+			[
+				"po",
+				"port_number"
+			],
+			[
+				"ad",
+				"address"
+			],
+			[
+				"condio",
+				"condition_met"
+			],
+			[
+				"font-",
+				"font-family"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"comp_",
+				"comp_ifdef"
+			],
+			[
+				"true",
+				"true"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/MACL.rb",
+			"settings":
+			{
+				"buffer_size": 49,
+				"line_ending": "Unix",
+				"name": "module MACL"
+			}
+		},
+		{
+			"file": "src/macl_build_order.rb",
+			"settings":
+			{
+				"buffer_size": 125,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/build_tools/Skinj.rb",
+			"settings":
+			{
+				"buffer_size": 9353,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "macl_list.rb",
+			"settings":
+			{
+				"buffer_size": 759,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "rgss3macl.rb",
+			"settings":
+			{
+				"buffer_size": 17794,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/RGSSEx/build_order.rb",
+			"settings":
+			{
+				"buffer_size": 339,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/XpanLib/build_order.rb",
+			"settings":
+			{
+				"buffer_size": 231,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "doc/StandardLibEx_help.txt",
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/macl_header.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/macl_header_tail.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/rgss3x_header.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/stdlibex_header.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/xpanlibex_header.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/macl_footer.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/macl_list.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Point_basic.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Chitat.rb",
+		"/C/Lib/Git/RGSS3-MACL/rgss3macl.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/Skinj.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Array_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Object_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Numeric_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Notebox.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Interpolate.rb",
+		"/C/Lib/Git/RGSS3-MACL/build_macl.bat",
+		"/C/Lib/Git/RGSS3-MACL/src/Handle.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/asm_folder.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/INFO.txt",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Game_Switches_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Tone_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Color_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Rect_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Font_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Vector.rb",
+		"/C/Lib/Git/RGSS3-MACL/lib/StandardLibEx/Numeric_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/script_assembler.rb",
+		"/C/Lib/Git/RGSS3-MACL/README.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/Logging.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Hash_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Kernel_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/iExRuby.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/lemony_notetags.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Pallete.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/Event_Comment_Scanner.rb",
+		"/C/Lib/Git/RGSS3-MACL/README.txt",
+		"/C/Lib/Git/RGSS3-MACL/macl_list.txt",
+		"/C/Lib/Git/RGSS3-MACL/CHECKLIST.log",
+		"/C/Users/new/Google Drive/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Sprites.rb",
+		"/C/Users/new/Google Drive/RPGVXAce/Yggdrasil2x6/src/YGG2x6_AI.rb",
+		"/C/Users/new/Google Drive/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Projectiles.rb",
+		"/C/Users/new/Google Drive/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Scenes.rb",
+		"/C/Users/new/Google Drive/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Windows.rb",
+		"/C/Users/new/Documents/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Structs.rb",
+		"/C/Users/new/Documents/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Scenes.rb",
+		"/C/Users/new/Documents/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Windows.rb",
+		"/C/Users/new/Documents/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Config.rb",
+		"/C/Users/new/Documents/RPGVXAce/Yggdrasil2x6/src/YGG2x6_AI.rb",
+		"/C/Users/new/Documents/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Base.rb",
+		"/C/Users/new/Documents/RPGVXAce/Yggdrasil2x6/src/YGG2x6_Projectiles.rb",
+		"/C/Lib/IEI/src/ArtsSystem.rb",
+		"/C/Lib/IEI/header/standalone_header.rb",
+		"/C/Lib/IEI/header_gen.rb",
+		"/C/Lib/IEI/lib/MagicLearn.rb",
+		"/C/Lib/IEI/lib/ArtsSystem.rb",
+		"/C/Lib/IEI/lib/MagicEquip.rb",
+		"/C/Lib/IEI/lib/Scopius.rb",
+		"/C/Lib/IEI/src/Character_MultiFrame.rb",
+		"/C/Lib/IEI/lib/Character_MultiFrame.rb",
+		"/C/Lib/IEI/src/Exectine.rb",
+		"/C/Lib/IEI/src/NoteEval.rb",
+		"/C/Lib/IEI/lib/AntiLag.rb",
+		"/C/Lib/IEI/src/KeyNValue.rb",
+		"/C/Lib/IEI/src/CacheMapEx.rb",
+		"/C/Lib/IEI/src/Core.rb",
+		"/C/Lib/IEI/src/SwitchVariable_Tracker.rb",
+		"/C/Lib/IEI/src/BitmapEx.rb",
+		"/C/Lib/IEI/src/AntiLag.rb",
+		"/C/Lib/IEI/src/Elements.rb",
+		"/C/Lib/IEI/src/Scopius.rb",
+		"/C/Lib/IEI/src/Costere.rb",
+		"/C/Lib/IEI/src/TimeSystem.rb",
+		"/C/Users/new/Google Drive/Kana/src/Commands.rb",
+		"/C/Users/new/Google Drive/Kana/src/Logger.rb",
+		"/C/Users/new/Google Drive/Kana/src/Config.rb",
+		"/C/Users/new/Google Drive/Kana/logs/#rpgmaker.log",
+		"/C/Users/new/Google Drive/Kana/src/Bot.rb",
+		"/C/Users/new/Google Drive/Kana/src/Kana.rb",
+		"/C/Users/new/Google Drive/Kana/src/Library.rb",
+		"/C/Lib/IEI/inc/indexing.rb",
+		"/C/Lib/IEI/src/Gallery.rb",
+		"/C/Users/new/Google Drive/Kana/Bot.rb",
+		"/C/$DropBox/Dropbox/Music/#Albums/mkalbum.rb",
+		"/C/$DropBox/Dropbox/Music/#Albums/Toki/Info.txt",
+		"/C/Users/new/Documents/XIN/ProjectBones.nfo",
+		"/C/Corei's/School Werk/Elec/ToolList.txt",
+		"/C/Users/new/Google Drive/Kana/Kana.rb",
+		"/C/Users/new/Google Drive/Kana/Server.rb",
+		"/C/Users/new/Google Drive/Kana/Commands.rb",
+		"/C/Users/new/Google Drive/Kana/Markov.rb",
+		"/C/Users/new/Google Drive/Kana/Config.rb",
+		"/C/Users/new/Google Drive/Kana/Library.rb",
+		"/C/Users/new/Google Drive/Kana/Channel.rb",
+		"/C/Users/new/Google Drive/Kana/Logger.rb",
+		"/C/Users/new/Google Drive/Kana/Stream.rb",
+		"/C/Users/new/Google Drive/Kana/logs/.log",
+		"/C/Users/new/Google Drive/Kana/logs/#Anime+.log",
+		"/C/Lib/Kana/class_map.txt",
+		"/C/Lib/Kana/Bot.rb",
+		"/C/Lib/Kana/Config.rb",
+		"/C/Lib/Kana/Stream.rb",
+		"/C/Lib/Kana/Logger.rb",
+		"/C/Lib/Kana/Kana.rb",
+		"/C/Lib/Kana/logs/#Anime+.log",
+		"/C/Lib/Kana/logs/#SARA_Discussion.log",
+		"/C/Lib/Kana/logs/irc.synirc.net.log",
+		"/C/Lib/Kana/Server.rb",
+		"/C/Lib/Kana/Channel.rb",
+		"/C/Lib/Kana/Commands.rb",
+		"/C/Lib/ref/[RUBY]Basic_ircbot.rb",
+		"/C/Lib/Kana/Connection.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/Registry.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Notetag.rb",
+		"/C/Corei's/HTML/Prac2/css/main.css",
+		"/C/Corei's/HTML/Prac2/index.html",
+		"/C/Lib/IEI/inc/visibility.rb",
+		"/C/Lib/IEI/inc/basic_handler.rb",
+		"/C/Lib/IEI/inc/passive_state.rb",
+		"/C/Lib/ProjectEuler/Problem003",
+		"/C/Lib/Git/RGSS3-MACL/src/FunLib/LogicGates.rb",
+		"/C/Users/new/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/C/Lib/ProjectEuler/Problem001.rb",
+		"/C/Lib/ProjectEuler/Problem002.rb",
+		"/C/Lib/IEI/inc/toggle_state.rb"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"@lines",
+			"@defines",
+			"#",
+			"()",
+			" unless $@",
+			"()",
+			"YGG::MixIns",
+			"()",
+			"YGG::REGEXP::BASE_ITEM",
+			":YGG2x6"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"@define",
+			" ",
+			"",
+			"YGG::Mixin",
+			"",
+			"YGG::Regexp::BaseItem",
+			"BSPTH"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 7,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/MACL.rb",
+					"settings":
+					{
+						"buffer_size": 49,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								45,
+								45
+							]
+						],
+						"settings":
+						{
+							"auto_name": "module MACL",
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/macl_build_order.rb",
+					"settings":
+					{
+						"buffer_size": 125,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								64,
+								64
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/build_tools/Skinj.rb",
+					"settings":
+					{
+						"buffer_size": 9353,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7093,
+								7093
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2543.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "macl_list.rb",
+					"settings":
+					{
+						"buffer_size": 759,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								25,
+								25
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "rgss3macl.rb",
+					"settings":
+					{
+						"buffer_size": 17794,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/RGSSEx/build_order.rb",
+					"settings":
+					{
+						"buffer_size": 339,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								83,
+								40
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/XpanLib/build_order.rb",
+					"settings":
+					{
+						"buffer_size": 231,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								95,
+								95
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "doc/StandardLibEx_help.txt",
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 250.0,
+	"status_bar_visible": true
+}

@@ -1,11 +1,22 @@
-﻿=begin
+=begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
+ Version : 1.0
+ Date Built: 06/02/2012 (MM/DD/YYYY)
  ──────────────────────────────────────────────────────────────────────────────
- USE:
-   Simply copy the rgss3_macl.rb into your project script editor.
-   Place the script below materials; and above main and all other scripts.
+ ■ Module
+ ♥ Class
  
- DEV: (requires ruby)
-   To build a fresh copy of the rgss3_macl.rb run the build_macl.bat
-=end
+ Parameter, Return : Help
+   -Help       Ruby Object
+     <self>    (Parent Object)
+     <Object>  (Varied Object)
+     N[]       (Array of N Object)
+     String    String
+     Boolean   (TrueClass or FalseClass)
+     Numeric   (Integer,Bignum,Float)
+     Integer   Integer
+     Float     Float
+     Array     Array
+     Hash      Hash
+     Symbol    Symbol

@@ -1,0 +1,14 @@
+DC : 04/22/2012
+DM : 06/02/2012
+// Add source code here. 
+// Key for scripts
+  ** Unfinished
+  *! Unfinished + Untested
+  ++ Finished
+  +! Finished + Untested
+Simply add the tags to the top of the script beside the name:
+EG:
+  *! Cookie Maker
+  DC : 04/24/2012
+  DM : 04/24/2012
+  *insert codez here*

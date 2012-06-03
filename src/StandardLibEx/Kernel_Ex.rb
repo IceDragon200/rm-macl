@@ -1,4 +1,5 @@
-﻿module Kernel
+﻿#-inject gen_module_header 'Kernel'
+module Kernel
   def load_data(filename)
     obj = nil
     File.open(filename,"rb") { |f| obj = Marshal.load(f) }

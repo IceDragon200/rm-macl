@@ -1,4 +1,5 @@
 # // FenixFyreX
+# // Not functional, DO NOT USE
 $:.unshift "System/Ruby"
 $:.unshift "System/Ruby/_so/"
 
