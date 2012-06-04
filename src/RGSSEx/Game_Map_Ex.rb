@@ -5,10 +5,10 @@ class Game_Map
   def post_load_map
   end
   # // Overwrite
-  def setup(map_id)
+  def setup map_id 
     @map_id = map_id
     pre_load_map
-    @map = MapManager.load(@map_id)
+    @map = MapManager.load_map @map_id 
     post_load_map
     @tileset_id = @map.tileset_id
     @display_x = 0

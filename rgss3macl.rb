@@ -320,8 +320,8 @@ module Enumerable
     end
     -1
   end
-  def invoke meth_sym,*args 
-    each { |o| o.send(meth_sym,*args) };self
+  def invoke meth_sym,*args,&block 
+    each { |o| o.send(meth_sym,*args,&block) };self
   end
   def invoke_collect meth_sym,*args
     collect { |o| o.send(meth_sym,*args) }
@@ -331,7 +331,7 @@ end
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Array
   def pick!
-    self.delete(n=pick);n
+    self.delete n=pick;n
   end unless method_defined? :pick! 
   def pad *args,&block
     dup.pad! *args,&block
@@ -469,51 +469,54 @@ module MACL::Parsers
     INT = /\d+/
     FLT = /\d+\.\d+/
   end
-  # // Converters
-  def self.obj2str(*objs)
-    return *objs.collect do |obj| String(obj) end
+  def self.Singulize array
+    return array.size == 1 ? array[0] : array
   end
-  def self.str2bool(*strs)
-    return *strs.collect do |str|
+  # // Converters
+  def self.obj2str *objs
+    Singulize(objs.collect do |obj| String(obj) end)
+  end
+  def self.str2bool *strs
+    Singulize(strs.collect do |str|
       case str.upcase
       when *STRS_TRUE  ; true
       when *STRS_FALSE ; false
       else             ; nil
       end
-    end  
+    end)  
   end
-  def self.str2int(*strs)
-    return *strs.collect do |str| Integer(str) end
+  def self.str2int *strs
+    Singulize(strs.collect do |str| Integer(str) end)
   end
-  def self.str2flt(*strs)
-    return *strs.collect do |str| Float(str) end
+  def self.str2flt *strs
+    Singulize(strs.collect do |str| Float(str) end)
   end
-  def self.str2int_a(str)
+  def self.str2int_a str
     str.scan(/\d+/).map!(&:to_i)
   end
-  def self.str2array(str)
+  def self.str2array str
     str.split(?,)
   end
-  def self.str2obj(str,type=:nil)
+  def self.str2obj str,type=:nil 
     case type
-    when :int, :integer ; str2int(str)
-    when :flt, :float   ; str2flt(str)
-    when :bool,:boolean ; str2bool(str)
+    when :int, :integer ; str2int str 
+    when :flt, :float   ; str2flt str 
+    when :bool,:boolean ; str2bool str 
     when :str, :string  ; str.to_s
     else # // Guess type
       if str =~ Regexp::FLT
-        str2flt(str)
+        str2flt str 
       elsif str =~ Regexp::INT
-        str2int(str)
+        str2int str 
       elsif str =~ Regexp::BOOL_REGEX
-        str2bool(str)
+        str2bool str 
       else # // String
         str.to_s
       end
     end
   end
   # // Get dtstr
-  def self.obj_data_type(obj)
+  def self.obj_data_type obj 
     case obj
     when Float     ; "flt" 
     when Numeric   ; "int" # // Float is also Numeric type
@@ -523,7 +526,7 @@ module MACL::Parsers
     end
   end
   # // 100 => int:100, "stuff"=>str:stuff
-  def self.obj2dtstr(obj)
+  def self.obj2dtstr obj 
     if obj.is_a?(Array)
       "%s:%s" % [obj_data_type(obj.first),obj.join(?,)]
     else 
@@ -541,26 +544,26 @@ module MACL::Parsers
   }
   @structs ||= {
   }
-  @data_types.merge(@structs)
+  @data_types.merge @structs 
   str = "(a-)?(%s):(.*)" % @data_types.keys.collect{|a|"(?:"+a.join(?|)+?)}.join(?|)
   DTREGEX = /#{str}/i
   @data_types.enum2keys!
   # // Notebox
   TAG_REGEXP = /(.+):\s*(.+)/
   # // key: value
-  def self.parse_knv_str(tag,types=[:nil],has_array=false)
+  def self.parse_knv_str tag,types=[:nil],has_array=false 
     types = Array(types)
     mtch = tag.match TAG_REGEXP
     return nil unless mtch
     key,value = mtch[1,2]
-    values = (has_array ? value.split(?,) : Array(value))
+    values = has_array ? value.split(?,) : Array(value)
     values = values.each_with_index.to_a
     values.collect!{|(n,index)|value2obj(n,types[index]||:nil)}
     return key, values
   end
   # // Chitat Main 
   # // str:Stuff, int:2, flt:0.2, bool:TRUE
-  def self.parse_dtstr(dtstr,return_type=:value)
+  def self.parse_dtstr dtstr,return_type=:value 
     mtch = dtstr.match DTREGEX
     raise "Malformed Data String %s" % dtstr unless mtch
     is_array, dt_type, value = mtch[1,3]
@@ -615,15 +618,12 @@ class Chitat
     end
   end
   class Tag
-    attr_reader :sym,:match_data
+    attr_reader :sym,:params
     def initialize sym,match_data
-      @sym,@match_data = sym,match_data
+      @sym,@params = sym,match_data.to_a
     end
     def param(i)
-      @match_data[i]
-    end
-    def params
-      @match_data.to_a
+      @params[i]
     end
   end
   attr_accessor :open_rgx,:close_rgx
@@ -685,8 +685,9 @@ class Chitat
   end
   def parse_str4tags str
     arra = parse_str str
-    arra.each { |a| a.collect!{|s|mk_tag(s)}.compact! }
-    arra.reject! {|a|a and a.empty?}
+    arra.each do |a| a.collect!{|s|mk_tag(s)};a.compact! end
+    arra.reject! do |a| a and a.empty? end
+    arra
   end
 end
 #// RGGSEx
@@ -780,12 +781,47 @@ class Rect
     Rect.new *to_a
   end
 end
+# ╒╕ ♥                                                                Table ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class Table
+  def iterate
+    if zsize > 0
+      for x in 0...xsize
+        for y in 0...ysize
+          for z in 0...zsize
+            yield self[x,y,z], x, y, z
+          end
+        end
+      end
+    elsif ysize > 0
+      for x in 0...xsize
+        for y in 0...ysize
+          yield self[x,y], x, y
+        end
+      end  
+    else
+      for x in 0...xsize
+        yield self[x], x
+      end  
+    end
+    Graphics.frame_reset
+  end
+  def replace table
+    resize table.xsize, table.ysize, table.zsize
+    iterate do |i,*xyz|
+      self[*xyz] = table[*xyz]
+    end
+  end
+  def clear
+    resize 1
+  end
+end
 # ╒╕ ♥                                                     RPG::Event::Page ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class RPG::Event::Page
   COMMENT_CODES = [108,408]
-  def select_commands(*codes)
-    @list.select{|c|codes.include?(c.code)}
+  def select_commands *codes 
+    @list.select do |c|codes.include?(c.code) end
   end
   def comments
     select_commands *COMMENT_CODES
@@ -801,11 +837,18 @@ class Game_Event
     @page.comment_a
   end
 end
+# ╒╕ ■                                                         SceneManager ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+module SceneManager
+  def self.recall
+    goto(@scene.class)
+  end
+end
 # ╒╕ ■                                                           MapManager ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MapManager
   @@maps = {}
-  def self.load id
+  def self.load_map id
     get_map(id).deep_clone
   end 
   def self.get_map id
@@ -824,10 +867,10 @@ class Game_Map
   def post_load_map
   end
   # // Overwrite
-  def setup(map_id)
+  def setup map_id 
     @map_id = map_id
     pre_load_map
-    @map = MapManager.load(@map_id)
+    @map = MapManager.load_map @map_id 
     post_load_map
     @tileset_id = @map.tileset_id
     @display_x = 0
@@ -843,13 +886,13 @@ end
 # ╒╕ ♥                                                        Game_Switches ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Game_Switches
-  def on?(id)
+  def on? id 
     !!self[id]
   end
-  def off?(id)
+  def off? id
     !self[id]
   end
-  def toggle(id)
+  def toggle id
     self[id] = !self[id]
   end
 end

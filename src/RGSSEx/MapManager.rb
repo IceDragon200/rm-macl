@@ -1,7 +1,7 @@
 #-inject gen_module_header 'MapManager'
 module MapManager
   @@maps = {}
-  def self.load id
+  def self.load_map id
     get_map(id).deep_clone
   end 
   def self.get_map id

@@ -2,8 +2,8 @@
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class RPG::Event::Page
   COMMENT_CODES = [108,408]
-  def select_commands(*codes)
-    @list.select{|c|codes.include?(c.code)}
+  def select_commands *codes 
+    @list.select do |c|codes.include?(c.code) end
   end
   def comments
     select_commands *COMMENT_CODES

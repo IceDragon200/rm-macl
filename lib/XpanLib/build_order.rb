@@ -40,15 +40,12 @@ class Chitat
     end
   end
   class Tag
-    attr_reader :sym,:match_data
+    attr_reader :sym,:params
     def initialize sym,match_data
-      @sym,@match_data = sym,match_data
+      @sym,@params = sym,match_data.to_a
     end
     def param(i)
-      @match_data[i]
-    end
-    def params
-      @match_data.to_a
+      @params[i]
     end
   end
   attr_accessor :open_rgx,:close_rgx
@@ -110,7 +107,8 @@ class Chitat
   end
   def parse_str4tags str
     arra = parse_str str
-    arra.each { |a| a.collect!{|s|mk_tag(s)}.compact! }
-    arra.reject! {|a|a and a.empty?}
+    arra.each do |a| a.collect!{|s|mk_tag(s)};a.compact! end
+    arra.reject! do |a| a and a.empty? end
+    arra
   end
 end

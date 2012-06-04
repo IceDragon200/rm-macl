@@ -69,12 +69,12 @@ class Skinj
     @@commands << [sym,regexp,nm,block]
   end
   # // comment
-  add_command :comment, /\/\/(.*)/i do 
+  add_command :comment, /\A\/\/(.*)/i do 
     Skinj.debug_puts "Comment: %s" % params[1].to_s
     true
   end
   # // eval
-  add_command :eval, /eval\s(.+)/i do 
+  add_command :eval, /\Aeval\s(.+)/i do 
     Skinj.debug_puts "Eval: %s" % params[1]
     begin
       eval(params[1]) 
@@ -84,13 +84,13 @@ class Skinj
     true
   end
   # // log
-  add_command :log, /log/i do
+  add_command :log, /\Alog/i do
     Skinj.debug_puts 'Enable Log Mode'
     $stdout = File.open("Skinj#{Time.now.strftime("(%m-%d-%y)(%H-%M-%S)")}.log","w")
     $stdout.sync = true
   end
   # // Loads a file into the current Skinj
-  add_command :include, /(?:\+\+|include)\s(.*)/i do 
+  add_command :include, /\A(?:\+\+|include)\s(.*)/i do 
     filename, = *sub_args(params[1])
     filename = filename.chomp.dump.gsub(/\A(?:['"])(.+)((?:['"]))/i) { $1 }
     Skinj.debug_puts "Including %s" % filename
@@ -110,7 +110,7 @@ class Skinj
     true
   end
   # // evaluates a string and loads it into the current Skinj
-  add_command :inject, /inject\s(.*)/i do 
+  add_command :inject, /\Ainject\s(.*)/i do 
     begin
       eval_string, = *sub_args(params[1])
       Skinj.debug_puts "Injecting %s" % eval_string
@@ -125,7 +125,7 @@ class Skinj
     end  
   end
   # // load the contents of a defined const into the current Skinj
-  add_command :insert, /insert\s(.*)/i do 
+  add_command :insert, /\Ainsert\s(.*)/i do 
     begin
       key, = *sub_args(*params[1])
       Skinj.debug_puts "Inserting %s" % key
@@ -140,7 +140,7 @@ class Skinj
     end  
   end
   # // Switches
-  add_command :switch, /switch\s(\S+):(ON|TRUE|OFF|FALSE|TOGGLE|FLIP)/i do 
+  add_command :switch, /\Aswitch\s(\S+):(ON|TRUE|OFF|FALSE|TOGGLE|FLIP)/i do 
     key,value = *sub_args(params[1],params[2])
     case value.upcase
     when "ON", "TRUE"
@@ -154,7 +154,7 @@ class Skinj
     true
   end
   # // define const as string
-  add_command :define_s, /define\s(\S+)\#\=(.+)/i do 
+  add_command :define_s, /\Adefine\s(\S+)\#\=(.+)/i do 
     key = params[1]
     value, = sub_args(params[2])
     @define[key] = value && !value.empty? ? value.to_s : ""
@@ -162,40 +162,40 @@ class Skinj
     true
   end
   # // define const
-  add_command :define, /define\s(\S+)\=(.+)/i do 
+  add_command :define, /\Adefine\s(\S+)\=(.+)/i do 
     key = params[1]
     value, = sub_args(params[2])
     @define[key] = value && !value.empty? ? eval(value.to_s) : ""
     Skinj.debug_puts "Defined [%s] = %s" % [key,@define[key]]
     true
   end
-  add_command :define2, /define\s(\S+):/i do
+  add_command :define2, /\Adefine\s(\S+):/i do
     key = params[1]
     @define[key] = "true"
     Skinj.debug_puts "Defined [%s] = %s" % [key,@define[key]]
     true
   end
   # // undefine const
-  add_command :undefine, /(?:undefine|undef)\s(\S+)/i do
+  add_command :undefine, /\A(?:undefine|undef)\s(\S+)/i do
     key = params[1]
     Skinj.debug_puts "Undefining %s" % key
     @define.delete(key) 
     true
   end
   # // if defined?
-  add_command :ifdef, /(?:if|unless(?:not|n))def\s(\S+)/i do 
+  add_command :ifdef, /\A(?:if|unless(?:not|n))def\s(\S+)/i do 
     key = params[1]
     Skinj.debug_puts "If Defined: %s" % key
     !!@define[key] ? true : jump_to_end
   end
   # // if not defined?
-  add_command :ifndef, /(?:if(?:not|n)|unless)def\s(\S+)/i do 
+  add_command :ifndef, /\A(?:if(?:not|n)|unless)def\s(\S+)/i do 
     key = params[1]
     Skinj.debug_puts "If Not Defined: %s" % key
     !@define[key] ? true : jump_to_end 
   end
   # // end if
-  END_REGEX = /end(?:if|unless|\:)/i
+  END_REGEX = /\Aend(?:if|unless|\:)/i
   END_REGEX_EX = /\#-end(?:if|unless|\:)/i
   RGX_ASMB_COM = /\A.?\#\-(\d+)?(.+)/i
   add_command :endif, END_REGEX do 

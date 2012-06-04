@@ -9,51 +9,54 @@ module MACL::Parsers
     INT = /\d+/
     FLT = /\d+\.\d+/
   end
-  # // Converters
-  def self.obj2str(*objs)
-    return *objs.collect do |obj| String(obj) end
+  def self.Singulize array
+    return array.size == 1 ? array[0] : array
   end
-  def self.str2bool(*strs)
-    return *strs.collect do |str|
+  # // Converters
+  def self.obj2str *objs
+    Singulize(objs.collect do |obj| String(obj) end)
+  end
+  def self.str2bool *strs
+    Singulize(strs.collect do |str|
       case str.upcase
       when *STRS_TRUE  ; true
       when *STRS_FALSE ; false
       else             ; nil
       end
-    end  
+    end)  
   end
-  def self.str2int(*strs)
-    return *strs.collect do |str| Integer(str) end
+  def self.str2int *strs
+    Singulize(strs.collect do |str| Integer(str) end)
   end
-  def self.str2flt(*strs)
-    return *strs.collect do |str| Float(str) end
+  def self.str2flt *strs
+    Singulize(strs.collect do |str| Float(str) end)
   end
-  def self.str2int_a(str)
+  def self.str2int_a str
     str.scan(/\d+/).map!(&:to_i)
   end
-  def self.str2array(str)
+  def self.str2array str
     str.split(?,)
   end
-  def self.str2obj(str,type=:nil)
+  def self.str2obj str,type=:nil 
     case type
-    when :int, :integer ; str2int(str)
-    when :flt, :float   ; str2flt(str)
-    when :bool,:boolean ; str2bool(str)
+    when :int, :integer ; str2int str 
+    when :flt, :float   ; str2flt str 
+    when :bool,:boolean ; str2bool str 
     when :str, :string  ; str.to_s
     else # // Guess type
       if str =~ Regexp::FLT
-        str2flt(str)
+        str2flt str 
       elsif str =~ Regexp::INT
-        str2int(str)
+        str2int str 
       elsif str =~ Regexp::BOOL_REGEX
-        str2bool(str)
+        str2bool str 
       else # // String
         str.to_s
       end
     end
   end
   # // Get dtstr
-  def self.obj_data_type(obj)
+  def self.obj_data_type obj 
     case obj
     when Float     ; "flt" 
     when Numeric   ; "int" # // Float is also Numeric type
@@ -63,7 +66,7 @@ module MACL::Parsers
     end
   end
   # // 100 => int:100, "stuff"=>str:stuff
-  def self.obj2dtstr(obj)
+  def self.obj2dtstr obj 
     if obj.is_a?(Array)
       "%s:%s" % [obj_data_type(obj.first),obj.join(?,)]
     else 
@@ -81,26 +84,26 @@ module MACL::Parsers
   }
   @structs ||= {
   }
-  @data_types.merge(@structs)
+  @data_types.merge @structs 
   str = "(a-)?(%s):(.*)" % @data_types.keys.collect{|a|"(?:"+a.join(?|)+?)}.join(?|)
   DTREGEX = /#{str}/i
   @data_types.enum2keys!
   # // Notebox
   TAG_REGEXP = /(.+):\s*(.+)/
   # // key: value
-  def self.parse_knv_str(tag,types=[:nil],has_array=false)
+  def self.parse_knv_str tag,types=[:nil],has_array=false 
     types = Array(types)
     mtch = tag.match TAG_REGEXP
     return nil unless mtch
     key,value = mtch[1,2]
-    values = (has_array ? value.split(?,) : Array(value))
+    values = has_array ? value.split(?,) : Array(value)
     values = values.each_with_index.to_a
     values.collect!{|(n,index)|value2obj(n,types[index]||:nil)}
     return key, values
   end
   # // Chitat Main 
   # // str:Stuff, int:2, flt:0.2, bool:TRUE
-  def self.parse_dtstr(dtstr,return_type=:value)
+  def self.parse_dtstr dtstr,return_type=:value 
     mtch = dtstr.match DTREGEX
     raise "Malformed Data String %s" % dtstr unless mtch
     is_array, dt_type, value = mtch[1,3]

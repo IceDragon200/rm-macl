@@ -89,12 +89,47 @@ class Rect
     Rect.new *to_a
   end
 end
+# ╒╕ ♥                                                                Table ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class Table
+  def iterate
+    if zsize > 0
+      for x in 0...xsize
+        for y in 0...ysize
+          for z in 0...zsize
+            yield self[x,y,z], x, y, z
+          end
+        end
+      end
+    elsif ysize > 0
+      for x in 0...xsize
+        for y in 0...ysize
+          yield self[x,y], x, y
+        end
+      end  
+    else
+      for x in 0...xsize
+        yield self[x], x
+      end  
+    end
+    Graphics.frame_reset
+  end
+  def replace table
+    resize table.xsize, table.ysize, table.zsize
+    iterate do |i,*xyz|
+      self[*xyz] = table[*xyz]
+    end
+  end
+  def clear
+    resize 1
+  end
+end
 # ╒╕ ♥                                                     RPG::Event::Page ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class RPG::Event::Page
   COMMENT_CODES = [108,408]
-  def select_commands(*codes)
-    @list.select{|c|codes.include?(c.code)}
+  def select_commands *codes 
+    @list.select do |c|codes.include?(c.code) end
   end
   def comments
     select_commands *COMMENT_CODES
@@ -110,11 +145,18 @@ class Game_Event
     @page.comment_a
   end
 end
+# ╒╕ ■                                                         SceneManager ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+module SceneManager
+  def self.recall
+    goto(@scene.class)
+  end
+end
 # ╒╕ ■                                                           MapManager ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MapManager
   @@maps = {}
-  def self.load id
+  def self.load_map id
     get_map(id).deep_clone
   end 
   def self.get_map id
@@ -133,10 +175,10 @@ class Game_Map
   def post_load_map
   end
   # // Overwrite
-  def setup(map_id)
+  def setup map_id 
     @map_id = map_id
     pre_load_map
-    @map = MapManager.load(@map_id)
+    @map = MapManager.load_map @map_id 
     post_load_map
     @tileset_id = @map.tileset_id
     @display_x = 0
@@ -152,13 +194,13 @@ end
 # ╒╕ ♥                                                        Game_Switches ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Game_Switches
-  def on?(id)
+  def on? id 
     !!self[id]
   end
-  def off?(id)
+  def off? id
     !self[id]
   end
-  def toggle(id)
+  def toggle id
     self[id] = !self[id]
   end
 end

@@ -48,79 +48,90 @@
 	"buffers":
 	[
 		{
-			"file": "src/MACL.rb",
-			"settings":
-			{
-				"buffer_size": 49,
-				"line_ending": "Unix",
-				"name": "module MACL"
-			}
-		},
-		{
-			"file": "src/macl_build_order.rb",
-			"settings":
-			{
-				"buffer_size": 125,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/build_tools/Skinj.rb",
-			"settings":
-			{
-				"buffer_size": 9353,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "macl_list.rb",
-			"settings":
-			{
-				"buffer_size": 759,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "rgss3macl.rb",
 			"settings":
 			{
-				"buffer_size": 17794,
+				"buffer_size": 22723,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/RGSSEx/build_order.rb",
+			"file": "src/MACL_Mixins.rb",
 			"settings":
 			{
-				"buffer_size": 339,
+				"buffer_size": 799,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/XpanLib/build_order.rb",
+			"contents": "#-inject gen_class_header 'Game_Map'\nclass Game_Map\n  def pre_load_map\n  end\n  def post_load_map\n  end\n  # // Overwrite\n  def setup map_id \n    @map_id = map_id\n    pre_load_map\n    @map = MapManager.load @map_id \n    post_load_map\n    @tileset_id = @map.tileset_id\n    @display_x = 0\n    @display_y = 0\n    referesh_vehicles\n    setup_events\n    setup_scroll\n    setup_parallax\n    setup_battleback\n    @need_refresh = false\n  end\nend  ",
+			"file": "src/RGSSEx/Game_Map_Ex.rb",
+			"file_size": 437,
+			"file_write_time": 129832252909458973,
 			"settings":
 			{
-				"buffer_size": 231,
+				"buffer_size": 437,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/RGSSEx/MapManager.rb",
+			"settings":
+			{
+				"buffer_size": 296,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/StandardLibEx/Array_Ex.rb",
+			"settings":
+			{
+				"buffer_size": 1609,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "doc/StandardLibEx_help.txt",
+			"file": "src/RGSSEx/Game_Switches_Ex.rb",
 			"settings":
 			{
-				"buffer_size": 0,
+				"buffer_size": 211,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/RGSSEx/RPG_Event_Page_Ex.rb",
+			"settings":
+			{
+				"buffer_size": 407,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/XpanLib/Chitat.rb",
+			"settings":
+			{
+				"buffer_size": 2216,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "class RelayIO < IO\n  def add_relay\n\n  end\n  def write(*args,&block)\n    @relays.invoke(:write,*args,&block)\n  end\n  def read(buff)\n  end\nend",
+			"settings":
+			{
+				"buffer_size": 140,
+				"line_ending": "Unix",
+				"name": "class RelayIO < IO"
 			}
 		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 0.0,
+		"height": 392.0,
 		"selected_items":
 		[
 		],
-		"width": 0.0
+		"width": 472.0
 	},
 	"console":
 	{
@@ -137,28 +148,41 @@
 	},
 	"file_history":
 	[
+		"/C/Lib/Git/RGSS3-MACL/src/MACL.rb",
+		"/C/Lib/Git/RGSS3-MACL/macl_list.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/Skinj.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/doc/StandardLibEx_help.txt",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Chitat.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/MACL_Mixins.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Game_Map_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/MapManager.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/Parsers.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/chitat_test.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/Registry.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/xpanlibex_header.rb",
+		"/C/Lib/Git/RGSS3-MACL/lib/XpanLib/build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/_rgss3_prototype.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/macl_build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Object_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/stdlibex_header.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Numeric_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/Require_patch.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/macl_header_.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/Handle.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Notebox.rb",
+		"/C/Lib/Git/RGSS3-MACL/rgss3macl.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/build_order.rb",
 		"/C/Lib/Git/RGSS3-MACL/headers/macl_header.rb",
 		"/C/Lib/Git/RGSS3-MACL/headers/macl_header_tail.rb",
 		"/C/Lib/Git/RGSS3-MACL/headers/rgss3x_header.rb",
-		"/C/Lib/Git/RGSS3-MACL/headers/stdlibex_header.rb",
-		"/C/Lib/Git/RGSS3-MACL/headers/xpanlibex_header.rb",
 		"/C/Lib/Git/RGSS3-MACL/headers/macl_footer.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/build_order.rb",
-		"/C/Lib/Git/RGSS3-MACL/macl_list.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Point_basic.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Chitat.rb",
-		"/C/Lib/Git/RGSS3-MACL/rgss3macl.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/build_tools/Skinj.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Array_Ex.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Object_Ex.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Numeric_Ex.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Notebox.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Interpolate.rb",
 		"/C/Lib/Git/RGSS3-MACL/build_macl.bat",
-		"/C/Lib/Git/RGSS3-MACL/src/Handle.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/build_tools/asm_folder.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/build_order.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/INFO.txt",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Game_Switches_Ex.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Tone_Ex.rb",
@@ -251,20 +275,7 @@
 		"/C/Lib/Kana/Channel.rb",
 		"/C/Lib/Kana/Commands.rb",
 		"/C/Lib/ref/[RUBY]Basic_ircbot.rb",
-		"/C/Lib/Kana/Connection.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/Registry.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Notetag.rb",
-		"/C/Corei's/HTML/Prac2/css/main.css",
-		"/C/Corei's/HTML/Prac2/index.html",
-		"/C/Lib/IEI/inc/visibility.rb",
-		"/C/Lib/IEI/inc/basic_handler.rb",
-		"/C/Lib/IEI/inc/passive_state.rb",
-		"/C/Lib/ProjectEuler/Problem003",
-		"/C/Lib/Git/RGSS3-MACL/src/FunLib/LogicGates.rb",
-		"/C/Users/new/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
-		"/C/Lib/ProjectEuler/Problem001.rb",
-		"/C/Lib/ProjectEuler/Problem002.rb",
-		"/C/Lib/IEI/inc/toggle_state.rb"
+		"/C/Lib/Kana/Connection.rb"
 	],
 	"find":
 	{
@@ -316,122 +327,15 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 8,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/MACL.rb",
-					"settings":
-					{
-						"buffer_size": 49,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								45,
-								45
-							]
-						],
-						"settings":
-						{
-							"auto_name": "module MACL",
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/macl_build_order.rb",
-					"settings":
-					{
-						"buffer_size": 125,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								64,
-								64
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/build_tools/Skinj.rb",
-					"settings":
-					{
-						"buffer_size": 9353,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7093,
-								7093
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2543.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "macl_list.rb",
-					"settings":
-					{
-						"buffer_size": 759,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								25,
-								25
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
 					"file": "rgss3macl.rb",
 					"settings":
 					{
-						"buffer_size": 17794,
+						"buffer_size": 22723,
 						"regions":
 						{
 						},
@@ -444,7 +348,121 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5774.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/MACL_Mixins.rb",
+					"settings":
+					{
+						"buffer_size": 799,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								754,
+								754
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/RGSSEx/Game_Map_Ex.rb",
+					"settings":
+					{
+						"buffer_size": 437,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								205,
+								205
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/RGSSEx/MapManager.rb",
+					"settings":
+					{
+						"buffer_size": 296,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								87,
+								87
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/StandardLibEx/Array_Ex.rb",
+					"settings":
+					{
+						"buffer_size": 1609,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1451,
+								1451
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -454,18 +472,18 @@
 				},
 				{
 					"buffer": 5,
-					"file": "src/RGSSEx/build_order.rb",
+					"file": "src/RGSSEx/Game_Switches_Ex.rb",
 					"settings":
 					{
-						"buffer_size": 339,
+						"buffer_size": 211,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								83,
-								40
+								176,
+								176
 							]
 						],
 						"settings":
@@ -480,23 +498,25 @@
 				},
 				{
 					"buffer": 6,
-					"file": "src/XpanLib/build_order.rb",
+					"file": "src/RGSSEx/RPG_Event_Page_Ex.rb",
 					"settings":
 					{
-						"buffer_size": 231,
+						"buffer_size": 407,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								95,
-								95
+								175,
+								175
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -506,22 +526,51 @@
 				},
 				{
 					"buffer": 7,
-					"file": "doc/StandardLibEx_help.txt",
+					"file": "src/XpanLib/Chitat.rb",
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 2216,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2197,
+								2197
 							]
 						],
 						"settings":
 						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 840.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"settings":
+					{
+						"buffer_size": 140,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								136,
+								136
+							]
+						],
+						"settings":
+						{
+							"auto_name": "class RelayIO < IO",
+							"default_dir": "C:\\Lib\\Git\\RGSS3-MACL\\src",
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,

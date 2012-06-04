@@ -9,8 +9,8 @@ module Enumerable
     end
     -1
   end
-  def invoke meth_sym,*args 
-    each { |o| o.send(meth_sym,*args) };self
+  def invoke meth_sym,*args,&block 
+    each { |o| o.send(meth_sym,*args,&block) };self
   end
   def invoke_collect meth_sym,*args
     collect { |o| o.send(meth_sym,*args) }
@@ -19,7 +19,7 @@ end
 #-inject gen_class_header 'Array'
 class Array
   def pick!
-    self.delete(n=pick);n
+    self.delete n=pick;n
   end unless method_defined? :pick! 
   def pad *args,&block
     dup.pad! *args,&block
