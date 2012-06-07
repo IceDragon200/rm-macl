@@ -1,5 +1,8 @@
-﻿# // 12/??/2011
-module IEI::Pallete
+﻿#-// 12/??/2011
+#-// 06/06/2012
+#-// Version : 1.0
+#-inject gen_module_header 'Pallete'
+module Pallete
   @sym_colors = {}
   #--------------------------------------------------------------------------#
   # ● module-method :pallete

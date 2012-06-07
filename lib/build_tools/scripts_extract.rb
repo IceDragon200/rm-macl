@@ -27,9 +27,7 @@ begin
     end
   end
   puts "Extraction complete!"
-  sleep 4.0
 rescue(Exception) => ex
   puts "ERROR"
   puts ex.message
-  sleep 4.0
 end

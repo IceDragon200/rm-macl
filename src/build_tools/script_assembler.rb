@@ -7,12 +7,11 @@ require_relative 'Skinj'
 begin
   in_filename, filename = ARGV
   str = File.read(in_filename)
+  @indent = 0
   @defines  = {"ASMxROOT"=>Dir.getwd}
   @switches = {"INCUR"=>false} 
-  File.open(filename,"w+") { |f| f.write Skinj.skinj_str(str,@defines,@switches).compile }
-  sleep 2.0
+  File.open(filename,"w+") { |f| f.write Skinj.skinj_str(str,@indent,@defines,@switches).compile }
 rescue(Exception) => ex
   p ex
   puts ?-, ex.backtrace
-  sleep 4.0
 end  

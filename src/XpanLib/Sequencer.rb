@@ -1,6 +1,7 @@
 ﻿# // 04/19/2012
 # // 04/19/2012
-class IEI::Sequencer
+#-inject gen_class_header 'Sequencer'
+class Sequencer
   attr_accessor :index
   attr_accessor :maxcount
   attr_accessor :count

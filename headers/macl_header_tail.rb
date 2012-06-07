@@ -1,2 +1,3 @@
 =end
-($imported||={})['RGSS3-MACL']=0x10000
+($imported||={})['RGSS3-MACL']=SKPVERSION
+#-switch INCUR:OFF

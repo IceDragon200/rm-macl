@@ -1,217 +1,124 @@
-﻿=begin
+=begin
  ──────────────────────────────────────────────────────────────────────────────
   Skinj (string assembler)
  ──────────────────────────────────────────────────────────────────────────────
   Date Created  : 05/12/2012
-  Date Modified : 05/17/2012
+  Date Modified : 06/06/2012
   Version       : 0x10000
   Created By    : IceDragon
  ──────────────────────────────────────────────────────────────────────────────
   Change Log:
     05/17/2012
       Added inject
- ──────────────────────────────────────────────────────────────────────────────
-  Asmbler Commands
-    KEY
-      [] optional
-      <> defined
- ──────────────────────────────────────────────────────────────────────────────
-    asmb_com - #-[x]<n>
-      This is the basis to any Assembler Command.
-      The line must start with #- in order to the command to be recoginized
-      x - is the indent level of the command
-      n - is the name of the command
- ──────────────────────────────────────────────────────────────────────────────
-    include  - #-[x]include <n>
-      Reads 'n' file into the current string, this can be used with other
-      skinj strings to have nested inclusions.
- ──────────────────────────────────────────────────────────────────────────────
-    inject   - #-[x]inject <n>
-      Evaluates 'n' as a ruby string and includes the resulant string into the
-      current string.
- ──────────────────────────────────────────────────────────────────────────────
-    insert   - #-[x]insert <n>
-      Converts a defined 'n' into the current string.
- ──────────────────────────────────────────────────────────────────────────────
-    switch   - #-switch <n>:(ON|OFF|TOGGLE)
-      Sets switch <n> with given state (on|off|toggle)
- ──────────────────────────────────────────────────────────────────────────────
-    define_s - #-define <n>#=<y>
-      Defines n as a string 'y'
- ──────────────────────────────────────────────────────────────────────────────
-    define   - #-define <n>[=<y>]
-      Defines 'n' with evaluated 'y'
- ──────────────────────────────────────────────────────────────────────────────
-    undefine - #-undefine <n>
-      Undefines 'n', and removes it
- ──────────────────────────────────────────────────────────────────────────────
-    ifdef    - #-ifdef <n>
-      If 'n' defined?
- ──────────────────────────────────────────────────────────────────────────────
-    ifndef   - #-ifndef <n>
-      If 'n' Not defined?
- ──────────────────────────────────────────────────────────────────────────────
-    endif    - #-endif
-      Pretty much
- ──────────────────────────────────────────────────────────────────────────────
-    comment  - #-//<n>
-      Ignored by assembler, used to make comments in skinj string.
+    06/04/2012
+      Added support for nested conditions
+      Added new command(s):
+        wait <float>
+          Puts skinj to sleep for <float> seconds
+        print <str>
+          Tells Skinj to print a message to the console
+        label <str>
+          Doesnt operate
+        jumpto <str>
+          Jumps to a given 'label' <str>
+        asmshow <str>
+    06/04/2012
+      Added new command(s):
+        indent +/-<int>
+        recmacro <str>
+        clrmacro <str>
+        stopmacro <str>
+        macro <str>
  ──────────────────────────────────────────────────────────────────────────────
 =end
-$console_out = $stdout
 Encoding.default_external = "UTF-8" # // Cause dumb shit happens otherwise
 # ╒╕ ♥                                                                Skinj ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
+#require_relative '../RelayIO.rb'
+#relay = IO_Relay.new
+#relay.add_relay $stdout 
+require_relative '../StandardLibEx/Array_Ex.rb'
+require_relative '../StandardLibEx/String_Ex.rb'
+require_relative 'Skinj_commands.rb'
+$console_out = $stdout #relay
 class Skinj
-  @@commands = []
-  def self.add_command(sym,regexp,&block)
-    nm = "asmb_" + sym.to_s
-    @@commands << [sym,regexp,nm,block]
-  end
-  # // comment
-  add_command :comment, /\A\/\/(.*)/i do 
-    Skinj.debug_puts "Comment: %s" % params[1].to_s
-    true
-  end
-  # // eval
-  add_command :eval, /\Aeval\s(.+)/i do 
-    Skinj.debug_puts "Eval: %s" % params[1]
-    begin
-      eval(params[1]) 
-    rescue Exception => ex
-      Skinj.debug_puts "Eval Failed: %s" % ex.message
-    end  
-    true
-  end
-  # // log
-  add_command :log, /\Alog/i do
-    Skinj.debug_puts 'Enable Log Mode'
-    $stdout = File.open("Skinj#{Time.now.strftime("(%m-%d-%y)(%H-%M-%S)")}.log","w")
-    $stdout.sync = true
-  end
-  # // Loads a file into the current Skinj
-  add_command :include, /\A(?:\+\+|include)\s(.*)/i do 
-    filename, = *sub_args(params[1])
-    filename = filename.chomp.dump.gsub(/\A(?:['"])(.+)((?:['"]))/i) { $1 }
-    Skinj.debug_puts "Including %s" % filename
-    unless File.exist?(filename)
-      Skinj.debug_puts "File %s does not exist, skipping." % filename 
-      File.open("MissingFile.log","a") { |f| f.puts filename }
-      sleep 2.0
-    else  
-      file  = File.open filename, "r"
-      str   = file.read.chomp.strip
-      file.close
-      str   = Skinj.skinj_str(str,@define,@switches).compile
-      strs  = str.split(/[\r\n]+/)
-      strs.collect{|s|(" "*indent)+s}.each {|s| add_line(s) }
-      Skinj.debug_puts "File %s included sucessfully" % filename
+  def collect_line
+    res = (@index...@lines.size).collect do |i|
+      @index = i
+      break if yield current_line
+      current_line
     end
-    true
+    res
   end
-  # // evaluates a string and loads it into the current Skinj
-  add_command :inject, /\Ainject\s(.*)/i do 
-    begin
-      eval_string, = *sub_args(params[1])
-      Skinj.debug_puts "Injecting %s" % eval_string
-      str = eval eval_string 
-      lines = str.split(/[\r\n]+/)
-      lines.collect{|s|(" "*indent)+s}.each {|s| add_line(s) }
-      true
-    rescue(Exception) => ex
-      Skinj.debug_puts "Inject failed: %s" % eval_string
-      p ex
-      true
-    end  
+  def setup_macros
+    @macros ||= {}
+    @macros[:record] ||= []
+    @macros[:store] ||= {}
+    @macros
   end
-  # // load the contents of a defined const into the current Skinj
-  add_command :insert, /\Ainsert\s(.*)/i do 
-    begin
-      key, = *sub_args(*params[1])
-      Skinj.debug_puts "Inserting %s" % key
-      str = @define[key]
-      lines = str.split(/[\r\n]+/)
-      lines.collect{|s|(" "*indent)+s}.each {|s| add_line(s) }
-      true
-    rescue(Exception) => ex
-      Skinj.debug_puts "Insert failed: %s" % key
-      p ex
-      true
-    end  
+  def macro_record name,str
+    (@macros[:store][name]||=[]) << str
   end
-  # // Switches
-  add_command :switch, /\Aswitch\s(\S+):(ON|TRUE|OFF|FALSE|TOGGLE|FLIP)/i do 
-    key,value = *sub_args(params[1],params[2])
-    case value.upcase
-    when "ON", "TRUE"
-      @switches[key] = true
-    when "OFF", "FALSE"
-      @switches[key] = false
-    when "TOGGLE", "FLIP"
-      @switches[key] = !@switches[key]
-    end
-    Skinj.debug_puts "Switch %s = %s" % [key,@switches[key]]
-    true
+  def command_line? rgx
+    mtch = @lines[@index].match(RGX_ASMB_COM)
+    return false unless mtch
+    return mtch[2].match(rgx)
   end
-  # // define const as string
-  add_command :define_s, /\Adefine\s(\S+)\#\=(.+)/i do 
-    key = params[1]
-    value, = sub_args(params[2])
-    @define[key] = value && !value.empty? ? value.to_s : ""
-    Skinj.debug_puts "Defined [%s] = %s" % [key,@define[key]]
-    true
-  end
-  # // define const
-  add_command :define, /\Adefine\s(\S+)\=(.+)/i do 
-    key = params[1]
-    value, = sub_args(params[2])
-    @define[key] = value && !value.empty? ? eval(value.to_s) : ""
-    Skinj.debug_puts "Defined [%s] = %s" % [key,@define[key]]
-    true
-  end
-  add_command :define2, /\Adefine\s(\S+):/i do
-    key = params[1]
-    @define[key] = "true"
-    Skinj.debug_puts "Defined [%s] = %s" % [key,@define[key]]
-    true
-  end
-  # // undefine const
-  add_command :undefine, /\A(?:undefine|undef)\s(\S+)/i do
-    key = params[1]
-    Skinj.debug_puts "Undefining %s" % key
-    @define.delete(key) 
-    true
-  end
-  # // if defined?
-  add_command :ifdef, /\A(?:if|unless(?:not|n))def\s(\S+)/i do 
-    key = params[1]
-    Skinj.debug_puts "If Defined: %s" % key
-    !!@define[key] ? true : jump_to_end
-  end
-  # // if not defined?
-  add_command :ifndef, /\A(?:if(?:not|n)|unless)def\s(\S+)/i do 
-    key = params[1]
-    Skinj.debug_puts "If Not Defined: %s" % key
-    !@define[key] ? true : jump_to_end 
-  end
-  # // end if
-  END_REGEX = /\Aend(?:if|unless|\:)/i
-  END_REGEX_EX = /\#-end(?:if|unless|\:)/i
-  RGX_ASMB_COM = /\A.?\#\-(\d+)?(.+)/i
-  add_command :endif, END_REGEX do 
-    Skinj.debug_puts "End Condition"
-    true
+  def current_line
+    @lines[@index]
   end
   def jump_to_end
-    @index += 1 until @lines[@index] =~ END_REGEX_EX or @index >= @lines.size; true
-  end 
-  attr_accessor :index, :lines, :line
-  def self.debug_puts(*args)
-    str = args.collect{|obj|"<@skinj> "+obj.to_s}
-    $console_out.puts str unless $console_out == $stdout
-    puts str
+    jump_to_else false
   end
-  def self.skinj_str(str,*args)
+  def jump_to_else with_else=true
+    org_index = @index
+    @target_indent = @skj_indent
+    @skj_indent += 1
+    while true
+      break debug_puts 'EOF' if @index >= @lines.size
+      if command_line? REGEX_INDENT
+        @skj_indent += 1 
+      elsif command_line? REGEX_END
+        @skj_indent -= 1 
+      elsif with_else and command_line?(REGEX_ELSE) && !@branch[@skj_indent] 
+        @skj_indent -= 1 
+      end  
+      debug_puts " >>Skipping: %s" % current_line
+      @index  += 1
+      break if @skj_indent == @target_indent
+      raise "Negative indent at index %s" % @index if @skj_indent < 0
+    end  
+    true
+  end
+  def jump_to_label str
+    lookup = /\A\#-label #{str}/i
+    @index = @lines.index do |s| 
+      !!(s =~ lookup)
+    end
+    @index ||= @lines.size
+    true
+  end
+  @@skinj_str = "<"
+  @@skinj_str += "SKINJ"#.green
+  @@skinj_str += " line"#.light_green
+  @@skinj_str += "[%04s]"#.light_white
+  @@skinj_str += " indent"#.light_green
+  @@skinj_str += "[%02s]"#.light_white
+  @@skinj_str += "> %s"
+  def debug_puts *args,&block
+    str = args.collect{|obj|@@skinj_str % [@index,@skj_indent,obj.to_s]}
+    Skinj.skinj_puts *str,&block
+  end
+  def self.debug_puts *args,&block 
+    str = args.collect{|obj|"<@skinj> %s" % obj.to_s}  
+    skinj_puts *str,&block
+  end
+  def self.skinj_puts *args, &block
+    $console_out.puts *args,&block unless $console_out == $stdout
+    puts *args,&block
+  end
+  def self.skinj_str str,*args 
+    str = str.join("\n") if str.is_a? Array # // Reference protect
     skinj = new(*args)
     skinj.lines = str.split(/[\r\n]+/)
     skinj.index, skinj.line = 0, nil
@@ -229,26 +136,44 @@ class Skinj
       break if skinj.index >= skinj.lines.size
     end
   rescue Exception => ex
-    File.open('Skinj_crash.log',"w+") { |f| 
+    debug_puts '>>>Skinj has crashed<<<'
+    debug_puts ex.inspect
+    File.open('Skinj_crash.log',"w+") { |f|
+      f.puts [skinj.index] 
       f.puts ex.message 
       f.puts ex.backtrace 
     }
   ensure
     return skinj  
   end
-  def initialize(define={},switches={})
-    @define = define
-    @switches= switches
-    @data = []
+  attr_accessor :index, :lines, :line, :indent, :skj_indent, :records, :macros
+  def initialize indent=0,define={},switches={},records={},macros=nil
+    @indent     = indent
+    @define     = define
+    @switches   = switches
+    @records    = records
+    @macros     = macros
+    @skj_indent = 0
+    @branch     = []
+    @data       = []
+    setup_macros
+
+    #debug_puts 'Skinj created: %s' % self.inspect
   end  
-  def add_line(line)
+  def settings
+    return @indent,@define,@switches,@records,@macros
+  end  
+  def add_line line 
     str, = incur_mode? ? sub_args(line) : line
     @data << str
   end  
-  def get_define(str)
+  def add_lines *lines
+    lines.each do |str| add_line str end
+  end
+  def get_define str 
     @define[str]
   end
-  def sub_args(*args)
+  def sub_args *args 
     args.collect do |str|
       estr = str.dup
       @define.each_pair{|key,value|estr.gsub!(key,value.to_s)}
@@ -262,7 +187,7 @@ class Skinj
     @last_indent
   end
   # // Assembler Commands
-  def execute_command(indent,str)
+  def execute_command indent,str 
     @last_params = nil
     @last_indent = indent
     @@commands.each do |a|
@@ -277,7 +202,10 @@ class Skinj
     !!@switches["INCUR"]
   end
   def compile
-    @data.join("\n")
+    build.join("\n")
+  end
+  def build
+    @data.invoke_collect(:indent,@indent)
   end
 end
 #------------------------------------------------------------------------------#

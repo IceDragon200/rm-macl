@@ -1,6 +1,7 @@
-﻿# // 04/19/2012
-# // 04/19/2012
-class IEI::ArrayTable
+﻿#-// 04/19/2012
+#-// 04/19/2012
+#-inject gen_class_header 'IEI::ArrayTable'
+class ArrayTable
   include Mixin::TableExpansion
   attr_reader :xsize
   attr_reader :ysize

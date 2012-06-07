@@ -1,6 +1,7 @@
 ﻿# // 04/12/2012
 # // 04/19/2012
-class IEI::Grid
+#-inject gen_class_header 'Grid'
+class Grid
   def self.qcell_r(columns,rows,cell_width,cell_height,index=0)
     new(columns,rows,cell_width,cell_height).cell_r(index)
   end  

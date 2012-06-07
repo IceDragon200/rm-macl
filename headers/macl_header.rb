@@ -1,8 +1,11 @@
+#-define SKPVERSION#=0x10001
+#-switch INCUR:ON
 =begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
- Version : 1.0
- Date Built: 06/02/2012 (MM/DD/YYYY)
+ Version : SKPVERSION
+ Last Build: 06/03/2012 (MM/DD/YYYY) (0x10000)
+ Date Built: 06/04/2012 (MM/DD/YYYY) (0x10001)
  ──────────────────────────────────────────────────────────────────────────────
  ■ Module
  ♥ Class

@@ -1,6 +1,6 @@
-﻿# // 04/19/2012
-# // 04/19/2012
-class IEI::ArrayTable
+# ╒╕ ♥                                                      IEI::ArrayTable ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class ArrayTable
   include Mixin::TableExpansion
   attr_reader :xsize
   attr_reader :ysize

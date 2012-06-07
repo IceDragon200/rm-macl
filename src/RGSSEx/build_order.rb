@@ -2,6 +2,9 @@
 #-unlessdef STDLBEX
 #-define RGSSExPTH#=C:/Lib/Git/RGSS3-MACL/src/RGSSEx
 #-end:
+#-include RGSSExPTH/Graphics_Ex.rb
+#-//include RGSSExPTH/Audio_Ex.rb
+#-//include RGSSExPTH/Input_Ex.rb
 #-include RGSSExPTH/Color_Ex.rb
 #-include RGSSExPTH/Tone_Ex.rb
 #-include RGSSExPTH/Font_Ex.rb

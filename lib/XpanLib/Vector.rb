@@ -1,35 +1,3 @@
-﻿# // Vector
-# // By FenixFyreX
-# // 05/12/2012
-class Point
-  attr_accessor :x,:y
-  def initialize(*a,&bl)
-    @x,@y = 0,0
-    @x,@y = *a if a.size == 2
-    @x,@y = *a[0] if a[0].is_a?(Array)
-    @x,@y = *a[0].to_a if a[0].is_a?(Point)
-  end
-  def to_rect(*a)
-    x,y,x2,y2 = @x,@y,1,1
-    if a[0].is_a?(Array)
-      x2,y2 = *a[0]
-    elsif a.size == 2
-      x2,y2 = *a
-    elsif a[0].is_a?(Point)
-      x2,y2 = a[0].x,a[0].y
-    end
-    Rect.new(x,y,x2-x,y2-y)
-  end
-  def to_s
-    "<Point: #{@x},#{@y}>"
-  end
-  def to_a
-    [@x,@y]
-  end
-  def hash
-    [@x,@y].hash
-  end
-end
 class Rect
   def in_rect?(rect)
     return false if x < rect.x

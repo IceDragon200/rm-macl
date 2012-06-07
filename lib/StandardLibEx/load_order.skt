@@ -2,5 +2,6 @@
 Object_Ex
 Kernel_Ex
 Numeric_Ex
+String_Ex
 Array_Ex
 Hash_Ex

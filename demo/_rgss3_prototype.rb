@@ -2,6 +2,10 @@
 require 'win32api'
 require 'zlib'
 require 'dl'
+module Graphics
+end
+module Input
+end
 module RPG
   class BaseItem
   end

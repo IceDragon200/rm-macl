@@ -1,6 +1,4 @@
 ﻿=begin
-=end
-=begin
  ──────────────────────────────────────────────────────────────────────────────
  Header Gen
    Script Related
@@ -12,7 +10,7 @@
      gen_module_header(name)
      gen_script_footer
    Writing Related
-     wrgen_chapter
+     wrgen_chapter(chapter_num, name, chapter_sfm_name)
  ──────────────────────────────────────────────────────────────────────────────
 =end
 Encoding.default_external = "UTF-8"

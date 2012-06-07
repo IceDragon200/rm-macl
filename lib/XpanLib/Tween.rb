@@ -1,4 +1,4 @@
-﻿#==============================================================================#
+#==============================================================================#
 # ♥ Tween
 #==============================================================================#
 # // • Created By    : CaptainJet
@@ -31,15 +31,13 @@ class Tween
     def frames_to_tt( frames )
       frames * @@_add_time
     end 
-    def f2tt( *args, &block )
-      frames_to_tt(*args, &block)
-    end  
+    alias f2tt frames_to_tt
+    alias frm2sec f2tt
     def tt_to_frames( tt )
       (tt * Graphics.frame_rate).to_i
-    end  
-    def tt2f( *args, &block )
-      tt_to_frames(*args,&block)
-    end  
+    end 
+    alias tt2f tt_to_frames 
+    alias sec2frm tt2f
     def _add_time
       @@_add_time
     end  
@@ -120,6 +118,8 @@ class Tween
     end  
   end 
 end 
+# ╒╕ ♥                                                         Tween::Multi ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
 class Tween::Multi
   attr_reader :tweeners
   def initialize( *tweensets )
@@ -165,8 +165,8 @@ class Tween::Multi
     @tweeners.each do |t| t.update ; end
   end  
 end   
-# // 01/26/2012
-# // 01/26/2012
+# ╒╕ ♥                                                           Tween::Osc ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
 class Tween::Osc
   attr_reader :index
   attr_reader :tindex
@@ -222,8 +222,8 @@ class Tween::Osc
     @tweeners[@index].value(n)
   end  
 end 
-# // 01/31/2012
-# // 01/31/2012
+# ╒╕ ♥                                                     Tween::Sequencer ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
 class Tween::Seqeuncer
   attr_reader :index
   attr_reader :tweeners
@@ -256,6 +256,8 @@ class Tween::Seqeuncer
     @tweeners[@index].value(n)
   end
 end  
+# ╒╕ ♥                                                         Tween::Easer ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
 class Tween::Easer
   attr_accessor :name
   attr_accessor :symbol
@@ -271,6 +273,10 @@ class Tween::Easer
     _ease( et, sv, ev-sv, t, *args )
   end  
 end  
+# ╒╕ ♥                                                                Tween ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+ ─┐ ● Tween::Easers ┌──────────────────────────────────────────────────────────
+  └─────────────────┘ 
 class Tween 
   # // IceDragon
   # // 01/26/2012
@@ -534,6 +540,3 @@ class Tween
     EASER_SYMBOLS[sym].symbol = sym
   }
 end
-#=■==========================================================================■=#
-#                           // ● End of File ● //                              #
-#=■==========================================================================■=#

@@ -1,7 +1,10 @@
-﻿# DeCasteljau Algorithm 
-# Hamburg (Germany), the 19th September 1999. Written by Nils Pipenbrinck aka Submissive/Cubic & $eeN 
-# Bezier Curve
+﻿#-//DeCasteljau Algorithm 
+#-//Hamburg (Germany), the 19th September 1999. Written by Nils Pipenbrinck aka Submissive/Cubic & $eeN 
+#-//Bezier Curve
+#-unlessdef xMACLBUILD
 require_relative 'Point_basic' 
+#-end: 
+#-inject gen_class_header 'Interpolate'
 module Interpolate
   # // Point dest, a, b; float t
   def self.lerp(dest,a,b,t)

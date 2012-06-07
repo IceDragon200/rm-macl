@@ -2,6 +2,9 @@
 @default_def = {
   "ASMxROOT" => Dir.getwd
 }
+@switches_def = {
+  "INCUR" => false
+}
 def asm_folder(source,target)
   files = Dir.entries("#{source}") - [".",".."]
   #puts "Files #{source}"
@@ -21,7 +24,7 @@ def asm_folder(source,target)
       puts "..."
       puts "=> Making #{trg}"
       str = File.read(pth)
-      File.open(trg,"w+") { |f| f.write Skinj.skinj_str(str,@default_def.dup).compile }
+      File.open(trg,"w+") { |f| f.write Skinj.skinj_str(str,0,@default_def.dup,@switches_def.dup).compile }
     end  
   end
 rescue Exception => ex
@@ -37,4 +40,3 @@ begin
 rescue(Exception) => ex
   p ?-, ex
 end
-sleep 4.0

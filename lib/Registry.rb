@@ -51,7 +51,6 @@ module Registry
   def self.save(filename)
     registry_with_err
     File.open(filename,"w+") do |f|
-      f.puts "#-// REGISTRY"
       @registry.each_pair.to_a.sort_by{|a|a[0]}.each do |(key,value)|
         f.puts branch2str(key,value)
       end
