@@ -1,5 +1,7 @@
 # ╒╕ ♥                                                                  Pos ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'Pos is already imported' if ($imported||={})['Pos']
+($imported||={})['Pos']=0x10000
 class Pos
   attr_accessor :x, :y
   def initialize( x, y )

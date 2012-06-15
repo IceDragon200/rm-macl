@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"gen_scr_imp",
+				"gen_scr_import_warn"
+			],
+			[
 				"Scop",
 				"Scopius"
 			],
@@ -48,51 +52,75 @@
 	"buffers":
 	[
 		{
-			"file": "src/build_tools/Skinj.rb",
+			"file": "src/XpanLib/Tween.rb",
 			"settings":
 			{
-				"buffer_size": 8178,
+				"buffer_size": 14929,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/build_tools/word_wrap80.rb",
+			"file": "src/XpanLib/Blaz.rb",
 			"settings":
 			{
-				"buffer_size": 163,
+				"buffer_size": 665,
 				"line_ending": "Unix",
-				"name": "begin"
-			}
-		},
-		{
-			"file": "src/StandardLibEx/String_Ex.rb",
-			"settings":
-			{
-				"buffer_size": 543,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/build_tools/Skinj_commands.rb",
-			"settings":
-			{
-				"buffer_size": 7280,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "demo/skinj_macros.rb",
-			"settings":
-			{
-				"buffer_size": 326,
-				"line_ending": "Unix"
+				"name": "class Blaz"
 			}
 		},
 		{
 			"file": "src/build_tools/header_gen.rb",
 			"settings":
 			{
-				"buffer_size": 2402,
+				"buffer_size": 2764,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/iExRuby.rb",
+			"settings":
+			{
+				"buffer_size": 348,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/build_tools/scripts_extract.rb",
+			"settings":
+			{
+				"buffer_size": 1021,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/MixIn_ConsoleHelpers.rb",
+			"settings":
+			{
+				"buffer_size": 1135,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "headers/macl_header.rb",
+			"settings":
+			{
+				"buffer_size": 721,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/XpanLib/build_order.rb",
+			"settings":
+			{
+				"buffer_size": 595,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "build_macl[full].bat",
+			"settings":
+			{
+				"buffer_size": 511,
 				"line_ending": "Unix"
 			}
 		}
@@ -121,61 +149,86 @@
 	},
 	"file_history":
 	[
+		"/C/Lib/Git/RGSS3-MACL/demo/match_to_hash.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/MatchData_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/skinj_nested_conditions.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/skinj_macros.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/skinj_label_test.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/parsers_bool_test.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/io_relay_test.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/chitat_test.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/array_test_multi.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/array_test.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/load_order.skt",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/edos_vxa_prototype.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/macl_build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/build_macl.bat",
+		"/C/Lib/Git/RGSS3-MACL/build_macl_scripts.bat",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/macl_header_tail.rb",
+		"/C/Lib/Git/RGSS3-MACL/edos_macl_list.rb",
+		"/C/Lib/Git/RGSS3-MACL/edos_macl_std_list.rb",
+		"/C/Lib/Git/RGSS3-MACL/edos_macl_dev_list.rb",
+		"/C/Lib/Git/RGSS3-MACL/build_macl_std.bat",
+		"/C/Lib/Git/RGSS3-MACL/build_macl_pub.bat",
+		"/C/Lib/Git/RGSS3-MACL/build_macl_dev.bat",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Vector.rb",
+		"/C/Lib/Git/RGSS3-MACL/headers/macl_header.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Surface.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Sequencer.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/RectExpansion.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Pos.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Point_basic.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Pallete.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Morph.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Interpolate.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Grid.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Chitat.rb",
+		"/C/Lib/Git/RGSS3-MACL/rgss3macl_dev.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Table_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/Skinj.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/Skinj_commands.rb",
+		"/C/Lib/Git/RGSS3-MACL/doc/Skinj.txt",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/header_gen.rb",
+		"/C/Lib/Git/RGSS3-MACL/macl_list.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Tween.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/macl_dev_test01.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/_rgss3_prototype.rb",
+		"/C/Lib/Git/RGSS3-MACL/demo/_rgss3_prototype_lite.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/ArrayTable.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/TableExpansion.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/build_order.rb",
+		"/C/Lib/Git/RGSS3-MACL/doc/credits.txt",
+		"/C/Lib/Git/RGSS3-MACL/src/MACL.rb",
 		"/C/Lib/Git/RGSS3-MACL/rgss3macl.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/MACL_Tail.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/String_Ex.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/GameManager_main.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/load_order.skt",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/word_wrap80.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/MACL_Mixins.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Game_Map_Ex.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Table_Ex.rb",
 		"/C/Lib/Git/RGSS3-MACL/macl_std_list.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Graphics_Ex.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/MapManager.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Array_Ex.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Game_Switches_Ex.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/RPG_Event_Page_Ex.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Chitat.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/SceneManager_Ex.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RelayIO.rb",
-		"/C/Lib/Git/RGSS3-MACL/demo/io_relay_test.rb",
-		"/C/Lib/Git/RGSS3-MACL/demo/array_test.rb",
-		"/C/Lib/Git/RGSS3-MACL/demo/parsers_bool_test.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/build_order.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/Parsers.rb",
-		"/C/Lib/Git/RGSS3-MACL/build_macl_std.bat",
 		"/C/Lib/Git/RGSS3-MACL/algorithim/conditional_branches.rb",
-		"/C/Lib/Git/RGSS3-MACL/demo/skinj_nested_conditions.rb",
-		"/C/Lib/Git/RGSS3-MACL/demo/skinj_label_test.rb",
-		"/C/Lib/Git/RGSS3-MACL/headers/macl_header.rb",
-		"/C/Lib/Git/RGSS3-MACL/headers/macl_header_tail.rb",
-		"/C/Lib/Git/RGSS3-MACL/macl_list.rb",
-		"/C/Lib/Git/RGSS3-MACL/build_macl.bat",
-		"/C/Lib/Git/RGSS3-MACL/build_macl_dev.bat",
-		"/C/Lib/Git/RGSS3-MACL/build_macl_scripts.bat",
-		"/C/Lib/Git/RGSS3-MACL/build_macl_pub.bat",
 		"/C/Lib/Git/RGSS3-MACL/src/build_tools/asm_folder.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/build_tools/script_assembler.rb",
 		"/C/Lib/Git/RGSS3-MACL/rgss3macl_std.rb",
 		"/C/Lib/Git/RGSS3-MACL/macl_dev_list.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/build_order.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/ArrayTable.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Grid.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Interpolate.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Morph.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Surface.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Rect_Ex.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Vector.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Tween.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Sequencer.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Pos.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Pallete.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/build_tools/scripts_extract.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/MACL.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/build_tools/Skinj.rb",
 		"/C/Lib/Git/RGSS3-MACL/doc/StandardLibEx_help.txt",
-		"/C/Lib/Git/RGSS3-MACL/demo/chitat_test.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/Registry.rb",
 		"/C/Lib/Git/RGSS3-MACL/headers/xpanlibex_header.rb",
 		"/C/Lib/Git/RGSS3-MACL/lib/XpanLib/build_order.rb",
-		"/C/Lib/Git/RGSS3-MACL/demo/_rgss3_prototype.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/macl_build_order.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Object_Ex.rb",
 		"/C/Lib/Git/RGSS3-MACL/headers/stdlibex_header.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/Numeric_Ex.rb",
@@ -183,10 +236,8 @@
 		"/C/Lib/Git/RGSS3-MACL/headers/macl_header_.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/Handle.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Notebox.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/StandardLibEx/build_order.rb",
 		"/C/Lib/Git/RGSS3-MACL/headers/rgss3x_header.rb",
 		"/C/Lib/Git/RGSS3-MACL/headers/macl_footer.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/XpanLib/Point_basic.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/INFO.txt",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Tone_Ex.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/RGSSEx/Color_Ex.rb",
@@ -225,30 +276,7 @@
 		"/C/Lib/IEI/lib/Character_MultiFrame.rb",
 		"/C/Lib/IEI/src/Exectine.rb",
 		"/C/Lib/IEI/src/NoteEval.rb",
-		"/C/Lib/IEI/lib/AntiLag.rb",
-		"/C/Lib/IEI/src/KeyNValue.rb",
-		"/C/Lib/IEI/src/CacheMapEx.rb",
-		"/C/Lib/IEI/src/Core.rb",
-		"/C/Lib/IEI/src/SwitchVariable_Tracker.rb",
-		"/C/Lib/IEI/src/BitmapEx.rb",
-		"/C/Lib/IEI/src/AntiLag.rb",
-		"/C/Lib/IEI/src/Elements.rb",
-		"/C/Lib/IEI/src/Scopius.rb",
-		"/C/Lib/IEI/src/Costere.rb",
-		"/C/Lib/IEI/src/TimeSystem.rb",
-		"/C/Users/new/Google Drive/Kana/src/Commands.rb",
-		"/C/Users/new/Google Drive/Kana/src/Logger.rb",
-		"/C/Users/new/Google Drive/Kana/src/Config.rb",
-		"/C/Users/new/Google Drive/Kana/logs/#rpgmaker.log",
-		"/C/Users/new/Google Drive/Kana/src/Bot.rb",
-		"/C/Users/new/Google Drive/Kana/src/Kana.rb",
-		"/C/Users/new/Google Drive/Kana/src/Library.rb",
-		"/C/Lib/IEI/inc/indexing.rb",
-		"/C/Lib/IEI/src/Gallery.rb",
-		"/C/Users/new/Google Drive/Kana/Bot.rb",
-		"/C/$DropBox/Dropbox/Music/#Albums/mkalbum.rb",
-		"/C/$DropBox/Dropbox/Music/#Albums/Toki/Info.txt",
-		"/C/Users/new/Documents/XIN/ProjectBones.nfo"
+		"/C/Lib/IEI/lib/AntiLag.rb"
 	],
 	"find":
 	{
@@ -256,7 +284,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 90.0,
+		"height": 0.0,
 		"where_history":
 		[
 			""
@@ -267,6 +295,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"{",
+			"}",
+			"()",
+			"Game::",
+			"is_?",
+			"class Point",
+			"MACL::Mixin::TableExpansion",
+			"alpha",
 			"sleep",
 			"RGX_MACRO_STOP",
 			"add_lines",
@@ -286,11 +322,16 @@
 			":YGG2x6"
 		],
 		"highlight": true,
-		"in_selection": false,
+		"in_selection": true,
 		"preserve_case": false,
 		"regex": false,
 		"replace_history":
 		[
+			"do",
+			"end",
+			"",
+			"is_a?",
+			"grey",
 			"REGEX_MACRO_STOP",
 			"@skj_indent",
 			"debug_puts",
@@ -311,23 +352,23 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 8,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/build_tools/Skinj.rb",
+					"file": "src/XpanLib/Tween.rb",
 					"settings":
 					{
-						"buffer_size": 8178,
+						"buffer_size": 14929,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4136,
-								4136
+								4144,
+								4144
 							]
 						],
 						"settings":
@@ -337,30 +378,30 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 315.0,
+						"translation.y": 1866.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "src/build_tools/word_wrap80.rb",
+					"file": "src/XpanLib/Blaz.rb",
 					"settings":
 					{
-						"buffer_size": 163,
+						"buffer_size": 665,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								148,
-								148
+								635,
+								635
 							]
 						],
 						"settings":
 						{
-							"auto_name": "begin",
+							"auto_name": "class Blaz",
 							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -371,18 +412,72 @@
 				},
 				{
 					"buffer": 2,
-					"file": "src/StandardLibEx/String_Ex.rb",
+					"file": "src/build_tools/header_gen.rb",
 					"settings":
 					{
-						"buffer_size": 543,
+						"buffer_size": 2764,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								33,
-								33
+								2539,
+								2539
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 887.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/iExRuby.rb",
+					"settings":
+					{
+						"buffer_size": 348,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								283,
+								283
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/build_tools/scripts_extract.rb",
+					"settings":
+					{
+						"buffer_size": 1021,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								684,
+								684
 							]
 						],
 						"settings":
@@ -398,50 +493,26 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "src/build_tools/Skinj_commands.rb",
+					"buffer": 5,
+					"file": "src/MixIn_ConsoleHelpers.rb",
 					"settings":
 					{
-						"buffer_size": 7280,
+						"buffer_size": 1135,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5783,
-								5783
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 2418.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "demo/skinj_macros.rb",
-					"settings":
-					{
-						"buffer_size": 326,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								278,
-								278
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -450,11 +521,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "src/build_tools/header_gen.rb",
+					"buffer": 6,
+					"file": "headers/macl_header.rb",
 					"settings":
 					{
-						"buffer_size": 2402,
+						"buffer_size": 721,
 						"regions":
 						{
 						},
@@ -468,8 +539,62 @@
 						"settings":
 						{
 							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 5,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/XpanLib/build_order.rb",
+					"settings":
+					{
+						"buffer_size": 595,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								595,
+								595
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "build_macl[full].bat",
+					"settings":
+					{
+						"buffer_size": 511,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								270,
+								270
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Batch File/Batch File.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,

@@ -1,4 +1,5 @@
 #-inject gen_class_header 'Point'
+#-inject gen_scr_imported_ww 'Point', '0x10000'
 class Point
   attr_accessor :x, :y
   class << self ; alias :[] :new ; end

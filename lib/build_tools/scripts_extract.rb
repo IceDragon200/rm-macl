@@ -3,8 +3,8 @@
 # // Created by IceDragon 
 Encoding.default_external = "UTF-8"
 begin
-  $LOAD_PATH << "C:/Lib/Git/RGSS3-MACL/src"
-  require 'iExRuby'
+  $LOAD_PATH << Dir.getwd
+  require_relative '../StandardLibEx/Kernel_Ex.rb'
   require 'Zlib' 
   # // Order to my madness
   filename = ARGV[0]||"#{Dir.getwd.gsub("\\",'/')}/Scripts.rvdata"
@@ -18,7 +18,7 @@ begin
   arra.each_with_index do |a,i|
     checksum, name, zstr = a
     name = name
-    fn = ("%s/[%d]%s.%s"%[folder_name,i,name.strip.chomp.gsub(/[\>\<\:\;\\\/\|\*\?\"\'\!\,\^\%\$\#\@\~\`]/,""),"rb"])
+    fn = ("%s/[%04d]%s.%s"%[folder_name,i,name.strip.chomp.gsub(/[\>\<\:\;\\\/\|\*\?\"\'\!\,\^\%\$\#\@\~\`]/,""),"rb"])
     puts "Found #{name}"
     puts "Writing #{fn}"
     File.open(fn,"w+") do |f|
@@ -28,6 +28,6 @@ begin
   end
   puts "Extraction complete!"
 rescue(Exception) => ex
-  puts "ERROR"
-  puts ex.message
+  p ex
+  puts ex.backtrace
 end

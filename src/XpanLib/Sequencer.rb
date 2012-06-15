@@ -1,7 +1,8 @@
-﻿# // 04/19/2012
 # // 04/19/2012
-#-inject gen_class_header 'Sequencer'
-class Sequencer
+# // 04/19/2012
+#-inject gen_class_header 'MACL::Sequencer'
+#-inject gen_scr_imported_ww 'MACL::Sequencer', '0x10000'
+class MACL::Sequencer
   attr_accessor :index
   attr_accessor :maxcount
   attr_accessor :count

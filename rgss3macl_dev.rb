@@ -1,9 +1,9 @@
 =begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
- Version : 0x10001
- Last Build: 06/03/2012 (MM/DD/YYYY) (0x10000)
- Date Built: 06/04/2012 (MM/DD/YYYY) (0x10001)
+ Version : 0x10003
+ Last Build: 06/09/2012 (MM/DD/YYYY) (0x10002)
+ Date Built: 06/13/2012 (MM/DD/YYYY) (0x10003)
  ──────────────────────────────────────────────────────────────────────────────
  ■ Module
  ♥ Class
@@ -250,7 +250,7 @@ RGSSEx Expansion
       ● Return
           Boolean
 =end
-($imported||={})['RGSS3-MACL']=0x10001
+($imported||={})['RGSS3-MACL']=0x10003
 # // Standard Library
 # ╒╕ ♥                                                               Object ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -419,9 +419,43 @@ class Hash
     self
   end
 end
+# ╒╕ ♥                                                            MatchData ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class MatchData
+  def to_hash
+    hsh = {}
+    return hsh if captures.empty? 
+    if names.empty?
+      (0..10).each do |i| hsh[i] = self[i] end
+    else
+      names.each do |s| hsh[s] = self[s] end
+    end
+    hsh
+  end unless method_defined? :to_hash
+end
 # ╒╕ ■                                                                 MACL ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
+  @@initialized = []
+  @@inits = []
+  def self.add_init sym,func
+    @@inits << [sym,func]
+  end
+  def self.run_init
+    @@inits.each do |(sym,func)|
+      p "%s was already initialized" if @@initialized.include? sym
+      begin
+        func.call 
+      rescue Exception => ex
+        p 'MACL: %s failed to load:' % sym.to_s
+        p ex
+        next
+      end
+      @@initialized << sym
+    end
+  end
+  module Mixin
+  end
 end
 # ╒╕ ■                                                          MACL::Mixin ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -605,38 +639,79 @@ module MACL::Parsers
   end
 end
 # // Xpansion Library
-# ╒╕ ♥                                                      IEI::ArrayTable ╒╕
+warn 'TableExpansion is already imported' if ($imported||={})['TableExpansion']
+($imported||={})['TableExpansion']=0x10000
+# ╒╕ ■                                          MACL::Mixin::TableExpansion ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class ArrayTable
-  include Mixin::TableExpansion
-  attr_reader :xsize
-  attr_reader :ysize
-  attr_reader :zsize
-  CAP = 256 ** 4
-  def initialize(*args,&block)
-    resize(*args,&block)
+module MACL::Mixin::TableExpansion
+  def iterate
+    x,y,z=[0]*3
+    if zsize > 1
+      for x in 0...xsize
+        for y in 0...ysize
+          for z in 0...zsize
+            yield self[x,y,z], x, y, z
+          end
+        end
+      end
+    elsif ysize > 1
+      for x in 0...xsize
+        for y in 0...ysize
+          yield self[x,y], x, y
+        end
+      end  
+    else
+      for x in 0...xsize
+        yield self[x], x
+      end  
+    end
+    Graphics.frame_reset
+    self
   end
-  def resize(x,y=1,z=1,&block)
-    @xsize, @ysize, @zsize = x.min(CAP), y.minmax(CAP,1), z.minmax(CAP,1)
-    @data = Array.new(@xsize * @ysize * @zsize, &block)
+  def iterate_map
+    i=0;xyz=[0,0,0]
+    iterate do |i,*xyz|
+      self[*xyz] = yield i, *xyz
+    end
+    self
+  end
+  def replace table
+    i=0;xyz=[0,0,0]
+    resize table.xsize, table.ysize, table.zsize
+    iterate do |i,*xyz|
+      self[*xyz] = table[*xyz]
+    end
+    self
+  end
+  def clear
+    resize 1
+    self
+  end
+  def nudge nx,ny,nz 
+    tabclone = self.dup
+    xs,ys,zs = tabclone.xsize, tabclone.ysize,tabclone.zsize
+    i,x,y,z=[0]*4
+    if zs > 0
+      tabclone.iterate do |i,x,y,z| self[(x+nx)%xs,(y+ny)%ys,(z+nz)%zs] = i end
+    elsif ys > 0  
+      tabclone.iterate do |i,x,y| self[(x+nx)%xs,(y+ny)%ys] = i end
+    else  
+      tabclone.iterate do |i,x| self[(x+nx)%xs] = i end
+    end  
+    self
   end  
-  def [](x, y = 0, z = 0)
-    @data[x.min(@xsize) + y.min(@ysize) * @xsize + z.min(@zsize) * @xsize * @ysize]
+  def oor? x,y=0,z=0
+    return true if x < 0 || y < 0 || z < 0
+    return true if xsize <= x
+    return true if ysize <= y if ysize > 0
+    return true if zsize <= z if zsize > 0
+    return false
   end
-  def []=(*args)
-    x = args[0].min(@xsize)
-    y = (args.size > 2 ? args[1] : 0).min(@ysize)
-    z = (args.size > 3 ? args[2] : 0).min(@zsize)
-    v = args.pop.min(CAP)
-    @data[x + y * @xsize + z * @xsize * @ysize] = v
-  end
-  def reset!()
-    @data.clear()
-    @xsize, @ysize, @zsize = 0, 0, 0
-  end  
 end
 # ╒╕ ♥                                                                Point ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'Point is already imported' if ($imported||={})['Point']
+($imported||={})['Point']=0x10000
 class Point
   attr_accessor :x, :y
   class << self ; alias :[] :new ; end
@@ -661,226 +736,128 @@ class Point
     [@x,@y].hash
   end
 end
-# ╒╕ ■                                                              Pallete ╒╕
+# ╒╕ ♥                                                           ArrayTable ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-module Pallete
-  @sym_colors = {}
-  #--------------------------------------------------------------------------#
-  # ● module-method :pallete
-  #/------------------------------------------------------------------------\#
-  # ● Return
-  #     Bitmap
-  #\------------------------------------------------------------------------/#  
-  def self.pallete
-    @pallete = Cache.system( "Pallete" ) if @pallete.nil? || @pallete.disposed?
-    return @pallete
+warn 'ArrayTable is already imported' if ($imported||={})['ArrayTable']
+($imported||={})['ArrayTable']=0x10000
+class MACL::ArrayTable
+  include MACL::Mixin::TableExpansion
+  attr_reader :xsize
+  attr_reader :ysize
+  attr_reader :zsize
+  CAP = 256 ** 4
+  def initialize *args,&block 
+    resize(*args,&block)
   end
-  #--------------------------------------------------------------------------#
-  # ● module-method :get_color
-  #/------------------------------------------------------------------------\#
-  # ● Parameter
-  #     index (Integer)
-  # ● Return
-  #     Color
-  #\------------------------------------------------------------------------/#
-  def self.get_color( index )
-    pallete.get_pixel( (index % 16) * 8, (index / 16) * 8 )
-  end 
-  #--------------------------------------------------------------------------#
-  # ● module-method :sym_color
-  #/------------------------------------------------------------------------\#
-  # ● Parameter
-  #     symbol (Symbol)
-  # ● Return
-  #     Color
-  #\------------------------------------------------------------------------/#
-  def self.sym_color( symbol )
-    get_color( @sym_colors[symbol] || 0 )
+  def resize x,y=1,z=1,&block 
+    @xsize, @ysize, @zsize = x.min(CAP), y.clamp(1,CAP), z.clamp(1,CAP)
+    @data = Array.new(@xsize*@ysize*@zsize,&block)
   end  
-  #--------------------------------------------------------------------------#
-  # ● module-method :[]
-  #/------------------------------------------------------------------------\#
-  # ● Refer to 
-  #     get_color
-  #\------------------------------------------------------------------------/#
-  def self.[]( n )
-    n.is_a?(Symbol) ? sym_color(n) : get_color(n)
+  def [](x,y=0,z=0)
+    @data[x.min(@xsize) + y.min(@ysize) * @xsize + z.min(@zsize) * @xsize * @ysize]
+  end
+  def []= *args 
+    x = args[0].min(@xsize)
+    y = (args.size > 2 ? args[1] : 0).min(@ysize)
+    z = (args.size > 3 ? args[2] : 0).min(@zsize)
+    v = args.pop.min(CAP)
+    @data[x + y * @xsize + z * @xsize * @ysize] = v
+  end
+  def reset!
+    @data.clear()
+    @xsize, @ysize, @zsize = 0, 0, 0
   end  
 end
-# ╒╕ ■                                                                Morph ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module Morph
-# ╒╕ ♥                                                               Growth ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-  class Growth
-    attr_reader :nodes
-    attr_reader :open_nodes
-    NODE_DIRECTIONS = [
-      [ 0,  0],
-      [ 0,  1], # // Down
-      [-1,  0], # // Left
-      [ 1,  0], # // Right
-      [ 0, -1], # // Up
-    ]
-    attr_accessor :same_dir_rate
-    attr_accessor :node_thinning
-    def initialize
-      @nodes = []
-      @open_nodes = [[0, 0, 0]]
-      @same_dir_rate = 35 
-      @node_thinning = 2
-      #@ntable = Table.new( *table_size )
-    end 
-    def ntable_at( x, y )
-      @ntable[x % @ntable.xsize, y % @ntable.ysize]
-    end  
-    def ntable_set_at( x, y, value )
-      @ntable[x % @ntable.xsize, y % @ntable.ysize] = value
-    end 
-    def table_size
-      return 100*2, 100*2
-    end  
-    def grow_by( n ) 
-      n.times { grow() } 
-      return self 
-    end
-    def grow()
-      new_open_nodes = []
-      @nodes |= @open_nodes.collect do |c|
-        node_count = [c[2] == 0 ? 4 : (3 - (c[0].abs+c[1].abs) / @node_thinning), 0].max
-        node_count.times do
-          new_open_nodes << random_node( c[0], c[1], c[2] )
-          #n = random_node( c[0], c[1], c[2] )
-          #if ntable_at(n[0], n[1]) == 0
-            #new_open_nodes << n ; ntable_set_at(n[0], n[1], 1)
-          #end  
-        end
-        c
-      end
-      @open_nodes = new_open_nodes
-      return self
-    end  
-    def final_nodes
-      return (@nodes + @open_nodes).uniq
-    end  
-    def random_node( x, y, from_direction )
-      possible_routes = [1, 2, 3, 4] - [5-from_direction]
-      if seed_rand(100) < @same_dir_rate 
-        dir = from_direction
-      else  
-        dir = possible_routes[seed_rand(possible_routes.size)]
-      end
-      nx, ny = *NODE_DIRECTIONS[dir]
-      #rx, ry = nx + x, ny + y      
-      #return rx, ry, dir
-      return nx + x, ny + y, dir
-    end 
-    def seed_rand( arg )
-      seed_gen.nil?() ? rand( arg ) : seed_gen.rand( arg )
-    end  
-    attr_reader :seed_gen
-    def set_seed_gen( seed )
-      @seed_gen = Random.new( seed )
-      return self
-    end  
-  end  
-# ╒╕ ♥                                                               Devour ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-  class Devour
-    def initialize( nodes )
-      @growth = Growth.new()
-      @devoured = []
-      @nodes = nodes
-      @x, @y = 0, 0
-    end  
-    def set_pos( x, y ) 
-      @x, @y = x, y
-      self
-    end  
-    def devour_by( n )
-      n.times { devour() }
-      self
-    end  
-    def devour
-      new_nodes = @growth.grow().open_nodes.collect { |nd| [nd[0]+@x, nd[1]+@y] }
-      @devoured |= new_nodes & @nodes
-      self
-    end  
-    def final_nodes()
-      return @nodes - @devoured
-    end 
-    def seed_gen()
-      return @growth.seed_gen
-    end  
-    def set_seed_gen( seed )
-      @growth.set_seed_gen( seed )
-      return self
-    end
-  end  
-# ╒╕ ♥                                                             Decimate ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-  class Decimate
-    def initialize( nodes )
-      @decimated = []
-      @nodes = nodes
-    end 
-    def decimate_by( n )
-      n.times { decimate() }
-      self
-    end  
-    def decimate
-      nds = final_nodes
-      @decimated << nds[seed_rand(nds.size)] unless nds.empty?
-      self
-    end  
-    def final_nodes()
-      return @nodes - @decimated
-    end 
-    def seed_rand( arg )
-      seed_gen.nil?() ? rand( arg ) : seed_gen.rand( arg )
-    end  
-    attr_reader :seed_gen
-    def set_seed_gen( seed )
-      @seed_gen = Random.new( seed )
-      return self
-    end 
-  end 
+warn 'RectExpansion is already imported' if ($imported||={})['RectExpansion']
+($imported||={})['RectExpansion']=0x10000
+def Rect.center(r1,r2)
+  Rect.new(r1.x+(r1.width-r2.width)/2,r1.y+(r1.height-r2.height)/2,r2.width,r2.height) 
 end
-# ╒╕ ♥                                                          Interpolate ╒╕
+def Rect.fit_in(source,target)
+  w,h = source.width, source.height
+  if w > h ; scale = target.width.to_f / w
+  else     ; scale = target.height.to_f / h
+  end
+  r = source.dup;r.width,r.height=(w*scale).to_i,(h*scale).to_i;r
+end  
+# ╒╕ ■                                           MACL::Mixin::RectExpansion ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-module Interpolate
-  # // Point dest, a, b; float t
-  def self.lerp(dest,a,b,t)
-    dest.x = a.x + (b.x-a.x)*t
-    dest.y = a.y + (b.y-a.y)*t
-  end
-  # // Point dest, *points; float t 
-  def self.bezier(dest,t,*points)
-    result_points = []; pnt = nil
-    wpoints = points
-    begin 
-      for i in 0...(wpoints.size-1)
-        pnt = Point[0,0];lerp(pnt,wpoints[i],wpoints[i+1],t)
-        result_points << pnt
-      end
-      wpoints = result_points
-      result_points = []
-    end until(wpoints.size <= 2)
-    raise "Not enought points" if wpoints.size != 2
-    lerp(dest,wpoints[0],wpoints[1],t)
-    #ab,bc,cd,abbc,bccd = Array.new(5) { Point[0,0] }
-    #lerp(ab, a,b,t)           # // point between a and b (green)
-    #lerp(bc, b,c,t)           # // point between b and c (green)
-    #lerp(cd, c,d,t)           # // point between c and d (green)
-    #lerp(abbc, ab,bc,t)       # // point between ab and bc (blue)
-    #lerp(bccd, bc,cd,t)       # // point between bc and cd (blue)
-    #lerp(dest, abbc,bccd,t)   # // point on the bezier-curve (black)
-  end
+module MACL::Mixin::RectExpansion
+  SYM_ARGS = [:x,:y,:width,:height]
+  def center( child_rect )
+    Rect.center( self, child_rect )
+  end    
+  def to_a();return self.x, self.y, self.width, self.height;end
+  def xto_a(*args,&block)
+    (args&SYM_ARGS).collect(&(block_given? ? block : proc{|sym|self.send(sym)}))
+  end  
+  def xto_h(*args);Hash[xto_a(*args){|sym|[sym,self.send(sym)]}];end
+  def cx();x+(width/2);end
+  def cy();y+(height/2);end
+  module RectOnly
+    def xset(x=nil,y=nil,w=nil,h=nil)
+      x,y,w,h = x.get_values(:x,:y,:width,:height) if(x.is_a?(Hash))
+      set(x||self.x,y||self.y,w||self.width,h||self.height);self
+    end 
+    # // Destructive
+    def contract!(n=0,orn=0)
+      self.x      += n   if(orn==0 || orn==1)
+      self.y      += n   if(orn==0 || orn==2)
+      self.width  -= n*2 if(orn==0 || orn==1)
+      self.height -= n*2 if(orn==0 || orn==2)
+      self
+    end  
+    def expand!(n=0)
+      contract!( -n )
+    end 
+    def squeeze!(n=0,invert=false,orn=0)
+      n = n.round(0) 
+      unless(invert)
+        self.x += n if(orn==0 || orn==1)
+        self.y += n if(orn==0 || orn==2)
+      end  
+      self.width  -= n if(orn==0 || orn==1)
+      self.height -= n if(orn==0 || orn==2)
+      self
+    end
+    def release!(n=1,invert=false,orn=0)
+      squeeze!(-n,invert,orn)
+    end  
+    def xpush!(n,orn=0)
+      self.x += n if(orn==0 || orn==1)
+      self.y += n if(orn==0 || orn==2)
+      self
+    end  
+    def xpull!(n,orn=0)
+      xpush!(-n,orn)
+    end  
+    # // . x . Dup
+    def contract(n=1,orn=0)
+      dup.contract!(n,orn)
+    end  
+    def expand(n=1,orn=0)
+      dup.expand!(n,orn)
+    end 
+    def squeeze(n=1,invert=false,orn=0)
+      dup.squeeze!(n,invert,orn)
+    end  
+    def release(n=1,invert=false,orn=0)
+      dup.release!(n,invert,orn)
+    end   
+    # // 03/05/2012
+    def xpush(n,orn=0)  
+      dup.xpush!(n,orn)
+    end
+    def xpull(n,orn=0)  
+      dup.xpull!(n,orn)
+    end  
+  end 
 end
 # ╒╕ ■                                                       Mixin::Surface ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-#-end
-module Mixin::Surface
+warn 'Surface is already imported' if ($imported||={})['Surface']
+($imported||={})['Surface']=0x10000
+module MACL::Mixin::Surface
   def rwidth
     self.width
   end
@@ -1055,9 +1032,9 @@ end
 # ╒╕ ♥                                                              Surface ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Surface
-  include Mixin::RectExpansion
-  include Mixin::RectExpansion::RectOnly
-  include Mixin::Surface
+  include MACL::Mixin::RectExpansion
+  include MACL::Mixin::RectExpansion::RectOnly
+  include MACL::Mixin::Surface
   def self.area_rect( *objs )
     mx = objs.min { |a, b| a.x <=> b.x }
     my = objs.min { |a, b| a.y <=> b.y }
@@ -1077,7 +1054,7 @@ end
 # ╒╕ ♥                                                                 Rect ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Rect
-  include Mixin::Surface
+  include MACL::Mixin::Surface
 end  
 # ╒╕ ♥                                                              Vector4 ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -1101,18 +1078,240 @@ end
 # ╒╕ ♥                                                               Window ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Window
-  include Mixin::Surface
+  include MACL::Mixin::Surface
 end  
 # ╒╕ ♥                                                               Sprite ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Sprite
-  include Mixin::Surface
+  include MACL::Mixin::Surface
 end
-﻿# // 04/12/2012
-# // 04/19/2012
+# ╒╕ ■                                                              Pallete ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'Pallete is already imported' if ($imported||={})['Pallete']
+($imported||={})['Pallete']=0x10000
+module Pallete
+  @sym_colors = {}
+  #--------------------------------------------------------------------------#
+  # ● module-method :pallete
+  #/------------------------------------------------------------------------\#
+  # ● Return
+  #     Bitmap
+  #\------------------------------------------------------------------------/#  
+  def self.pallete
+    @pallete = Cache.system( "Pallete" ) if @pallete.nil? || @pallete.disposed?
+    return @pallete
+  end
+  #--------------------------------------------------------------------------#
+  # ● module-method :get_color
+  #/------------------------------------------------------------------------\#
+  # ● Parameter
+  #     index (Integer)
+  # ● Return
+  #     Color
+  #\------------------------------------------------------------------------/#
+  def self.get_color( index )
+    pallete.get_pixel( (index % 16) * 8, (index / 16) * 8 )
+  end 
+  #--------------------------------------------------------------------------#
+  # ● module-method :sym_color
+  #/------------------------------------------------------------------------\#
+  # ● Parameter
+  #     symbol (Symbol)
+  # ● Return
+  #     Color
+  #\------------------------------------------------------------------------/#
+  def self.sym_color( symbol )
+    get_color( @sym_colors[symbol] || 0 )
+  end  
+  #--------------------------------------------------------------------------#
+  # ● module-method :[]
+  #/------------------------------------------------------------------------\#
+  # ● Refer to 
+  #     get_color
+  #\------------------------------------------------------------------------/#
+  def self.[]( n )
+    n.is_a?(Symbol) ? sym_color(n) : get_color(n)
+  end  
+end
+# ╒╕ ■                                                          MACL::Morph ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'MACL::Morph is already imported' if ($imported||={})['MACL::Morph']
+($imported||={})['MACL::Morph']=0x10000
+module MACL::Morph
+# ╒╕ ♥                                                               Growth ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+  class Growth
+    attr_reader :nodes
+    attr_reader :open_nodes
+    NODE_DIRECTIONS = [
+      [ 0,  0],
+      [ 0,  1], # // Down
+      [-1,  0], # // Left
+      [ 1,  0], # // Right
+      [ 0, -1], # // Up
+    ]
+    attr_accessor :same_dir_rate
+    attr_accessor :node_thinning
+    def initialize
+      @nodes = []
+      @open_nodes = [[0, 0, 0]]
+      @same_dir_rate = 35 
+      @node_thinning = 2
+      #@ntable = Table.new( *table_size )
+    end 
+    def ntable_at( x, y )
+      @ntable[x % @ntable.xsize, y % @ntable.ysize]
+    end  
+    def ntable_set_at( x, y, value )
+      @ntable[x % @ntable.xsize, y % @ntable.ysize] = value
+    end 
+    def table_size
+      return 100*2, 100*2
+    end  
+    def grow_by( n ) 
+      n.times { grow() } 
+      return self 
+    end
+    def grow()
+      new_open_nodes = []
+      @nodes |= @open_nodes.collect do |c|
+        node_count = [c[2] == 0 ? 4 : (3 - (c[0].abs+c[1].abs) / @node_thinning), 0].max
+        node_count.times do
+          new_open_nodes << random_node( c[0], c[1], c[2] )
+          #n = random_node( c[0], c[1], c[2] )
+          #if ntable_at(n[0], n[1]) == 0
+            #new_open_nodes << n ; ntable_set_at(n[0], n[1], 1)
+          #end  
+        end
+        c
+      end
+      @open_nodes = new_open_nodes
+      return self
+    end  
+    def final_nodes
+      return (@nodes + @open_nodes).uniq
+    end  
+    def random_node( x, y, from_direction )
+      possible_routes = [1, 2, 3, 4] - [5-from_direction]
+      if seed_rand(100) < @same_dir_rate 
+        dir = from_direction
+      else  
+        dir = possible_routes[seed_rand(possible_routes.size)]
+      end
+      nx, ny = *NODE_DIRECTIONS[dir]
+      #rx, ry = nx + x, ny + y      
+      #return rx, ry, dir
+      return nx + x, ny + y, dir
+    end 
+    def seed_rand( arg )
+      seed_gen.nil?() ? rand( arg ) : seed_gen.rand( arg )
+    end  
+    attr_reader :seed_gen
+    def set_seed_gen( seed )
+      @seed_gen = Random.new( seed )
+      return self
+    end  
+  end  
+# ╒╕ ♥                                                               Devour ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+  class Devour
+    def initialize( nodes )
+      @growth = Growth.new()
+      @devoured = []
+      @nodes = nodes
+      @x, @y = 0, 0
+    end  
+    def set_pos( x, y ) 
+      @x, @y = x, y
+      self
+    end  
+    def devour_by( n )
+      n.times { devour() }
+      self
+    end  
+    def devour
+      new_nodes = @growth.grow().open_nodes.collect { |nd| [nd[0]+@x, nd[1]+@y] }
+      @devoured |= new_nodes & @nodes
+      self
+    end  
+    def final_nodes()
+      return @nodes - @devoured
+    end 
+    def seed_gen()
+      return @growth.seed_gen
+    end  
+    def set_seed_gen( seed )
+      @growth.set_seed_gen( seed )
+      return self
+    end
+  end  
+# ╒╕ ♥                                                             Decimate ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+  class Decimate
+    def initialize( nodes )
+      @decimated = []
+      @nodes = nodes
+    end 
+    def decimate_by( n )
+      n.times { decimate() }
+      self
+    end  
+    def decimate
+      nds = final_nodes
+      @decimated << nds[seed_rand(nds.size)] unless nds.empty?
+      self
+    end  
+    def final_nodes()
+      return @nodes - @decimated
+    end 
+    def seed_rand( arg )
+      seed_gen.nil?() ? rand( arg ) : seed_gen.rand( arg )
+    end  
+    attr_reader :seed_gen
+    def set_seed_gen( seed )
+      @seed_gen = Random.new( seed )
+      return self
+    end 
+  end 
+end
+# ╒╕ ♥                                                          Interpolate ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'Interpolate is already imported' if ($imported||={})['Interpolate']
+($imported||={})['Interpolate']=0x10000
+module MACL::Interpolate
+  # // Point dest, a, b; float t
+  def self.lerp(dest,a,b,t)
+    dest.x = a.x + (b.x-a.x)*t
+    dest.y = a.y + (b.y-a.y)*t
+  end
+  # // Point dest, *points; float t 
+  def self.bezier(dest,t,*points)
+    result_points = []; pnt = nil
+    wpoints = points
+    begin 
+      for i in 0...(wpoints.size-1)
+        pnt = Point[0,0];lerp(pnt,wpoints[i],wpoints[i+1],t)
+        result_points << pnt
+      end
+      wpoints = result_points
+      result_points = []
+    end until(wpoints.size <= 2)
+    raise "Not enought points" if wpoints.size != 2
+    lerp(dest,wpoints[0],wpoints[1],t)
+    #ab,bc,cd,abbc,bccd = Array.new(5) { Point[0,0] }
+    #lerp(ab, a,b,t)           # // point between a and b (green)
+    #lerp(bc, b,c,t)           # // point between b and c (green)
+    #lerp(cd, c,d,t)           # // point between c and d (green)
+    #lerp(abbc, ab,bc,t)       # // point between ab and bc (blue)
+    #lerp(bccd, bc,cd,t)       # // point between bc and cd (blue)
+    #lerp(dest, abbc,bccd,t)   # // point on the bezier-curve (black)
+  end
+end
 # ╒╕ ♥                                                                 Grid ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class Grid
+warn 'Grid is already imported' if ($imported||={})['Grid']
+($imported||={})['Grid']=0x10000
+class MACL::Grid
   def self.qcell_r(columns,rows,cell_width,cell_height,index=0)
     new(columns,rows,cell_width,cell_height).cell_r(index)
   end  
@@ -1153,16 +1352,20 @@ class Grid
     (0...columns).collect{|x|xy2index(x,y)}
   end    
 end
+warn 'Tween is already imported' if ($imported||={})['Tween']
+($imported||={})['Tween']=0x10000
 # ╒╕ ♥                                                                Tween ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Tween
-  @@_add_time = (1.0 / Graphics.frame_rate) 
   attr_reader :values
   attr_reader :start_values
   attr_reader :end_values
   attr_reader :time
   attr_reader :maxtime
   class << self
+    def init
+      @@_add_time = (1.0 / Graphics.frame_rate) 
+    end
     def frames_to_tt( frames )
       frames * @@_add_time
     end 
@@ -1183,54 +1386,60 @@ class Tween
   def value( index=0 )
     return @values[index]
   end  
-  def start_value( index=0 )
+  def start_value index=0 
     return @start_values[index]
   end  
-  def end_value( index=0 )
+  def end_value index=0  
     return @end_values[index]
   end  
-  def set( start_values=[], end_values=[], easer=:linear, maxtime=1.0, extra_params=[] )
-    start_values = [start_values] unless start_values.is_a?(Enumerable)
-    end_values   = [end_values]   unless end_values.is_a?(Enumerable)
+  def set start_values=[],end_values=[],easer=:linear,maxtime=1.0,extra_params=[]
+    start_values = Array(start_values)
+    end_values   = Array(end_values)
     @start_values, @end_values = start_values, end_values
     @easer, @maxtime = easer, maxtime
     @extra_params = extra_params
-    scale_values()
+    scale_values
     @values = []
-    update_value( @time )
+    update_value @time 
   end  
-  def set_and_reset( *args )
-    reset_time()
-    set( *args )
+  def set_and_reset *args 
+    reset_time 
+    set *args 
   end  
-  def scale_values( n=1.0 )
+  def scale_values n=1.0 
     @start_values = @start_values.collect { |v| v * n }
     @end_values   = @end_values.collect { |v| v * n }
   end  
-  def change_easer( new_easer ) ; @easer = new_easer ; end
-  def reset_time() 
+  def change_easer new_easer 
+    @easer = new_easer
+  end
+  def reset_time 
     @time = 0.0 
   end
-  def reset!()
-    reset_time()
-    update_value_now()
+  def reset!
+    reset_time
+    update_value_now
   end  
-  def easer() ; return Tween::EASER_SYMBOLS[@easer] ; end # // YAY now u can dump it >_>
-  def done?() ; return @time == @maxtime ; end # // Time gets capped anyway
+  def easer
+    return Tween::EASER_SYMBOLS[@easer]
+  end # // YAY now u can dump it >_>
+  def done?
+    @time == @maxtime 
+  end # // Time gets capped anyway
   def pred_time
-    @time = (@time-@@_add_time).max(0)
+    @time = (@time-@@_add_time).max 0 
   end  
   def succ_time
-    @time = (@time+@@_add_time).min(@maxtime)
+    @time = (@time+@@_add_time).min @maxtime 
   end  
-  def time_rate()
-    time_to_rate(@time)
+  def time_rate
+    time_to_rate @time 
   end  
-  def time_to_rate(t=@time)
+  def time_to_rate t=@time 
     t / @maxtime
   end  
-  def value_at_time( time, sv=@start_values[0], ev=@end_values[0], mt=@maxtime, exp=@extra_params )
-    easer.ease( time, sv, ev, mt, *exp )
+  def value_at_time time, sv=@start_values[0], ev=@end_values[0], mt=@maxtime, exp=@extra_params 
+    easer.ease time, sv, ev, mt, *exp  
   end  
   def invert
     @start_values,@end_values = @end_values,@start_values
@@ -1240,16 +1449,16 @@ class Tween
     yield self while update && !done?
     self
   end
-  def update()
-    succ_time() unless done? # // Save a little cpu..
-    update_value_now()
+  def update
+    succ_time unless done? # // Save a little cpu..
+    update_value_now
   end  
-  def update_value_now()
-    update_value( @time )
+  def update_value_now
+    update_value @time  
   end  
-  def update_value( time )
+  def update_value time 
     for i in 0...@start_values.size
-      @values[i] = value_at_time( time, @start_values[i], @end_values[i] )
+      @values[i] = value_at_time time, @start_values[i], @end_values[i] 
     end  
   end 
 end 
@@ -1257,43 +1466,43 @@ end
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Tween::Multi
   attr_reader :tweeners
-  def initialize( *tweensets )
-    set( *tweensets )
+  def initialize *tweensets 
+    set *tweensets 
   end
-  def set( *tweensets )
+  def set *tweensets 
     clear
     tweensets.each do |tset|
-      add_tween( *tset )
+      add_tween *tset 
     end
   end
   def done?
     return @tweeners.all? { |t| t.done? }
   end  
-  def clear()
+  def clear
     @tweeners = []
   end  
-  def tweener(index)
+  def tweener index 
     @tweeners[index]
   end  
-  def tweener_value(index, vindex)
-    @tweeners[index].value(vindex)
+  def tweener_value index, vindex 
+    @tweeners[index].value vindex 
   end
-  def tweener_values(index)
+  def tweener_values index 
     @tweeners[index].values
   end 
-  def add_tween( *tset )
-    @tweeners << Tween.new( *tset )
+  def add_tween *args  
+    @tweeners << Tween.new(*args)
   end  
-  def reset()
+  def reset
     @tweeners.each do |t| t.reset_time ; end
   end  
-  def value(index)
+  def value index 
     @tweeners[index].value
   end  
   def values
     @tweeners.collect do |t| t.value ; end
   end 
-  def all_values()
+  def all_values
     @tweeners.collect { |t| t.values ; }.flatten
   end  
   def update
@@ -1306,18 +1515,18 @@ class Tween::Osc
   attr_reader :index
   attr_reader :tindex
   attr_reader :cycles
-  def initialize( *args, &block )
-    normal_cycle()
-    set( *args, &block )
-    set_cycles( -1 )
-    reset()
+  def initialize *args,&block  
+    normal_cycle
+    set *args,&block 
+    set_cycles -1
+    reset
   end 
   def reset
     @tindex = 0
     @index = 0
     @tweeners.each { |t| t.reset! }
   end  
-  def set_cycles( n )
+  def set_cycles n 
     @cycles = n
   end  
   def invert_cycle
@@ -1326,16 +1535,16 @@ class Tween::Osc
   def normal_cycle
     @inverted = false
   end  
-  def set( svs, evs, easers=[:linear, :linear], maxtimes=[1.0,1.0] )
+  def set svs, evs, easers=[:linear, :linear], maxtimes=[1.0,1.0] 
     @tweeners = []
     for i in 0...easers.size
       args = (i % 2 == 0 ? [svs, evs] : [evs, svs]) + [easers[i], maxtimes[i%maxtimes.size]]
-      @tweeners[i] = Tween.new( *args )
+      @tweeners[i] = Tween.new *args 
     end
     self
   end  
   def total_time
-    @tweeners.inject(0) { |r, t| r + t.maxtime }
+    @tweeners.inject 0 do |r, t| r + t.maxtime end
   end 
   def done?
     return @tindex / @tweeners.size >= @cycles unless @cycles == -1
@@ -1348,13 +1557,13 @@ class Tween::Osc
       @tindex = @tindex.succ
       @tweeners[@index].reset_time
     end  
-    @tweeners[@index].update()
+    @tweeners[@index].update
   end  
   def values
     @tweeners[@index].values
   end 
-  def value(n=0)
-    @tweeners[@index].value(n)
+  def value n=0 
+    @tweeners[@index].value n 
   end  
 end 
 # ╒╕ ♥                                                     Tween::Sequencer ╒╕
@@ -1362,11 +1571,11 @@ end
 class Tween::Seqeuncer
   attr_reader :index
   attr_reader :tweeners
-  def initialize()
+  def initialize
     @tweeners = []
     @index = 0
   end 
-  def add_tween(*args,&block)
+  def add_tween *args,&block 
     @tweeners << Tween.new(*args,&block)
   end  
   def reset
@@ -1382,104 +1591,103 @@ class Tween::Seqeuncer
   def update
     return if done?
     @index = (@inverted ? @index.pred : @index.succ) if @tweeners[@index].done?
-    @tweeners[@index].update()
+    @tweeners[@index].update
   end  
   def values
     @tweeners[@index].values
   end 
-  def value(n=0)
-    @tweeners[@index].value(n)
+  def value n=0 
+    @tweeners[@index].value n 
   end
 end  
 # ╒╕ ♥                                                         Tween::Easer ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Tween::Easer
-  attr_accessor :name
-  attr_accessor :symbol
-  def initialize( name = nil, &function )
+  attr_accessor :name,:symbol
+  class << self
+    alias :old_new :new
+    def new *args,&function 
+      obj = old_new *args 
+      # // time, start_value, change_value, current_time/elapsed_time
+      @function = function
+      class << obj ; define_method(:_ease,&@function) ; end
+      @function = nil
+      obj
+    end
+  end
+  def initialize name=nil 
     @name = name || ".Easer"
     @symbol = :__easer
-    @function = function
-    # // time, start_value, change_value, current_time/elapsed_time
-    class << self ; define_method(:_ease, &@function) ; end
-    @function = nil
   end  
-  def ease( et, sv, ev, t, *args )
-    _ease( et, sv, ev-sv, t, *args )
+  def ease et, sv, ev, t, *args 
+    _ease et, sv, ev-sv, t, *args 
   end  
 end  
-# ╒╕ ♥                                                                Tween ╒╕
+# ╒╕ ♥                                                        Tween::Easers ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
- ─┐ ● Tween::Easers ┌──────────────────────────────────────────────────────────
-  └─────────────────┘ 
 class Tween 
-  # // IceDragon
-  # // 01/26/2012
-  # // 01/26/2012
   module Null
-    In   = Easer.new("Null::In") { |t, st, ch, d| st }
-    Out  = Easer.new("Null::Out") { |t, st, ch, d| ch + st }
+    In   = Easer.new "Null::In" do |t, st, ch, d| st end
+    Out  = Easer.new "Null::Out"  do |t, st, ch, d| ch + st end
   end 
-  # // 01/26/2012
-  # // 01/26/2012
   module Bee
-    In    = Easer.new("Bee::In") { |t, st, ch, d, b=4.0|
+    In    = Easer.new "Bee::In"  do |t, st, ch, d, b=4.0|
       (ch * t / d + st) + (-ch * Math.sin(Math.cos((b * t / d)*Math::PI)*Math::PI) / b) 
-    }
-    Out    = Easer.new("Bee::Out") { |t, st, ch, d, b=4.0| 
+    end
+    Out    = Easer.new "Bee::Out"  do |t, st, ch, d, b=4.0| 
       (ch * t / d + st) + (ch * Math.sin(Math.cos((b * t / d)*Math::PI)*Math::PI) / b) 
-    }
-    InOut = Easer.new("Bee::InOut") { |t, st, ch, d, b=4.0| 
+    end
+    InOut = Easer.new "Bee::InOut"  do |t, st, ch, d, b=4.0| 
       t < d/2.0 ? 
         In.ease(t*2.0, 0, ch, d, b) * 0.5 + st :
         Out.ease(t*2.0 - d, 0, ch, d, b) * 0.5 + ch * 0.5 + st
-    }
+    end
   end
   # // 01/26/2012
   # // 01/26/2012
   module Modulate
-    Out = Easer.new("Modulate::Out") { |t, st, ch, d, e1=:linear, e2=:linear|
+    Out = Easer.new "Modulate::Out"  do |t, st, ch, d, e1=:linear, e2=:linear|
       return st if ch == 0
       Tween::EASER_SYMBOLS[e1].ease(t, 0, ch, d) * (Tween::EASER_SYMBOLS[e2].ease(t, 0, ch, d) / ch) + st
-    }
-    In = Easer.new("Modulate::In") { |t, st, ch, d, e1=:linear, e2=:linear|
+    end
+    In = Easer.new "Modulate::In"  do |t, st, ch, d, e1=:linear, e2=:linear|
       return st if ch == 0
       Tween::EASER_SYMBOLS[e1].ease(t, 0, ch, d) * (1.0-(Tween::EASER_SYMBOLS[e2].ease(d-t, 0, ch, d) / ch)) + st
-    }
-    InOut = Easer.new("Modulate::InOut") { |t, st, ch, d, e1=:linear, e2=:sine_in|
+    end
+    InOut = Easer.new "Modulate::InOut"  do |t, st, ch, d, e1=:linear, e2=:sine_in|
       t < d/2.0 ? 
         In.ease(t*2.0, 0, ch, d) * 0.5 + st :
         Out.ease(t*2.0 - d, 0, ch, d) * 0.5 + ch * 0.5 + st
-    }
+    end
   end  
   # // Jet
-  Linear  = Easer.new("Linear") { |t, st, ch, d| ch * t / d + st }
+  Linear  = Easer.new "Linear"  do |t, st, ch, d| ch * t / d + st end
   module Sine 
-    In    = Easer.new("Sine::In") { |t, st, ch, d| 
+    In    = Easer.new "Sine::In"  do |t, st, ch, d| 
       -ch * Math.cos(t / d * (Math::PI / 2)) + ch + st 
-    }
-    Out   = Easer.new("Sine::Out") { |t, st, ch, d| 
+    end
+    Out   = Easer.new "Sine::Out"  do |t, st, ch, d| 
       ch * Math.sin(t / d * (Math::PI / 2)) + st 
-    }
-    InOut = Easer.new("Sine::InOut") { |t, st, ch, d| 
+    end
+    InOut = Easer.new "Sine::InOut" do |t, st, ch, d| 
       -ch / 2 * (Math.cos(Math::PI * t / d) - 1) + st 
-    }
+    end
   end
   module Circ  
-    In    = Easer.new("Circ::In") { |t, st, ch, d| 
+    In    = Easer.new "Circ::In" do |t, st, ch, d| 
       -ch * (Math.sqrt(1 - (t/d) * t/d) - 1) + st rescue st
-    }
-    Out   = Easer.new("Circ::Out") { |t, st, ch, d| 
+    end
+    Out   = Easer.new "Circ::Out" do |t, st, ch, d| 
       t = t/d - 1 ; ch * Math.sqrt(1 - t * t) + st rescue st
-    }
-    InOut = Easer.new("Circ::InOut") { |t, st, ch, d| 
+    end
+    InOut = Easer.new "Circ::InOut" do |t, st, ch, d| 
       (t /= d/2.0) < 1 ? 
        -ch / 2 * (Math.sqrt(1 - t*t) - 1) + st : 
         ch / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + st rescue st
-    }
+    end
   end  
   module Bounce
-    Out    = Easer.new("Bounce::Out") { |t, st, ch, d| 
+    Out    = Easer.new "Bounce::Out" do |t, st, ch, d| 
       if (t /= d) < (1/2.75)
         ch * (7.5625 * t * t) + st
       elsif t < (2 / 2.75)
@@ -1489,96 +1697,96 @@ class Tween
       else
         ch * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + st
       end
-    }
-    In    = Easer.new("Bounce::In") { |t, st, ch, d|
+    end
+    In    = Easer.new "Bounce::In" do |t, st, ch, d|
       ch - Out.ease(d-t, 0, ch, d) + st 
-    }
-    InOut = Easer.new("Bounce::InOut") { |t, st, ch, d| 
+    end
+    InOut = Easer.new "Bounce::InOut"  do |t, st, ch, d| 
       t < d/2.0 ? 
         In.ease(t*2.0, 0, ch, d) * 0.5 + st :
         Out.ease(t*2.0 - d, 0, ch, d) * 0.5 + ch * 0.5 + st
-    }
+    end
   end  
   module Back  
-    In    = Easer.new("Back::In") { |t, st, ch, d, s=1.70158| 
+    In    = Easer.new "Back::In" do |t, st, ch, d, s=1.70158| 
       ch * (t/=d) * t * ((s+1) * t - s) + st 
-    }
-    Out   = Easer.new("Back::Out") { |t, st, ch, d, s=1.70158| 
+    end
+    Out   = Easer.new "Back::Out" do |t, st, ch, d, s=1.70158| 
       ch * ((t=t/d-1) * t * ((s+1) * t + s) + 1) + st 
-    }
-    InOut = Easer.new("Back::InOut") { |t, st, ch, d, s=1.70158| 
+    end
+    InOut = Easer.new "Back::InOut" do |t, st, ch, d, s=1.70158| 
       (t /= d/2.0) < 1 ?
         ch / 2.0 * (t * t * (((s *= (1.525)) + 1) * t - s)) + st :
         ch / 2.0 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + st
-    }
+    end
   end  
   module Cubic 
-    In    = Easer.new("Cubic::In") { |t, st, ch, d| ch * (t /= d) * t * t + st }
-    Out   = Easer.new("Cubic::Out") { |t, st, ch, d| 
+    In    = Easer.new "Cubic::In" do |t, st, ch, d| ch * (t /= d) * t * t + st end
+    Out   = Easer.new "Cubic::Out" do |t, st, ch, d| 
       ch * ((t = t / d.to_f - 1) * t * t + 1) + st 
-    }
-    InOut = Easer.new("Cubic::InOut") { |t, st, ch, d| 
+    end
+    InOut = Easer.new "Cubic::InOut" do |t, st, ch, d| 
       (t /= d / 2.0) < 1 ?
         ch / 2.0 * t * t * t + st :
         ch / 2.0 * ((t -= 2) * t * t + 2) + st
-    }
+    end
   end
   module Expo  
-    In    = Easer.new("Expo::In") { |t, st, ch, d| 
+    In    = Easer.new "Expo::In" do |t, st, ch, d| 
       t == 0 ? st : ch * (2 ** (10 * (t / d.to_f - 1))) + st 
-    }
-    Out   = Easer.new("Expo::Out") { |t, st, ch, d| 
+    end
+    Out   = Easer.new "Expo::Out" do |t, st, ch, d| 
       t == d ? st + ch : ch * (-(2 ** (-10 * t / d.to_f)) + 1) + st 
-    }
-    InOut = Easer.new("Expo::InOut") { |t, st, ch, d| 
+    end
+    InOut = Easer.new "Expo::InOut" do |t, st, ch, d| 
       if t == 0                ; st
       elsif t == d             ; st + ch
       elsif (t /= d / 2.0) < 1 ; ch / 2.0 * (2 ** (10 * (t - 1))) + st
       else                     ; ch / 2.0 * (-(2 ** (-10 * (t -= 1))) + 2) + st
       end
-    }
+    end
   end  
   module Quad
-    In    = Easer.new("Quad::In") { |t, st, ch, d| 
+    In    = Easer.new "Quad::In" do |t, st, ch, d| 
       ch * (t /= d.to_f) * t + st 
-    }
-    Out   = Easer.new("Quad::Out") { |t, st, ch, d| 
+    end
+    Out   = Easer.new "Quad::Out" do |t, st, ch, d| 
       -ch * (t /= d.to_f) * (t - 2) + st 
-    }
-    InOut = Easer.new("Quad::InOut") { |t, st, ch, d| 
+    end
+    InOut = Easer.new "Quad::InOut" do |t, st, ch, d| 
       (t /= d / 2.0) < 1 ?
         ch / 2.0 * t * t + st : 
         -ch / 2.0 * ((t -= 1) * (t - 2) - 1) + st 
-    }
+    end
   end  
   module Quart
-    In    = Easer.new("Quart::In") { |t, st, ch, d| 
+    In    = Easer.new "Quart::In" do |t, st, ch, d| 
       ch * (t /= d.to_f) * t * t * t + st
-    }
-    Out   = Easer.new("Quart::Out") { |t, st, ch, d|
+    end
+    Out   = Easer.new "Quart::Out" do |t, st, ch, d|
       -ch * ((t = t / d.to_f - 1) * t * t * t - 1) + st 
-    }
-    InOut = Easer.new("Quart::InOut") { |t, st, ch, d| 
+    end
+    InOut = Easer.new "Quart::InOut" do |t, st, ch, d| 
       (t /= d / 2.0) < 1 ? 
         ch / 2.0 * t * t * t * t + st :
         -ch / 2.0 * ((t -= 2) * t * t * t - 2) + st
-    }
+    end
   end  
   module Quint
-    In    = Easer.new("Quint::In") { |t, st, ch, d| 
+    In    = Easer.new "Quint::In" do |t, st, ch, d| 
       ch * (t /= d.to_f) * t * t * t * t + st 
-    }
-    Out   = Easer.new("Quint::Out") { |t, st, ch, d| 
+    end
+    Out   = Easer.new "Quint::Out" do |t, st, ch, d| 
       ch * ((t = t / d.to_f - 1) * t * t *t * t + 1) + st 
-    }
-    InOut = Easer.new("Quint::InOut") { |t, st, ch, d| 
+    end
+    InOut = Easer.new "Quint::InOut" do |t, st, ch, d| 
       (t /= d / 2.0) < 1 ?
         ch / 2.0 * t * t *t * t * t + st :
         ch / 2.0 * ((t -= 2) * t * t * t * t + 2) + st
-    }
+    end
   end  
   module Elastic
-    In    = Easer.new("Elastic::In") { |t, st, ch, d, a = 5, p = 0| 
+    In    = Easer.new "Elastic::In" do |t, st, ch, d, a = 5, p = 0| 
       s = 0
       if t == 0 
         st
@@ -1594,8 +1802,8 @@ class Tween
         end
         -(a * (2 ** (10 * (t -= 1))) * Math.sin( (t * d - s) * (2 * Math::PI) / p)) + st
       end
-    }
-    Out   = Easer.new("Elastic::Out") { |t, st, ch, d, a = 5, p = 0|  
+    end
+    Out   = Easer.new "Elastic::Out" do |t, st, ch, d, a = 5, p = 0|  
       s = 0
       if t == 0
         st
@@ -1611,7 +1819,7 @@ class Tween
         end
         a * (2 ** (-10 * t)) * Math.sin((t * d - s) * (2 * Math::PI) / p.to_f) + ch + st
       end  
-    }
+    end
   end  
 end  
 class Tween
@@ -1675,11 +1883,14 @@ class Tween
     EASER_SYMBOLS[sym].symbol = sym
   }
 end
-﻿# // 04/19/2012
+MACL.add_init :tween, Tween.method(:init)
 # // 04/19/2012
-# ╒╕ ♥                                                            Sequencer ╒╕
+# // 04/19/2012
+# ╒╕ ♥                                                      MACL::Sequencer ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class Sequencer
+warn 'MACL::Sequencer is already imported' if ($imported||={})['MACL::Sequencer']
+($imported||={})['MACL::Sequencer']=0x10000
+class MACL::Sequencer
   attr_accessor :index
   attr_accessor :maxcount
   attr_accessor :count
@@ -1710,6 +1921,8 @@ class Sequencer
 end
 # ╒╕ ■                                                               Chitat ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'Chitat is already imported' if ($imported||={})['Chitat']
+($imported||={})['Chitat']=0x10000
 class Chitat
   class Stack < Array
     attr_reader :match_data
@@ -1793,6 +2006,31 @@ class Chitat
     arra.each do |a| a.collect!{|s|mk_tag(s)};a.compact! end
     arra.reject! do |a| a and a.empty? end
     arra
+  end
+end
+# ╒╕ ♥                                                                 Blaz ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class Blaz
+  def initialize &block
+    @commands = []
+    instance_exec &block if block_given?
+  end
+  attr_accessor :commands
+  def enum_commands
+    sym,regex,func = [nil]*3
+    @commands.each do |(sym,regex,func)|
+      yield sym,regex,func
+    end
+  end  
+  def add_command sym,regex,&func
+    @commands << [sym,regex,func]
+  end
+  def match_command str
+    enum_commands do |sym,regex,func|
+      regex = regex.call if regex.respond_to? :call
+      mtch = str.match(regex)
+      return if yield sym, mtch, func if mtch
+    end
   end
 end
 #// RGGSEx
@@ -1924,69 +2162,7 @@ end
 # ╒╕ ♥                                                                Table ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Table
-  def iterate
-    x,y,z=[0]*3
-    if zsize > 0
-      for x in 0...xsize
-        for y in 0...ysize
-          for z in 0...zsize
-            yield self[x,y,z], x, y, z
-          end
-        end
-      end
-    elsif ysize > 0
-      for x in 0...xsize
-        for y in 0...ysize
-          yield self[x,y], x, y
-        end
-      end  
-    else
-      for x in 0...xsize
-        yield self[x], x
-      end  
-    end
-    Graphics.frame_reset
-    self
-  end
-  def iterate_map
-    i=0;xyz=[0,0,0]
-    iterate do |i,*xyz|
-      self[*xyz] = yield i, *xyz
-    end
-    self
-  end
-  def replace table
-    i=0;xyz=[0,0,0]
-    resize table.xsize, table.ysize, table.zsize
-    iterate do |i,*xyz|
-      self[*xyz] = table[*xyz]
-    end
-    self
-  end
-  def clear
-    resize 1
-    self
-  end
-  def nudge nx,ny,nz 
-    tabclone = self.dup
-    xs,ys,zs = tabclone.xsize, tabclone.ysize,tabclone.zsize
-    i,x,y,z=[0]*4
-    if zs > 0
-      tabclone.iterate do |i,x,y,z| self[(x+nx)%xs,(y+ny)%ys,(z+nz)%zs] = i end
-    elsif ys > 0  
-      tabclone.iterate do |i,x,y| self[(x+nx)%xs,(y+ny)%ys] = i end
-    else  
-      tabclone.iterate do |i,x| self[(x+nx)%xs] = i end
-    end  
-    self
-  end  
-  def oor? x,y=0,z=0
-    return true if x < 0 || y < 0 || z < 0
-    return true if xsize <= x
-    return true if ysize <= y if ysize > 0
-    return true if zsize <= z if zsize > 0
-    return false
-  end  
+  include MACL::Mixin::TableExpansion  
 end
 # ╒╕ ♥                                                     RPG::Event::Page ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -2068,5 +2244,6 @@ class Game_Switches
     self[id] = !self[id]
   end
 end
+MACL.run_init;
 # ┌┬────────────────────────────────────────────────────────────────────────┬┐
 # ╘╛ ● End of File ●                                                        ╘╛

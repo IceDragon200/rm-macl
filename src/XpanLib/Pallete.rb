@@ -1,7 +1,8 @@
-﻿#-// 12/??/2011
+#-// 12/??/2011
 #-// 06/06/2012
 #-// Version : 1.0
 #-inject gen_module_header 'Pallete'
+#-inject gen_scr_imported_ww 'Pallete', '0x10000'
 module Pallete
   @sym_colors = {}
   #--------------------------------------------------------------------------#

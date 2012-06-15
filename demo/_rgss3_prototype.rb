@@ -1,11 +1,5 @@
 # // RGSS3 Prototype
-require 'win32api'
-require 'zlib'
-require 'dl'
-module Graphics
-end
-module Input
-end
+require_relative '_rgss3_prototype_lite'
 module RPG
   class BaseItem
   end
@@ -33,18 +27,4 @@ module RPG
   end
   class Event
   end
-end
-class Rect
-end
-class Viewport
-end
-class Window
-end
-class Sprite
-end
-class Plane
-end
-class Bitmap
-end
-class Font
 end

@@ -1,5 +1,7 @@
 # ╒╕ ♥                                                                Point ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'Point is already imported' if ($imported||={})['Point']
+($imported||={})['Point']=0x10000
 class Point
   attr_accessor :x, :y
   class << self ; alias :[] :new ; end

@@ -1,7 +1,8 @@
-﻿// Spacer - to fix naming errors
+// Spacer - to fix naming errors
 Object_Ex
 Kernel_Ex
 Numeric_Ex
 String_Ex
 Array_Ex
 Hash_Ex
+MatchData_Ex

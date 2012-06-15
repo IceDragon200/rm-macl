@@ -1,3 +1,5 @@
 =end
 ($imported||={})['RGSS3-MACL']=SKPVERSION
-#-switch INCUR:OFF
+#-unlessdef xEDOSBUILD
+  #-switch INCUR:OFF
+#-end: 

@@ -1,6 +1,7 @@
-﻿#-// 05/11/2012
+#-// 05/11/2012
 #-// 06/02/2012
 #-inject gen_module_header 'Chitat'
+#-inject gen_scr_imported_ww 'Chitat', '0x10000'
 class Chitat
   class Stack < Array
     attr_reader :match_data

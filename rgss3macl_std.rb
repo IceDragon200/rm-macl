@@ -1,9 +1,9 @@
 =begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
- Version : 0x10001
- Last Build: 06/03/2012 (MM/DD/YYYY) (0x10000)
- Date Built: 06/04/2012 (MM/DD/YYYY) (0x10001)
+ Version : 0x10002
+ Last Build: 06/04/2012 (MM/DD/YYYY) (0x10001)
+ Date Built: 06/09/2012 (MM/DD/YYYY) (0x10002)
  ──────────────────────────────────────────────────────────────────────────────
  ■ Module
  ♥ Class
@@ -137,7 +137,7 @@ Standard Library
       ● Return
           Hash or <self>
 =end
-($imported||={})['RGSS3-MACL']=0x10001
+($imported||={})['RGSS3-MACL']=0x10002
 # // Standard Library
 # ╒╕ ♥                                                               Object ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘

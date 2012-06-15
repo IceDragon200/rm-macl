@@ -33,5 +33,6 @@
     #-include XPANLBEX/build_order.rb
   #-end:
   #-include RGSSExPTH/build_order.rb
+  #-include SRCPATH/macl_tail.rb
 #-end:
 #-include HEADER/macl_footer.rb

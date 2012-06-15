@@ -1,8 +1,10 @@
-﻿# // 04/19/2012
 # // 04/19/2012
-# ╒╕ ♥                                                            Sequencer ╒╕
+# // 04/19/2012
+# ╒╕ ♥                                                      MACL::Sequencer ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class Sequencer
+warn 'MACL::Sequencer is already imported' if ($imported||={})['MACL::Sequencer']
+($imported||={})['MACL::Sequencer']=0x10000
+class MACL::Sequencer
   attr_accessor :index
   attr_accessor :maxcount
   attr_accessor :count

@@ -1,5 +1,5 @@
 #-unlessdef SRCPATH
-#-define SRCPATH#=C:/Lib/Git/RGSS3-MACL/src/
+  #-define SRCPATH#=C:/Lib/Git/RGSS3-MACL/src/
 #-end:
 #-include SRCPATH/MACL.rb
 #-include SRCPATH/MACL_Mixins.rb

@@ -1,8 +1,8 @@
-﻿# // 04/12/2012
-# // 04/19/2012
 # ╒╕ ♥                                                                 Grid ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class Grid
+warn 'Grid is already imported' if ($imported||={})['Grid']
+($imported||={})['Grid']=0x10000
+class MACL::Grid
   def self.qcell_r(columns,rows,cell_width,cell_height,index=0)
     new(columns,rows,cell_width,cell_height).cell_r(index)
   end  

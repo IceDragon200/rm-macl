@@ -67,6 +67,18 @@ def gen_script_footer
 %Q(# ┌┬────────────────────────────────────────────────────────────────────────┬┐
 # ╘╛ ● End of File ●                                                        ╘╛)
 end
+def gen_scr_imported name, value
+  %Q(($imported||={})['%s']=%s) % [name,value]
+end
+def gen_scr_import_warn name, value=nil
+  %Q(warn '%1$s is already imported' if ($imported||={})['%1$s']) % name
+end
+def gen_scr_imported_ww name, value
+  str = gen_scr_import_warn(name, value)
+  str += "\n" + gen_scr_imported(name, value)
+  str
+end
+alias gen_script_import gen_scr_imported
 # // Story Writing
 def wrgen_chapter(num,name,chapter_nm="Chapter")
 str=%Q(# ╒╕ ■ %068s ╒╕

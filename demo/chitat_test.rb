@@ -1,13 +1,13 @@
 # // 06/02/2012
 # // 06/03/2012
-begin
+# // Dummy RGSS3
+require_relative '_rgss3_prototype.rb'
+_demo_block do
   # // Copied from IER - Map Merge
   MERGE  = /merge:\s*(\d+(?:\s*,\s*\d+)*)/i
   SWITCH = /switch:\s*(\d+)-(.*)/i
   XY     = /(?:pos|xy):\s*(\d+)\s*,\s*(\d+)/i
   LAYERS = /layers:\s*([1-3](?:\s*,\s*[1-3]){0,2})/i
-  # // Dummy RGSS3
-  require_relative '_rgss3_prototype.rb'
   # // RGSS3-MACL Build
   require_relative '../rgss3macl.rb'
   # // Chitat Notefolder Parser
@@ -46,9 +46,5 @@ x
     end
     puts "--END"
   end  
-  gets
-rescue Exception => ex
-  p ex
-  p ex.backtrace
   gets
 end  

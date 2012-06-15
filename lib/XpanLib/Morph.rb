@@ -1,6 +1,8 @@
-# ╒╕ ■                                                                Morph ╒╕
+# ╒╕ ■                                                          MACL::Morph ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-module Morph
+warn 'MACL::Morph is already imported' if ($imported||={})['MACL::Morph']
+($imported||={})['MACL::Morph']=0x10000
+module MACL::Morph
 # ╒╕ ♥                                                               Growth ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
   class Growth

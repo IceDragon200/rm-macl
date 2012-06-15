@@ -1,6 +1,7 @@
 # // 06/06/2012
 # // 06/06/2012
-begin
+require_relative '_rgss3_prototype.rb'
+_demo_block do
   require '../src/build_tools/Skinj.rb'
   str = %Q(
 #-define Cookies#=cookies
@@ -15,8 +16,4 @@ begin
 #-macro Oreo
 )
   Skinj.skinj_str str
-  gets
-rescue Exception => ex
-  p ex
-  gets
 end

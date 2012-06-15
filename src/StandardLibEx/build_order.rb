@@ -8,3 +8,4 @@
 #-include STDLBEX/String_Ex.rb
 #-include STDLBEX/Array_Ex.rb
 #-include STDLBEX/Hash_Ex.rb
+#-include STDLBEX/MatchData_Ex.rb

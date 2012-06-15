@@ -1,7 +1,7 @@
-﻿#-// Vector
+#-// Vector
 #-// By FenixFyreX
 #-// 05/12/2012
-
+#-inject gen_scr_imported_ww 'MACL::Vector', '0x10000'
 class Rect
   def in_rect?(rect)
     return false if x < rect.x

@@ -1,5 +1,6 @@
-﻿#-inject gen_module_header 'Morph'
-module Morph
+#-inject gen_module_header 'MACL::Morph'
+#-inject gen_scr_imported_ww 'MACL::Morph', '0x10000'
+module MACL::Morph
 #-inject gen_class_header 'Growth'
 #-// 12/14/2011
 #-// 12/21/2011

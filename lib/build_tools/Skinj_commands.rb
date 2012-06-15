@@ -48,7 +48,7 @@ class Skinj
   # // Loads a file into the current Skinj
   add_command :include, /\A(?:\+\+|include)\s(.+)/i do 
     filename, = *sub_args(params[1])
-    filename = filename#.chomp.dump#.gsub(/\A(?:['"])(.+)((?:['"]))/i) { $1 }
+    filename = filename
     debug_puts "Including %s" % filename
     unless File.exist?(filename)
       debug_puts "File %s does not exist, skipping." % filename 

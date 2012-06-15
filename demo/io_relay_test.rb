@@ -1,5 +1,5 @@
-begin
-  require_relative '_rgss3_prototype.rb'
+require_relative '_rgss3_prototype.rb'
+_demo_block do
   require_relative '../rgss3macl.rb'
   require_relative '../src/RelayIO.rb'
   relay = IO_Relay.new

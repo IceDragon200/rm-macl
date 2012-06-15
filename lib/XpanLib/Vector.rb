@@ -1,3 +1,5 @@
+warn 'MACL::Vector is already imported' if ($imported||={})['MACL::Vector']
+($imported||={})['MACL::Vector']=0x10000
 class Rect
   def in_rect?(rect)
     return false if x < rect.x

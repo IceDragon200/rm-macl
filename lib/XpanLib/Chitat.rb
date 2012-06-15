@@ -1,5 +1,7 @@
 # ╒╕ ■                                                               Chitat ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'Chitat is already imported' if ($imported||={})['Chitat']
+($imported||={})['Chitat']=0x10000
 class Chitat
   class Stack < Array
     attr_reader :match_data

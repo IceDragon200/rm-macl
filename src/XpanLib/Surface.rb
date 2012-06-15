@@ -42,8 +42,9 @@
 #==============================================================================# 
 #-else:
   #-inject gen_module_header 'Mixin::Surface'
-#-end
-module Mixin::Surface
+#-end:
+#-inject gen_scr_imported_ww 'Surface', '0x10000'
+module MACL::Mixin::Surface
   def rwidth
     self.width
   end
@@ -217,9 +218,9 @@ module Mixin::Surface
 end 
 #-inject gen_class_header 'Surface'
 class Surface
-  include Mixin::RectExpansion
-  include Mixin::RectExpansion::RectOnly
-  include Mixin::Surface
+  include MACL::Mixin::RectExpansion
+  include MACL::Mixin::RectExpansion::RectOnly
+  include MACL::Mixin::Surface
   def self.area_rect( *objs )
     mx = objs.min { |a, b| a.x <=> b.x }
     my = objs.min { |a, b| a.y <=> b.y }
@@ -238,7 +239,7 @@ class Surface
 end
 #-inject gen_class_header 'Rect'
 class Rect
-  include Mixin::Surface
+  include MACL::Mixin::Surface
 end  
 #-inject gen_class_header 'Vector4'
 class Vector4 < Rect
@@ -260,9 +261,9 @@ class Vector4 < Rect
 end
 #-inject gen_class_header 'Window'
 class Window
-  include Mixin::Surface
+  include MACL::Mixin::Surface
 end  
 #-inject gen_class_header 'Sprite'
 class Sprite
-  include Mixin::Surface
+  include MACL::Mixin::Surface
 end  

@@ -1,9 +1,9 @@
 =begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
- Version : 0x10001
- Last Build: 06/03/2012 (MM/DD/YYYY) (0x10000)
- Date Built: 06/04/2012 (MM/DD/YYYY) (0x10001)
+ Version : 0x10003
+ Last Build: 06/09/2012 (MM/DD/YYYY) (0x10002)
+ Date Built: 06/13/2012 (MM/DD/YYYY) (0x10003)
  ──────────────────────────────────────────────────────────────────────────────
  ■ Module
  ♥ Class
@@ -250,7 +250,7 @@ RGSSEx Expansion
       ● Return
           Boolean
 =end
-($imported||={})['RGSS3-MACL']=0x10001
+($imported||={})['RGSS3-MACL']=0x10003
 # // Standard Library
 # ╒╕ ♥                                                               Object ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -419,9 +419,43 @@ class Hash
     self
   end
 end
+# ╒╕ ♥                                                            MatchData ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class MatchData
+  def to_hash
+    hsh = {}
+    return hsh if captures.empty? 
+    if names.empty?
+      (0..10).each do |i| hsh[i] = self[i] end
+    else
+      names.each do |s| hsh[s] = self[s] end
+    end
+    hsh
+  end unless method_defined? :to_hash
+end
 # ╒╕ ■                                                                 MACL ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
+  @@initialized = []
+  @@inits = []
+  def self.add_init sym,func
+    @@inits << [sym,func]
+  end
+  def self.run_init
+    @@inits.each do |(sym,func)|
+      p "%s was already initialized" if @@initialized.include? sym
+      begin
+        func.call 
+      rescue Exception => ex
+        p 'MACL: %s failed to load:' % sym.to_s
+        p ex
+        next
+      end
+      @@initialized << sym
+    end
+  end
+  module Mixin
+  end
 end
 # ╒╕ ■                                                          MACL::Mixin ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -605,8 +639,79 @@ module MACL::Parsers
   end
 end
 # // Xpansion Library
+warn 'TableExpansion is already imported' if ($imported||={})['TableExpansion']
+($imported||={})['TableExpansion']=0x10000
+# ╒╕ ■                                          MACL::Mixin::TableExpansion ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+module MACL::Mixin::TableExpansion
+  def iterate
+    x,y,z=[0]*3
+    if zsize > 1
+      for x in 0...xsize
+        for y in 0...ysize
+          for z in 0...zsize
+            yield self[x,y,z], x, y, z
+          end
+        end
+      end
+    elsif ysize > 1
+      for x in 0...xsize
+        for y in 0...ysize
+          yield self[x,y], x, y
+        end
+      end  
+    else
+      for x in 0...xsize
+        yield self[x], x
+      end  
+    end
+    Graphics.frame_reset
+    self
+  end
+  def iterate_map
+    i=0;xyz=[0,0,0]
+    iterate do |i,*xyz|
+      self[*xyz] = yield i, *xyz
+    end
+    self
+  end
+  def replace table
+    i=0;xyz=[0,0,0]
+    resize table.xsize, table.ysize, table.zsize
+    iterate do |i,*xyz|
+      self[*xyz] = table[*xyz]
+    end
+    self
+  end
+  def clear
+    resize 1
+    self
+  end
+  def nudge nx,ny,nz 
+    tabclone = self.dup
+    xs,ys,zs = tabclone.xsize, tabclone.ysize,tabclone.zsize
+    i,x,y,z=[0]*4
+    if zs > 0
+      tabclone.iterate do |i,x,y,z| self[(x+nx)%xs,(y+ny)%ys,(z+nz)%zs] = i end
+    elsif ys > 0  
+      tabclone.iterate do |i,x,y| self[(x+nx)%xs,(y+ny)%ys] = i end
+    else  
+      tabclone.iterate do |i,x| self[(x+nx)%xs] = i end
+    end  
+    self
+  end  
+  def oor? x,y=0,z=0
+    return true if x < 0 || y < 0 || z < 0
+    return true if xsize <= x
+    return true if ysize <= y if ysize > 0
+    return true if zsize <= z if zsize > 0
+    return false
+  end
+end
 # ╒╕ ♥                                                                Point ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'Point is already imported' if ($imported||={})['Point']
+($imported||={})['Point']=0x10000
 class Point
   attr_accessor :x, :y
   class << self ; alias :[] :new ; end
@@ -633,6 +738,8 @@ class Point
 end
 # ╒╕ ■                                                               Chitat ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
+warn 'Chitat is already imported' if ($imported||={})['Chitat']
+($imported||={})['Chitat']=0x10000
 class Chitat
   class Stack < Array
     attr_reader :match_data
@@ -716,6 +823,31 @@ class Chitat
     arra.each do |a| a.collect!{|s|mk_tag(s)};a.compact! end
     arra.reject! do |a| a and a.empty? end
     arra
+  end
+end
+# ╒╕ ♥                                                                 Blaz ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class Blaz
+  def initialize &block
+    @commands = []
+    instance_exec &block if block_given?
+  end
+  attr_accessor :commands
+  def enum_commands
+    sym,regex,func = [nil]*3
+    @commands.each do |(sym,regex,func)|
+      yield sym,regex,func
+    end
+  end  
+  def add_command sym,regex,&func
+    @commands << [sym,regex,func]
+  end
+  def match_command str
+    enum_commands do |sym,regex,func|
+      regex = regex.call if regex.respond_to? :call
+      mtch = str.match(regex)
+      return if yield sym, mtch, func if mtch
+    end
   end
 end
 #// RGGSEx
@@ -847,69 +979,7 @@ end
 # ╒╕ ♥                                                                Table ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Table
-  def iterate
-    x,y,z=[0]*3
-    if zsize > 0
-      for x in 0...xsize
-        for y in 0...ysize
-          for z in 0...zsize
-            yield self[x,y,z], x, y, z
-          end
-        end
-      end
-    elsif ysize > 0
-      for x in 0...xsize
-        for y in 0...ysize
-          yield self[x,y], x, y
-        end
-      end  
-    else
-      for x in 0...xsize
-        yield self[x], x
-      end  
-    end
-    Graphics.frame_reset
-    self
-  end
-  def iterate_map
-    i=0;xyz=[0,0,0]
-    iterate do |i,*xyz|
-      self[*xyz] = yield i, *xyz
-    end
-    self
-  end
-  def replace table
-    i=0;xyz=[0,0,0]
-    resize table.xsize, table.ysize, table.zsize
-    iterate do |i,*xyz|
-      self[*xyz] = table[*xyz]
-    end
-    self
-  end
-  def clear
-    resize 1
-    self
-  end
-  def nudge nx,ny,nz 
-    tabclone = self.dup
-    xs,ys,zs = tabclone.xsize, tabclone.ysize,tabclone.zsize
-    i,x,y,z=[0]*4
-    if zs > 0
-      tabclone.iterate do |i,x,y,z| self[(x+nx)%xs,(y+ny)%ys,(z+nz)%zs] = i end
-    elsif ys > 0  
-      tabclone.iterate do |i,x,y| self[(x+nx)%xs,(y+ny)%ys] = i end
-    else  
-      tabclone.iterate do |i,x| self[(x+nx)%xs] = i end
-    end  
-    self
-  end  
-  def oor? x,y=0,z=0
-    return true if x < 0 || y < 0 || z < 0
-    return true if xsize <= x
-    return true if ysize <= y if ysize > 0
-    return true if zsize <= z if zsize > 0
-    return false
-  end  
+  include MACL::Mixin::TableExpansion  
 end
 # ╒╕ ♥                                                     RPG::Event::Page ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -991,5 +1061,6 @@ class Game_Switches
     self[id] = !self[id]
   end
 end
+MACL.run_init;
 # ┌┬────────────────────────────────────────────────────────────────────────┬┐
 # ╘╛ ● End of File ●                                                        ╘╛

@@ -1,4 +1,5 @@
-begin
+require_relative '_rgss3_prototype.rb'
+_demo_block do
   require '../src/build_tools/Skinj.rb'
   str = %Q(
 #-label PRE
@@ -19,8 +20,4 @@ begin
 #-print Post End
 )
   Skinj.skinj_str str
-  gets
-rescue Exception => ex
-  p ex
-  gets
 end

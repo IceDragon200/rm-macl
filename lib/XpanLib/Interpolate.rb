@@ -1,7 +1,9 @@
 require_relative 'Point_basic' 
 # ╒╕ ♥                                                          Interpolate ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-module Interpolate
+warn 'Interpolate is already imported' if ($imported||={})['Interpolate']
+($imported||={})['Interpolate']=0x10000
+module MACL::Interpolate
   # // Point dest, a, b; float t
   def self.lerp(dest,a,b,t)
     dest.x = a.x + (b.x-a.x)*t
