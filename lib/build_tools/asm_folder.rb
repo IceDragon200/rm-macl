@@ -1,42 +1,66 @@
-﻿Encoding.default_external = "UTF-8"
+Encoding.default_external = "UTF-8"
 @default_def = {
-  "ASMxROOT" => Dir.getwd
+  "ASMxROOT" => Dir.getwd,
 }
 @switches_def = {
   "INCUR" => false
 }
-def asm_folder(source,target)
+def asm_folder source,target
+  Dir.mkdir target unless File.exist? target
   files = Dir.entries("#{source}") - [".",".."]
   #puts "Files #{source}"
   #puts files
   files.each do |sf|
-    bsn = File.basename(sf)
+    bsn = File.basename sf
     pth = "#{source}/#{bsn}"
     trg = "#{target}/#{bsn}"
-    if File.directory?(pth)
+    if File.directory? pth
       puts "Entering new directory %s" % trg
-      unless File.exist?(trg) 
+      unless File.exist? trg
         puts "Making Directory: %s" % trg
-        Dir.mkdir(trg) 
-      end  
-      asm_folder(pth,trg)
+        Dir.mkdir trg
+      end
+      asm_folder pth,trg
     else
       puts "..."
       puts "=> Making #{trg}"
-      str = File.read(pth)
-      File.open(trg,"w+") { |f| f.write Skinj.skinj_str(str,0,@default_def.dup,@switches_def.dup).compile }
-    end  
+      str = File.read pth
+      begin
+        File.open trg,"w+" do |f|
+          defs,swis = @default_def.clone,@switches_def.clone
+          f.write Skinj.skinj_str(str,0,defs,swis).assemble
+        end
+      rescue Exception => ex
+        puts 'Error ocurred while Skinjing %s' % pth
+        p ex
+      end
+    end
   end
 rescue Exception => ex
   Skinj.debug_puts ex.message
 end
 begin
-  require 'C:/Lib/Git/RGSS3-MACL/src/build_tools/Skinj'
   require_relative "header_gen"
-  src  = ARGV[0]||(Dir.getwd)
+  require 'C:/Lib/Git/RGSS3-MACL/src/build_tools/Skinj'
+  class Skinj
+    include Skinj_Gen
+  end
+  argsv = ARGV.dup
+  switches = argsv.select do |s| s.start_with? '--' end
+  argsv -= switches
+  switches.map! &:downcase
+  @default_def['Game_'] = 'Game::' if switches.include? '--edos'
+  @switches_def['INCUR'] = true if switches.include? '--incur'
+  src,trg = argsv
+  if trg.nil? or trg.empty?
+    src = src[0]||Dir.getwd
+    src,trg = "#{src}/src","#{src}/lib"
+  end
+  src = File.expand_path src
+  trg = File.expand_path trg
   puts "<Source Directiory: #{src}>"
-  asm_folder("#{src}/src","#{src}/lib")
+  asm_folder src,trg
   puts "Finished"
-rescue(Exception) => ex
+rescue Exception => ex
   p ?-, ex
 end

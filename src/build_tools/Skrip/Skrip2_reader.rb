@@ -1,4 +1,4 @@
-﻿# // 04/17/2012
+# // 04/17/2012
 # // 04/18/2012
 # // Change Log
 # // 04/18/2012 - Added header reading
@@ -25,7 +25,7 @@ module Skrip
           puts "#{s} skrip loaded"
         rescue(Exception) => ex
           puts "#{s} skrip failed to load"
-        end        
+        end
       }
     end
     def load_skpck(name)
@@ -33,7 +33,7 @@ module Skrip
     end
     def get_skpck(name)
       $LOADED_SKPCK[name]
-    end  
+    end
   end
 end
 class << Skrip

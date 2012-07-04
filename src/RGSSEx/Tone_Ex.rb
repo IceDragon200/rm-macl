@@ -24,4 +24,7 @@ class Tone
   def to_tone
     Tone.new *to_a
   end
+  def to_hash
+    {red: red, green: green, blue: blue, grey: grey}
+  end
 end

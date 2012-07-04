@@ -4,28 +4,28 @@
 module LogicGates
   # // I am aware I didnt have to put ? true : false ternaries,
   # // but just for readability
-  def self.And(a,b)
+  def And a,b
     a and b ? true : false
   end
-  def self.Or(a,b)
+  def Or a,b
     a or b ? true : false
   end
-  def self.Buffer(a)
+  def Buffer a
     !!a
   end
-  def self.Invert(a)
+  def Invert a
     !a
   end
-  def self.NAnd(a,b)
+  def NAnd a,b
     a and b ? false : true
   end
-  def self.NOr(a,b)
+  def NOr a,b
     a or b ? false : true
   end
-  def self.XOr(a,b)
+  def XOr a,b
     a or b and not a and b ? true : false
   end
-  def self.XNOr(a,b)
+  def XNOr a,b
     a and b or !a and !b ? true : false
   end
 end

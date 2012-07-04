@@ -16,11 +16,11 @@ def mk_dir_struct(name)
     (!File.directory?(f)) ? FILE_EXTS.any?{|ext|File.extname(f).downcase == ext.downcase} : true
   }
   files.inject({}) do |r,f|
-    if(File.directory?(f)) 
+    if(File.directory?(f))
       r[[:branch,File.bsnm_ext(f)]] = mk_dir_struct(f+"/")
     else
       r[[:leaf,File.bsnm_ext(f)]] = File.read(f)
-    end 
+    end
     r
   end
 end
@@ -28,10 +28,10 @@ def puts_hsh_fold_struct(hsh,ind=0)
   str = ""
   hsh.each_pair { |k,v|
     case(k[0])
-    when :leaf
-      str += ("  "*ind) + k[1] + "\n"
-    when :branch
-      str += puts_hsh_fold_struct(v,ind+1)
+      when :leaf
+        str += ("  "*ind) + k[1] + "\n"
+      when :branch
+        str += puts_hsh_fold_struct(v,ind+1)
     end
   }
   str

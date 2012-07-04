@@ -1,4 +1,16 @@
 #// RGGSEx
+# ╒╕ ■                                                          RPG::Metric ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+module RPG
+  module Metric
+    COLOR_CAP    = 255
+    COLOR_BASE   = 0
+    TONE_CAP     = 255
+    TONE_BASE    = 0
+    OPACITY_CAP  = 255
+    OPACITY_BASE = 0
+  end  
+end
 # ╒╕ ■                                                             Graphics ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class << Graphics
@@ -14,9 +26,123 @@ class << Graphics
   end
   alias sec2frm sec_to_frames
 end
+# ╒╕ ■                                                                Audio ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+module Audio
+  @vol_rate = {
+    default: 1.0,
+    bgm: 1.0,
+    bgs: 1.0,
+    me: 1.0,
+    se: 1.0
+  }
+  def self.vol_rate sym
+    @vol_rate[sym]
+  end
+end
+module MACL::Mixin::AudioVolume
+  def audio_sym
+    :default
+  end
+  def audio_path
+    'Audio/%s'
+  end
+  def vol_rate
+    Audio.vol_rate audio_sym
+  end
+  def volume_abs
+    @volume
+  end
+  def volume
+    volume_abs * vol_rate
+  end
+end
+# ╒╕ ♥                                                             RPG::BGM ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class RPG::BGM
+  include MACL::Mixin::AudioVolume
+  def audio_sym
+    :bgm
+  end
+  def audio_path
+    'Audio/BGM/%s'
+  end
+  def play pos=0
+    if @name.empty?
+      Audio.bgm_stop
+      @@last = RPG::BGM.new
+    else
+      Audio.bgm_play(audio_path % @name, self.volume, @pitch, pos) rescue nil
+      @@last = self.clone
+    end
+  end
+end
+# ╒╕ ♥                                                             RPG::BGS ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class RPG::BGS
+  include MACL::Mixin::AudioVolume
+  def audio_sym
+    :bgs
+  end
+  def audio_path
+    'Audio/BGS/%s'
+  end
+  def play pos=0
+    if @name.empty?
+      Audio.bgs_stop
+      @@last = RPG::BGM.new
+    else
+      Audio.bgs_play(audio_path % @name, self.volume, @pitch, pos) rescue nil
+      @@last = self.clone
+    end
+  end
+end
+# ╒╕ ♥                                                              RPG::ME ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class RPG::ME
+  include MACL::Mixin::AudioVolume
+  def audio_sym
+    :me
+  end
+  def audio_path
+    'Audio/ME/%s'
+  end
+  def play
+    if @name.empty?
+      Audio.me_stop
+      @@last = RPG::BGM.new
+    else
+      Audio.me_play(audio_path % @name, self.volume, @pitch) rescue nil
+      @@last = self.clone
+    end
+  end
+end
+# ╒╕ ♥                                                              RPG::SE ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class RPG::SE
+  include MACL::Mixin::AudioVolume
+  def audio_sym
+    :se
+  end
+  def audio_path
+    'Audio/SE/%s'
+  end
+  def play
+    if @name.empty?
+      Audio.se_stop
+      @@last = RPG::BGM.new
+    else
+      Audio.se_play(audio_path % @name, self.volume, @pitch) rescue nil
+      @@last = self.clone
+    end
+  end
+end
 # ╒╕ ♥                                                                Color ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Color
+  def hash
+    [self.red,self.green,self.blue,self.alpha].hash
+  end
   def rgb_sym
     return :red, :green, :blue
   end
@@ -38,6 +164,9 @@ class Color
   end
   def to_tone
     Tone.new *to_a
+  end
+  def to_hash
+    {red: red, green: green, blue: blue, alpha: alpha}
   end
 end
 # ╒╕ ♥                                                                 Tone ╒╕
@@ -64,6 +193,9 @@ class Tone
   end
   def to_tone
     Tone.new *to_a
+  end
+  def to_hash
+    {red: red, green: green, blue: blue, grey: grey}
   end
 end
 # ╒╕ ♥                                                                 Font ╒╕
@@ -94,6 +226,12 @@ end
 # ╒╕ ♥                                                                 Rect ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Rect
+  def / n
+    self.class.new(self.x/n,self.y/n,self.width/n,self.height/n)
+  end
+  def * n
+    self.class.new(self.x*n,self.y*n,self.width*n,self.height*n)
+  end
   def to_a
     return self.x, self.y, self.width, self.height
   end
@@ -107,40 +245,146 @@ class Rect
     self.width == 0 and self.height == 0
   end
 end
+# ╒╕ ♥                                                              Vector4 ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
 class Vector4 < Rect
   def rwidth
     self.width - self.x
   end
   def rheight
     self.height - self.y
-  end  
+  end
   def vwidth
     self.width
-  end  
+  end
   def vheight
     self.height
-  end  
-  def self.v4a_to_rect( v4a )
-    return Rect.new( v4a[0], v4a[1], v4a[2]-v4a[0], v4a[3]-v4a[1] )
-  end  
+  end
+  def self.v4a_to_rect v4a
+    return Rect.new v4a[0], v4a[1], v4a[2]-v4a[0], v4a[3]-v4a[1]
+  end
 end
 # ╒╕ ♥                                                                Table ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Table
   include MACL::Mixin::TableExpansion  
 end
+warn 'Bitmap_Ex is already imported' if ($imported||={})['Bitmap_Ex']
+($imported||={})['Bitmap_Ex']=0x10002
+# ╒╕ ♥                                                               Bitmap ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class Bitmap
+  def fill sx,sy,color=Color.new(255,255,255,255)
+    base_color = get_pixel sx,sy
+    nodes = []
+    nodes << [sx,sy]
+    table = Table.new width,height 
+    nx=ny=x=y=0
+    while nodes.size > 0
+      x,y = nodes.shift
+      next unless x and y
+      next if table[x,y] > 0
+      set_pixel(x,y,color) 
+      table[x,y] = 1
+      for iy in -1..1
+        for ix in -1..1
+          nx,ny = x+ix,y+iy
+          next if table[nx,ny].to_i > 0
+          next unless get_pixel(nx,ny) == base_color
+          nodes << [nx,ny] 
+        end
+      end
+      yield if block_given? 
+    end
+  end
+  def recolor f_color,t_color=nil 
+    if f_color.is_a? Color and t_color.is_a? Color 
+      hsh = { f_color => t_color }
+    elsif f_color.is_a? Array && t_color 
+      arra = t_color.is_a? Enumerable ? t_color : [t_color]*f_color.size 
+      hsh = {};f_color.each_with_index{|c,i|hsh[c]=arra[i]}
+    else  
+      hsh = f_color
+    end  
+    x,y,color = nil,nil,nil
+    iterate_do { |x,y,color| set_pixel(x,y,hsh[color]||color) }
+  end 
+  def iterate_map 
+    iterate_do { |x,y,color| set_pixel(x,y,yield(x,y,color)) }
+  end
+  def legacy_recolor color1,color2
+    for y in 0...height
+      for x in 0...width
+        set_pixel x,y,color2 if get_pixel(x,y) == color1
+      end
+    end
+  end 
+  def palletize 
+    pallete = Set.new
+    iterate_do true do |x,y,color| pallete << color.to_a end
+    pallete.to_a.sort.collect do |a|Color.new *a end
+  end  
+  def iterate_do return_only=false 
+    x, y = nil, nil
+    for y in 0...height
+      for x in 0...width
+        yield x,y,get_pixel(x,y) 
+      end
+    end   
+  end 
+  def draw_line point1,point2,color,weight
+    x1,y1 = point1.to_a
+    x2,y2 = point2.to_a
+    dx = x2 - x1
+    dy = y2 - y1
+    sx = x1 < x2 ? 1 : -1
+    sy = y1 < y2 ? 1 : -1
+    err= (dx-dy).to_f
+    e2 = 0
+    loop do
+      set_pixel_weighted x1,x2,color,weight 
+      break if x1 == x2 and y1 == y2 
+      e2 = 2*err
+      if e2 > -dy 
+        err = err - dy
+        x1  = x1 + sx  
+      end
+      if e2 < dx 
+        err = err + dx
+        y1  = y1 + sy 
+      end
+    end  
+  end
+  def set_pixel_weighted x,y,color,weight=1
+    weight.times do |i| set_pixel(x,y+i,color) end
+  end
+end
+# ╒╕ ♥                                                               Sprite ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+class Sprite
+  def to_rect
+    Rect.new x,y,width,height
+  end
+  def to_cube
+    Cube.new x,y,z,width,height,0
+  end
+end
 # ╒╕ ♥                                                     RPG::Event::Page ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class RPG::Event::Page
-  COMMENT_CODES = [108,408]
-  def select_commands *codes 
-    @list.select do |c|codes.include?(c.code) end
-  end
-  def comments
-    select_commands *COMMENT_CODES
-  end
-  def comments_a
-    comments.map!(&:parameters).flatten!
+module RPG
+  class Event
+    class Page
+      COMMENT_CODES = [108,408]
+      def select_commands *codes
+        @list.select do |c| codes.include?(c.code) end
+      end
+      def comments
+        select_commands *COMMENT_CODES
+      end
+      def comments_a
+        comments.map!(&:parameters).flatten!
+      end
+    end
   end
 end
 # ╒╕ ♥                                                           Game_Event ╒╕
@@ -167,7 +411,7 @@ module MapManager
   def self.get_map id
     unless @@maps.has_key? id
       @@maps[id] = load_data("Data/Map%03d.rvdata2" % id)
-      @@maps[id].note_scan
+      @@maps[id].do_note_scan
     end
     @@maps[id]
   end

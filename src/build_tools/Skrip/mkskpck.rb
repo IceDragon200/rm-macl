@@ -1,4 +1,4 @@
-﻿# // 04/17/2012
+# // 04/17/2012
 # // 04/17/2012
 $LOAD_PATH << "C:/Lib/iExRuby/"
 require 'Skrip2'
@@ -19,14 +19,14 @@ begin
         GPS.call( 'SKPCK',' DEFAULT_OUT_PATH', '', str, 255, ".\\mkskpck.ini" )
         str.delete!("\0")
         src, trg = params[0], str
-      end  
-    end  
+      end
+    end
   else
     src, trg = params
-  end  
+  end
   if(src && trg)
-    Skrip.folder2skpck(src,trg) 
-  else  
+    Skrip.folder2skpck(src,trg)
+  else
     puts HELP
   end
 rescue(Exception) => ex

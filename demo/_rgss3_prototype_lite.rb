@@ -4,6 +4,8 @@ require 'dl'
 module Graphics
   class << self
     attr_reader :width, :height
+    def frame_reset
+    end
     def frame_rate
       @frame_rate ||= 60
     end
@@ -172,6 +174,7 @@ module Kernel
   def _demo_block
     begin
       yield
+      puts '<RUBY> Press return to continue'
       gets 
     rescue Exception => ex
       p ex

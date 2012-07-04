@@ -1,15 +1,15 @@
-#-define SKPVERSION#=0x10003
+#-define SKPVERSION#=0x10008
 #-switch INCUR:ON
 =begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
  Version : SKPVERSION
- Last Build: 06/09/2012 (MM/DD/YYYY) (0x10002)
- Date Built: 06/13/2012 (MM/DD/YYYY) (0x10003)
+ Last Build: 23/06/2012 (MM/DD/YYYY) (0x10007)
+ Date Built: 02/07/2012 (MM/DD/YYYY) (SKPVERSION)
  ──────────────────────────────────────────────────────────────────────────────
  ■ Module
  ♥ Class
- 
+
  Parameter, Return : Help
    -Help       Ruby Object
      <self>    (Parent Object)

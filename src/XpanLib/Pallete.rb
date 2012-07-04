@@ -10,9 +10,9 @@ module Pallete
   #/------------------------------------------------------------------------\#
   # ● Return
   #     Bitmap
-  #\------------------------------------------------------------------------/#  
+  #\------------------------------------------------------------------------/#
   def self.pallete
-    @pallete = Cache.system( "Pallete" ) if @pallete.nil? || @pallete.disposed?
+    @pallete = Cache.system "Pallete" if @pallete.nil? || @pallete.disposed?
     return @pallete
   end
   #--------------------------------------------------------------------------#
@@ -23,9 +23,9 @@ module Pallete
   # ● Return
   #     Color
   #\------------------------------------------------------------------------/#
-  def self.get_color( index )
-    pallete.get_pixel( (index % 16) * 8, (index / 16) * 8 )
-  end 
+  def self.get_color index
+    pallete.get_pixel (index % 16) * 8, (index / 16) * 8
+  end
   #--------------------------------------------------------------------------#
   # ● module-method :sym_color
   #/------------------------------------------------------------------------\#
@@ -34,16 +34,16 @@ module Pallete
   # ● Return
   #     Color
   #\------------------------------------------------------------------------/#
-  def self.sym_color( symbol )
+  def self.sym_color symbol
     get_color( @sym_colors[symbol] || 0 )
-  end  
+  end
   #--------------------------------------------------------------------------#
   # ● module-method :[]
   #/------------------------------------------------------------------------\#
-  # ● Refer to 
+  # ● Refer to
   #     get_color
   #\------------------------------------------------------------------------/#
-  def self.[]( n )
+  def self.[] n
     n.is_a?(Symbol) ? sym_color(n) : get_color(n)
-  end  
+  end
 end

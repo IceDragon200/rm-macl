@@ -5,8 +5,8 @@ require 'Skrip2'
 require 'Skrip2_reader'
 require 'Win32API'
 #require 'curses'
-  
-def unpack_skpck(source)
+
+def unpack_skpck source
   Dir.mkdir("C:/Lib/skpck2out/") unless(File.exist?("C:/Lib/skpck2out/"))
   source  = source.dup.gsub("\\","/")
   nm      = File.basename(source)
@@ -17,7 +17,7 @@ def unpack_skpck(source)
   ldord   = skpck[:header][:load_order]
   if(ldord)
     puts "load_order is present, outputting to #{target+"load_order.skt"}"
-    File.open(target+"load_order.skt","w+") do |f| 
+    File.open(target+"load_order.skt","w+") do |f|
       f.puts "// #{nm} Load Order"
       ldord.each { |s| f.puts(s) }
     end

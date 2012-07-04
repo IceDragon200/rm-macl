@@ -34,19 +34,15 @@ module MACL::Morph
       return 100*2, 100*2
     end  
     def grow_by( n ) 
-      n.times { grow() } 
+      n.times { grow } 
       return self 
     end
-    def grow()
+    def grow
       new_open_nodes = []
       @nodes |= @open_nodes.collect do |c|
-        node_count = [c[2] == 0 ? 4 : (3 - (c[0].abs+c[1].abs) / @node_thinning), 0].max
+        node_count = (c[2] == 0 ? 4 : (3 - (c[0].abs+c[1].abs) / @node_thinning)).max 0
         node_count.times do
-          new_open_nodes << random_node( c[0], c[1], c[2] )
-          #n = random_node( c[0], c[1], c[2] )
-          #if ntable_at(n[0], n[1]) == 0
-            #new_open_nodes << n ; ntable_set_at(n[0], n[1], 1)
-          #end  
+          new_open_nodes << random_node( c[0], c[1], c[2] )  
         end
         c
       end
@@ -69,7 +65,7 @@ module MACL::Morph
       return nx + x, ny + y, dir
     end 
     def seed_rand( arg )
-      seed_gen.nil?() ? rand( arg ) : seed_gen.rand( arg )
+      seed_gen.nil? ? rand( arg ) : seed_gen.rand( arg )
     end  
     attr_reader :seed_gen
     def set_seed_gen( seed )
@@ -83,7 +79,7 @@ module MACL::Morph
 #-// Version : 1.0
   class Devour
     def initialize( nodes )
-      @growth = Growth.new()
+      @growth = Growth.new
       @devoured = []
       @nodes = nodes
       @x, @y = 0, 0
@@ -93,18 +89,18 @@ module MACL::Morph
       self
     end  
     def devour_by( n )
-      n.times { devour() }
+      n.times { devour }
       self
     end  
     def devour
-      new_nodes = @growth.grow().open_nodes.collect { |nd| [nd[0]+@x, nd[1]+@y] }
+      new_nodes = @growth.grow.open_nodes.collect { |nd| [nd[0]+@x, nd[1]+@y] }
       @devoured |= new_nodes & @nodes
       self
     end  
-    def final_nodes()
+    def final_nodes
       return @nodes - @devoured
     end 
-    def seed_gen()
+    def seed_gen
       return @growth.seed_gen
     end  
     def set_seed_gen( seed )
@@ -122,7 +118,7 @@ module MACL::Morph
       @nodes = nodes
     end 
     def decimate_by( n )
-      n.times { decimate() }
+      n.times { decimate }
       self
     end  
     def decimate
@@ -130,11 +126,11 @@ module MACL::Morph
       @decimated << nds[seed_rand(nds.size)] unless nds.empty?
       self
     end  
-    def final_nodes()
+    def final_nodes
       return @nodes - @decimated
     end 
     def seed_rand( arg )
-      seed_gen.nil?() ? rand( arg ) : seed_gen.rand( arg )
+      seed_gen.nil? ? rand( arg ) : seed_gen.rand( arg )
     end  
     attr_reader :seed_gen
     def set_seed_gen( seed )

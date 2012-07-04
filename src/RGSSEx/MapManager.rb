@@ -7,7 +7,7 @@ module MapManager
   def self.get_map id
     unless @@maps.has_key? id
       @@maps[id] = load_data("Data/Map%03d.rvdata2" % id)
-      @@maps[id].note_scan
+      @@maps[id].do_note_scan
     end
     @@maps[id]
   end

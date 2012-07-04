@@ -4,10 +4,10 @@ _demo_block do
   require_relative '../src/RelayIO.rb'
   relay = IO_Relay.new
   relay.add_relay $stdout
-  file = File.open("LogRelay.log","w")
+  file = File.open "LogRelay.log",?w
   file.sync = true
   relay.add_relay file
-  
+
   $stdout = relay
   loop do
     begin
@@ -17,5 +17,5 @@ _demo_block do
       p ex
       retry
     end
-  end  
+  end
 end

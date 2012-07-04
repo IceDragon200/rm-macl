@@ -36,11 +36,13 @@ Encoding.default_external = "UTF-8" # // Cause dumb shit happens otherwise
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 #require_relative '../RelayIO.rb'
 #relay = IO_Relay.new
-#relay.add_relay $stdout 
+#relay.add_relay $stdout
+require 'Iconv'
 require_relative '../StandardLibEx/Array_Ex.rb'
 require_relative '../StandardLibEx/String_Ex.rb'
 require_relative 'Skinj_commands.rb'
 $console_out = $stdout #relay
+($imported||={})['Skinj'] = 0x1000A
 class Skinj
   def collect_line
     res = (@index...@lines.size).collect do |i|
@@ -60,14 +62,14 @@ class Skinj
     (@macros[:store][name]||=[]) << str
   end
   def command_line? rgx
-    mtch = @lines[@index].match(RGX_ASMB_COM)
+    mtch = @lines[@index].match REGEXP_ASMB_COM
     return false unless mtch
-    return mtch[2].match(rgx)
+    return mtch[2].match rgx
   end
   def current_line
     @lines[@index]
   end
-  def jump_to_end
+  def jump_to_next_end
     jump_to_else false
   end
   def jump_to_else with_else=true
@@ -76,27 +78,40 @@ class Skinj
     @skj_indent += 1
     while true
       break debug_puts 'EOF' if @index >= @lines.size
-      if command_line? REGEX_INDENT
-        @skj_indent += 1 
-      elsif command_line? REGEX_END
-        @skj_indent -= 1 
-      elsif with_else and command_line?(REGEX_ELSE) && !@branch[@skj_indent] 
-        @skj_indent -= 1 
-      end  
-      debug_puts " >>Skipping: %s" % current_line
-      @index  += 1
+      if command_line? REGEXP_INDENT
+        @skj_indent += 1
+      elsif command_line? REGEXP_END
+        @skj_indent -= 1
+      elsif with_else and command_line?(REGEXP_ELSE) && !@branch[@skj_indent]
+        @skj_indent -= 1
+      end
+      jump_to_rindex 1
       break if @skj_indent == @target_indent
       raise "Negative indent at index %s" % @index if @skj_indent < 0
-    end  
+    end
     true
   end
   def jump_to_label str
+    debug_puts '>Jumping to label %s<' % str
     lookup = /\A\#-label #{str}/i
-    @index = @lines.index do |s| 
+    @index = @lines.index do |s|
       !!(s =~ lookup)
     end
     @index ||= @lines.size
     true
+  end
+  def jump_to_index index,silent=true
+    debug_puts '>Jumping to index %s<' % index unless silent
+    n = (index-@index) <=> 0
+    until @index == index
+      debug_puts " >>Skipping: %s" % current_line
+      @index += n
+    end
+    true
+  end
+  # // Relative Index
+  def jump_to_rindex index
+    jump_to_index @index + index
   end
   @@skinj_str = "<"
   @@skinj_str += "SKINJ"#.green
@@ -109,42 +124,44 @@ class Skinj
     str = args.collect{|obj|@@skinj_str % [@index,@skj_indent,obj.to_s]}
     Skinj.skinj_puts *str,&block
   end
-  def self.debug_puts *args,&block 
-    str = args.collect{|obj|"<@skinj> %s" % obj.to_s}  
+  def self.debug_puts *args,&block
+    str = args.collect{|obj|"<@skinj> %s" % obj.to_s}
     skinj_puts *str,&block
   end
   def self.skinj_puts *args, &block
     $console_out.puts *args,&block unless $console_out == $stdout
     puts *args,&block
   end
-  def self.skinj_str str,*args 
-    str = str.join("\n") if str.is_a? Array # // Reference protect
-    skinj = new(*args)
-    skinj.lines = str.split(/[\r\n]+/)
+  def self.skinj_str str,*args
+    str = str.join "\n" if str.is_a? Array # // Reference protect
+    skinj = new *args
+    ic = Iconv.new 'UTF-8//IGNORE', 'UTF-8'
+    skinj.lines = ic.iconv(str).split(/[\r\n]+/)
     skinj.index, skinj.line = 0, nil
-    loop do 
+    loop do
       skinj.line = skinj.lines[skinj.index]
       break unless skinj.line
       skinj.index += 1
-      if skinj.line =~ RGX_ASMB_COM
+      if skinj.line =~ REGEXP_ASMB_COM
         i, n = ($1 || 0).to_i, $2
         com = skinj.execute_command(i,n)
         next if com
         #next if com.respond_to?(:call) ? instance_exec(&com) : true if com
-      end  
+      end
       skinj.add_line skinj.line
       break if skinj.index >= skinj.lines.size
     end
   rescue Exception => ex
     debug_puts '>>>Skinj has crashed<<<'
     debug_puts ex.inspect
-    File.open('Skinj_crash.log',"w+") { |f|
-      f.puts [skinj.index] 
-      f.puts ex.message 
-      f.puts ex.backtrace 
-    }
+    Dir.mkdir 'crashes' unless File.exists? 'crashes'
+    File.open("crashes/#{Time.now.to_f*10**4}.log",?w) do |f|
+      f.puts [skinj.index]
+      f.puts ex.message
+      f.puts ex.backtrace
+    end
   ensure
-    return skinj  
+    return skinj
   end
   attr_accessor :index, :lines, :line, :indent, :skj_indent, :records, :macros
   def initialize indent=0,define={},switches={},records={},macros=nil
@@ -159,27 +176,27 @@ class Skinj
     setup_macros
 
     #debug_puts 'Skinj created: %s' % self.inspect
-  end  
+  end
   def settings
     return @indent,@define,@switches,@records,@macros
-  end  
-  def add_line line 
+  end
+  def add_line line
     str, = incur_mode? ? sub_args(line) : line
     @data << str
-  end  
+  end
   def add_lines *lines
     lines.each do |str| add_line str end
   end
-  def get_define str 
+  def get_define str
     @define[str]
   end
-  def sub_args *args 
+  def sub_args *args
     args.collect do |str|
       estr = str.dup
-      @define.each_pair{|key,value|estr.gsub!(key,value.to_s)}
+      @define.each_pair { |key,value|estr.gsub!(key,value.to_s) }
       estr
     end
-  end  
+  end
   def params
     @last_params
   end
@@ -187,7 +204,7 @@ class Skinj
     @last_indent
   end
   # // Assembler Commands
-  def execute_command indent,str 
+  def execute_command indent,str
     @last_params = nil
     @last_indent = indent
     @@commands.each do |a|
@@ -196,16 +213,20 @@ class Skinj
       return instance_exec(&function) if @last_params
     end
     return false
-  end  
+  end
   # // Output
   def incur_mode?
     !!@switches["INCUR"]
   end
-  def compile
-    build.join("\n")
-  end
   def build
-    @data.invoke_collect(:indent,@indent)
+    @data.invoke_collect :indent,@indent
+  end
+  def assemble
+    build.join "\n"
+  end
+  # // Trim the @branch array to fit the current indent level
+  def collapse_branch
+    @branch.replace @branch[0,@skj_indent]
   end
 end
 #------------------------------------------------------------------------------#

@@ -3,6 +3,7 @@
   #-define STDLBEX#=C:/Lib/Git/RGSS3-MACL/src/StandardLibEx
 #-end:
 #-include STDLBEX/Object_Ex.rb
+#-include STDLBEX/Module_Ex.rb
 #-include STDLBEX/Kernel_Ex.rb
 #-include STDLBEX/Numeric_Ex.rb
 #-include STDLBEX/String_Ex.rb

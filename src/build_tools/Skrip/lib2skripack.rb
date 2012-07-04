@@ -1,5 +1,5 @@
 $LOAD_PATH << "C:/Lib/iExRuby/"
-require 'zlib' 
+require 'zlib'
 require 'iExRuby'
 
 def file2string(file)
@@ -41,6 +41,6 @@ begin
   #//
   pack[:header][:ruby_version] = RUBY_VERSION
   pack[:header][:pack_time] = Time.now.to_f
-  pack[:content] = make_skripack("lib/") 
+  pack[:content] = make_skripack("lib/")
   save_data(pack,"packed.skrpk")
 end

@@ -1,0 +1,12 @@
+Change Log
+   (DD/MM/YYYY)
+  - 19/06/2012
+      Added new functionality to Skinj
+        define word#=defined_as_string
+        define word||=define if nil/false
+        define word&&=define if true
+
+  - 06/20/2012
+      Some Skinj commmands have been rewritten
+        if, unless, ifnot, unlessnot now support 'eval'
+        ifdef, unlessdef, ifnotdef, unlessnotdef

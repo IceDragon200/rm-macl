@@ -6,27 +6,27 @@ class MACL::Sequencer
   attr_accessor :index
   attr_accessor :maxcount
   attr_accessor :count
-  def initialize(s, n=10)
+  def initialize s, n=10
     self.sequence = s
     @index = 0
     @maxcount = n
-    reset_count()
-  end  
+    reset_count
+  end
   attr_reader :sequence
-  def sequence=(n)
-    n = n.to_a if n.is_a?(Range)
+  def sequence= n
+    n = n.to_a if n.is_a? Range
     @sequence = n
-  end  
+  end
   def reset_count
     @count = @maxcount
-  end  
+  end
   def value
     @sequence[@index]
-  end  
+  end
   def update
-    @count = @count.pred.max(0)
+    @count = @count.pred.max 0
     if @count == 0
-      @index = @index.succ.modulo(@sequence.size) 
+      @index = @index.succ.modulo @sequence.size
       @count = @maxcount
     end
   end

@@ -2,6 +2,9 @@
 #-//06/02/2012
 #-inject gen_class_header 'Color'
 class Color
+  def hash
+    [self.red,self.green,self.blue,self.alpha].hash
+  end
   def rgb_sym
     return :red, :green, :blue
   end
@@ -23,5 +26,8 @@ class Color
   end
   def to_tone
     Tone.new *to_a
+  end
+  def to_hash
+    {red: red, green: green, blue: blue, alpha: alpha}
   end
 end

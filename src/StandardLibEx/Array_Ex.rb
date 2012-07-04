@@ -12,12 +12,17 @@ module Enumerable
   def invoke meth_sym,*args,&block 
     each { |o| o.send(meth_sym,*args,&block) };self
   end
-  def invoke_collect meth_sym,*args
-    collect { |o| o.send(meth_sym,*args) }
+  def invoke_collect meth_sym,*args,&block
+    collect { |o| o.send(meth_sym,*args,&block) }
   end
 end
 #-inject gen_class_header 'Array'
 class Array
+  def offset obj
+    res = self.shift
+    self.push obj
+    res
+  end
   def pick!
     self.delete n=pick;n
   end unless method_defined? :pick! 
@@ -58,6 +63,7 @@ class Array
     concat(slice!(0,n))
   end unless method_defined? :rotate!
   def remove_this obj,n=1
+    i = 0
     n.times { (i = self.index(obj)) ? self.delete_at(i) : break }; self
   end
 end

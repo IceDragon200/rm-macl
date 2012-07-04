@@ -7,23 +7,20 @@
 # // • Version       : 1.0
 #==============================================================================#
 module MixIn_ConsoleHelpers
-  def _command_regex( size=1 )
+  def _command_regex size=1
     prm = '[ ](.*)' * [(size-1), 0].max
     prm += '[ ](.*)' if size > 0
     return /#{yield}#{prm}/i
   end
-  def yn_confirm( n="" )
+  def yn_confirm n=""
     loop do
       puts "Are you sure!?"
       puts "(Y|N) maybe?"
       print "<#{n}@> "
       case gets.upcase.chomp
-      when "Y", "YES"
-        return true
-      when "N", "NO"
-        return false
-      when "M", "MAYBE"
-        puts "D: Make up your mind already!"      
+        when "Y", "YES"  ; return true
+        when "N", "NO"   ; return false
+        when "M", "MAYBE"; puts "D: Make up your mind already!"
       end
     end
   end

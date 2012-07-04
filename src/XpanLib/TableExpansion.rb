@@ -64,4 +64,33 @@ module MACL::Mixin::TableExpansion
     return true if zsize <= z if zsize > 0
     return false
   end
+  def to_a
+    tabe = begin
+      if @zsize > 1
+        Array.new @xsize do 
+          Array.new @ysize do 
+            Array.new @zsize, 0 
+          end 
+        end
+      elsif @ysize > 1
+        Array.new @xsize do 
+          Array.new @ysize, 0
+        end
+      else
+        Array.new @xsize, 0
+      end
+    end  
+    x,y,z,n,xyz = [nil]*5
+    iterate do |n,*xyz|
+      x,y,z = *xyz
+      if xyz.size == 3
+        tabe[x][y][z] = n
+      elsif xyz.size == 2
+        tabe[x][y] = n
+      else
+        tabe[x] = n  
+      end
+    end
+    tabe
+  end
 end
