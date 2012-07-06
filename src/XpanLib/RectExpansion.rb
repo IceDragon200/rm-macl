@@ -50,7 +50,7 @@
 #
 #==============================================================================#
 #-end:
-#-inject gen_scr_imported_ww 'RectExpansion', '0x10000'
+#-inject gen_scr_imported_ww 'RectExpansion', '0x10001'
 #-inject gen_function_des 'Rect.center'
 def Rect.center r1,r2
   Rect.new r1.x+(r1.width-r2.width)/2,r1.y+(r1.height-r2.height)/2,r2.width,r2.height
@@ -83,6 +83,12 @@ module MACL::Mixin::RectExpansion
   end
   def cy
     y+height/2
+  end
+  def cx= x
+    self.x = x - self.width / 2.0
+  end
+  def cy= y
+    self.y = y - self.height / 2.0
   end
   # // Destructive
   def contract! n=0,orn=0

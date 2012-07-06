@@ -79,7 +79,7 @@ class Numeric
   def max n
     n > self ? n : self
   end unless method_defined? :max
-  def clamp min, max
+  def clamp min,max
     self < min ? min : (self > max ? max : self)
   end unless method_defined? :clamp
   def unary
@@ -159,12 +159,9 @@ class String
   end
   def as_bool
     case self.upcase
-    when *MACL::Parsers::STRS_TRUE
-      return true
-    when *MACL::Parsers::STRS_FALSE
-      return false
-    else
-      return nil
+      when *MACL::Parser::STRS_TRUE  ; return true
+      when *MACL::Parser::STRS_FALSE ; return false
+      else                           ; return nil
     end
   end
 end

@@ -28,6 +28,9 @@ module MACL::Mixin::AudioVolume
     volume_abs * vol_rate
   end
 end
+#-skip:
+__END__
+#-end:
 #-recmacro AudioObj
 #-switch INCUR:ON
 #-inject gen_class_header 'RPG::__CLASSNAME'

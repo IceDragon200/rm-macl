@@ -4,6 +4,12 @@ warn 'TableExpansion is already imported' if ($imported||={})['TableExpansion']
 # ╒╕ ■                                          MACL::Mixin::TableExpansion ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL::Mixin::TableExpansion
+  def area
+    xsize*ysize
+  end
+  def volume
+    xsize*ysize*zsize
+  end
   def iterate
     x,y,z=[0]*3
     if zsize > 1
@@ -100,9 +106,9 @@ end
 # ╒╕ ♥                                                                Point ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 warn 'Point is already imported' if ($imported||={})['Point']
-($imported||={})['Point']=0x10001
+($imported||={})['Point']=0x10002
 class Point
-  def self.to_point array
+  def self.convert2point array
     Point.new *array[0,1]
   end
   attr_accessor :x, :y
@@ -119,10 +125,10 @@ class Point
     "<#{self.class.name}: %s, %s>" % [self.x,self.y]
   end
   def to_a
-    return @x,@y
+    @x,@y
   end
   def to_hash
-    return {x: @x, y: @y}
+    {x: @x, y: @y}
   end
   def hash
     [@x,@y].hash
@@ -174,6 +180,18 @@ module MACL
     def empty
       set
       self
+    end
+    def area1
+      @width*@height
+    end
+    def area2
+      @width*@length
+    end
+    def area3
+      @height*@length
+    end
+    def volume
+      @width*@height*@length
     end
   end
 end
@@ -295,17 +313,17 @@ module MACL
       sym,regex,func,params = [nil]*4
       Hash[commands.collect do |(sym,regex,func,params)| [sym,[regex,func,params]] end]
     end
-    def enum_commands
-      sym,regex,func,params = [nil]*4
-      each do |(sym,regex,func,params)|
-        yield sym,regex,func,params
-      end
-    end
     def add_command sym,regex,params=[],&func
       @commands.push [sym,regex,func,params]
     end
     def shift_command sym,regex,params=[],&func
       @commands.unshift [sym,regex,func,params]
+    end
+    def enum_commands
+      sym,regex,func,params = [nil]*4
+      each do |(sym,regex,func,params)|
+        yield sym,regex,func,params
+      end
     end
     def match_command str
       sym,regex,func,params = [nil]*4
@@ -318,7 +336,7 @@ module MACL
     def exec_command str
       sym,mtch,func,params = [nil]*4
       match_command str do |sym,mtch,func,params|
-        func.call mtch
+        return func.call mtch
       end
     end
   end

@@ -42,6 +42,18 @@ module MACL
       set
       self
     end
+    def area1
+      @width*@height
+    end
+    def area2
+      @width*@length
+    end
+    def area3
+      @height*@length
+    end
+    def volume
+      @width*@height*@length
+    end
   end
 end
 Cube = MACL::Cube

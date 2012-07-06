@@ -1,11 +1,13 @@
 #-inject gen_class_header 'Point'
-#-inject gen_scr_imported_ww 'Point', '0x10001'
+#-inject gen_scr_imported_ww 'Point', '0x10002'
 class Point
-  def self.to_point array
-    Point.new *array[0,1]
+  def self.convert2point array
+    Point.new(*array[0..1])
   end
   attr_accessor :x, :y
-  class << self ; alias :[] :new ; end
+  class << self
+    alias :[] :new
+  end
   def initialize x=0,y=0
     @x,@y = x,y
   end
@@ -15,7 +17,7 @@ class Point
   end
   alias old_to_s to_s
   def to_s
-    "<#{self.class.name}: %s, %s>" % [self.x,self.y]
+    return "<#{self.class.name}: %s, %s>" % [self.x,self.y]
   end
   def to_a
     return @x,@y
@@ -24,9 +26,9 @@ class Point
     return {x: @x, y: @y}
   end
   def hash
-    [@x,@y].hash
+    return [@x,@y].hash
   end
   def unaries
-    [@x <=> 0, @y <=> 0]
+    return [@x <=> 0, @y <=> 0]
   end
 end

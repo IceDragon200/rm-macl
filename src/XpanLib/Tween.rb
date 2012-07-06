@@ -49,6 +49,9 @@ class Tween
       @@_add_time
     end
   end
+#-skip:
+  init
+#-end:  
   def initialize start_values=[],end_values=[],easer=:linear,maxtime=1.0,extra_params=[]
     set_and_reset start_values, end_values, easer, maxtime, extra_params
   end

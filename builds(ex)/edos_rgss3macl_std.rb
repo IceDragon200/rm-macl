@@ -1,9 +1,9 @@
 =begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
- Version : 0x10008
- Last Build: 23/06/2012 (MM/DD/YYYY) (0x10007)
- Date Built: 02/07/2012 (MM/DD/YYYY) (0x10008)
+ Version : 0x10009
+ Last Build: 02/07/2012 (MM/DD/YYYY) (0x10008)
+ Date Built: 06/07/2012 (MM/DD/YYYY) (0x10009)
  ──────────────────────────────────────────────────────────────────────────────
  ■ Module
  ♥ Class
@@ -207,7 +207,7 @@ RGSSEx Expansion
       ● Return
           Boolean
 =end
-($imported||={})['RGSS3-MACL']=0x10008
+($imported||={})['RGSS3-MACL']=0x10009
 # // Standard Library
 # ╒╕ ♥                                                               Object ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -289,7 +289,7 @@ class Numeric
   def max n
     n > self ? n : self
   end unless method_defined? :max
-  def clamp min, max
+  def clamp min,max
     self < min ? min : (self > max ? max : self)
   end unless method_defined? :clamp
   def unary
@@ -369,12 +369,9 @@ class String
   end
   def as_bool
     case self.upcase
-    when *MACL::Parsers::STRS_TRUE
-      return true
-    when *MACL::Parsers::STRS_FALSE
-      return false
-    else
-      return nil
+      when *MACL::Parser::STRS_TRUE  ; return true
+      when *MACL::Parser::STRS_FALSE ; return false
+      else                           ; return nil
     end
   end
 end
@@ -750,27 +747,11 @@ class Rect
   def to_rect
     Rect.new *to_a
   end
+  def area
+    self.width*self.height
+  end
   def empty?
     self.width == 0 and self.height == 0
-  end
-end
-# ╒╕ ♥                                                              Vector4 ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-class Vector4 < Rect
-  def rwidth
-    self.width - self.x
-  end
-  def rheight
-    self.height - self.y
-  end
-  def vwidth
-    self.width
-  end
-  def vheight
-    self.height
-  end
-  def self.v4a_to_rect v4a
-    return Rect.new v4a[0], v4a[1], v4a[2]-v4a[0], v4a[3]-v4a[1]
   end
 end
 # ╒╕ ♥                                                                Table ╒╕
@@ -806,7 +787,7 @@ class Bitmap
       yield if block_given? 
     end
   end
-  def recolor f_color,t_color=nil 
+  def recolor! f_color,t_color=nil 
     if f_color.is_a? Color and t_color.is_a? Color 
       hsh = { f_color => t_color }
     elsif f_color.is_a? Array && t_color 
@@ -816,10 +797,15 @@ class Bitmap
       hsh = f_color
     end  
     x,y,color = nil,nil,nil
-    iterate_do { |x,y,color| set_pixel(x,y,hsh[color]||color) }
+    iterate do |x,y,color| 
+      set_pixel(x,y,hsh[color]||color) 
+    end
   end 
+  def recolor *args,&block
+    dup.recolor! *args,&block
+  end
   def iterate_map 
-    iterate_do { |x,y,color| set_pixel(x,y,yield(x,y,color)) }
+    iterate { |x,y,color| set_pixel(x,y,yield(x,y,color)) }
   end
   def legacy_recolor color1,color2
     for y in 0...height
@@ -833,7 +819,7 @@ class Bitmap
     iterate_do true do |x,y,color| pallete << color.to_a end
     pallete.to_a.sort.collect do |a|Color.new *a end
   end  
-  def iterate_do return_only=false 
+  def iterate return_only=false 
     x, y = nil, nil
     for y in 0...height
       for x in 0...width
@@ -865,12 +851,21 @@ class Bitmap
     end  
   end
   def set_pixel_weighted x,y,color,weight=1
-    weight.times do |i| set_pixel(x,y+i,color) end
+    even = ((weight % 2) == 0) ? 1 : 0
+    half = weight / 2
+    for px in (x-half)..(x+half-even)
+      for py in (y-half)..(y+half-even)
+        self.set_pixel(px, py, color) 
+      end
+    end
   end
 end
 # ╒╕ ♥                                                               Sprite ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Sprite
+  def move x,y
+    self.x,self.y=x,y
+  end
   def to_rect
     Rect.new x,y,width,height
   end
@@ -891,7 +886,7 @@ module RPG
         select_commands *COMMENT_CODES
       end
       def comments_a
-        comments.map!(&:parameters).flatten!
+        comments.map(&:parameters).flatten
       end
     end
   end
@@ -899,8 +894,8 @@ end
 # ╒╕ ♥                                                          Game::Event ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Game_Event
-  def comment_a
-    @page.comment_a
+  def comments_a
+    @page.comments_a
   end
 end
 # ╒╕ ■                                                         SceneManager ╒╕

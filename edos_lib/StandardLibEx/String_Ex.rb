@@ -38,12 +38,9 @@ class String
   end
   def as_bool
     case self.upcase
-    when *MACL::Parsers::STRS_TRUE
-      return true
-    when *MACL::Parsers::STRS_FALSE
-      return false
-    else
-      return nil
+      when *MACL::Parser::STRS_TRUE  ; return true
+      when *MACL::Parser::STRS_FALSE ; return false
+      else                           ; return nil
     end
   end
 end

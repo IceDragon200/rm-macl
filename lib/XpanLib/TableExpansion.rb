@@ -3,6 +3,12 @@ warn 'TableExpansion is already imported' if ($imported||={})['TableExpansion']
 # ╒╕ ■                                          MACL::Mixin::TableExpansion ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL::Mixin::TableExpansion
+  def area
+    xsize*ysize
+  end
+  def volume
+    xsize*ysize*zsize
+  end
   def iterate
     x,y,z=[0]*3
     if zsize > 1

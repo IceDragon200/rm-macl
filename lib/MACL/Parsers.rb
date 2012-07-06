@@ -1,13 +1,16 @@
-# ╒╕ ■                                                        MACL::Parsers ╒╕
+warn 'MACL::Parser is already imported' if ($imported||={})['MACL::Parser']
+($imported||={})['MACL::Parser']=0x10002
+# ╒╕ ■                                                         MACL::Parser ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-module MACL::Parsers
-  STRS_TRUE  = ["TRUE","YES","ON","T","Y"]
-  STRS_FALSE = ["FALSE","NO","OFF","F","N"]
+module MACL::Parser
+  STRS_TRUE  = ["TRUE" ,"YES","ON" ,"T","Y"]
+  STRS_FALSE = ["FALSE","NO" ,"OFF","F","N"]
   STRS_BOOL  = STRS_TRUE + STRS_FALSE
   module Regexp
     BOOL = /(?:#{STRS_BOOL.join(?|)})/i
-    INT = /\d+/
-    FLT = /\d+\.\d+/
+    INT  = /\d+/
+    FLT  = /\d+\.\d+/
+    PRATE= /\d+%/i
   end
   def self.Singulize array
     return array.size == 1 ? array[0] : array
@@ -19,9 +22,9 @@ module MACL::Parsers
   def self.str2bool *strs
     Singulize(strs.collect do |str|
       case str.upcase
-      when *STRS_TRUE  ; true
-      when *STRS_FALSE ; false
-      else             ; nil
+        when *STRS_TRUE  ; true
+        when *STRS_FALSE ; false
+        else             ; nil
       end
     end)
   end
@@ -30,6 +33,12 @@ module MACL::Parsers
   end
   def self.str2flt *strs
     Singulize(strs.collect do |str| Float str end)
+  end
+  def self.str2prate *strs
+    Singulize(strs.collect do |str| str.to_i/100.0 end)
+  end
+  def self.str2rate *strs
+    Singulize(strs.collect do |str| str.to_i/1.0 end)
   end
   def self.str2int_a str
     str.scan(/\d+/).map! &:to_i
@@ -46,6 +55,8 @@ module MACL::Parsers
     else # // Guess type
       if str =~ Regexp::FLT
         str2flt str
+      elsif str =~ Regexp::PRATE  
+        str2prate str  
       elsif str =~ Regexp::INT
         str2int str
       elsif str =~ Regexp::BOOL_REGEX
@@ -79,12 +90,12 @@ module MACL::Parsers
     ["string" ,"str" ]=> proc {|args|args.map!(&:to_s) },
     ["integer","int" ]=> proc {|args|args.map!(&:to_i) },
     ["boolean","bool"]=> proc {|args|args.collect!{|s|str2bool(s)}},
+    ["percent","perc"]=> proc {|args|args.collect!{|s|str2prate(s)}},
+    ["rate"   ,"rt"  ]=> proc {|args|args.collect!{|s|str2rate(s)}},
     ["float"  ,"flt" ]=> proc {|args|args.map!(&:to_f) },
     ["hex"]           => proc {|args|args.map!(&:hex)  }
   }
-  @structs ||= {
-  }
-  @data_types.merge @structs
+  #@data_types.merge @structs
   str = "(a-)?(%s):(.*)" % @data_types.keys.collect{|a|"(?:"+a.join(?|)+?)}.join(?|)
   DTREGEX = /#{str}/i
   @data_types.enum2keys!

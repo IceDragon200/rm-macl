@@ -1,6 +1,12 @@
 #-inject gen_scr_imported_ww 'TableExpansion', '0x10000'
 #-inject gen_module_header 'MACL::Mixin::TableExpansion'
 module MACL::Mixin::TableExpansion
+  def area
+    xsize*ysize
+  end
+  def volume
+    xsize*ysize*zsize
+  end
   def iterate
     x,y,z=[0]*3
     if zsize > 1

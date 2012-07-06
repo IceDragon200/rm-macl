@@ -68,7 +68,7 @@ module Registry
         content.split(/[\r\n]+/).each do |line|
           mtch = line.match(/(.+)\=(.+)/i)
           if mtch
-            a,dt,v = MACL::Parsers.parse_dtstr(mtch[2],:all)
+            a,dt,v = MACL::Parser.parse_dtstr(mtch[2],:all)
             p a,dt,v
             @registry[tg][mtch[1]] = Leaf.new(a,dt,v)
           end

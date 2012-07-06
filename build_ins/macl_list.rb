@@ -27,13 +27,13 @@
 #-end:
 #-include HEADER/macl_header_tail.rb
 #-// Include Scripts
-#-include STDLBEX/build_order.rb
+#-include STDLBEX/_build_order.rb
 #-unlessdef xONLYSTDLIB
-  #-include SRCPATH/macl_build_order.rb
+  #-include SRCPATH/macl/_build_order.rb
   #-ifdef XPANLBEX
-    #-include XPANLBEX/build_order.rb
+    #-include XPANLBEX/_build_order.rb
   #-end:
-  #-include RGSSExPTH/build_order.rb
+  #-include RGSSExPTH/_build_order.rb
   #-include SRCPATH/macl/macl_tail.rb
 #-end:
 #-include HEADER/macl_footer.rb

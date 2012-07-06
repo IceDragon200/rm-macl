@@ -11,7 +11,7 @@ module RPG
         select_commands *COMMENT_CODES
       end
       def comments_a
-        comments.map!(&:parameters).flatten!
+        comments.map(&:parameters).flatten
       end
     end
   end
@@ -19,7 +19,7 @@ end
 # ╒╕ ♥                                                           Game_Event ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Game_Event
-  def comment_a
-    @page.comment_a
+  def comments_a
+    @page.comments_a
   end
 end

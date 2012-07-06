@@ -1,9 +1,9 @@
 =begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
- Version : 0x10008
- Last Build: 23/06/2012 (MM/DD/YYYY) (0x10007)
- Date Built: 02/07/2012 (MM/DD/YYYY) (0x10008)
+ Version : 0x10009
+ Last Build: 02/07/2012 (MM/DD/YYYY) (0x10008)
+ Date Built: 06/07/2012 (MM/DD/YYYY) (0x10009)
  ──────────────────────────────────────────────────────────────────────────────
  ■ Module
  ♥ Class
@@ -249,7 +249,7 @@ RGSSEx Expansion
       ● Return
           Boolean
 =end
-($imported||={})['RGSS3-MACL']=0x10008
+($imported||={})['RGSS3-MACL']=0x10009
 # // Standard Library
 # ╒╕ ♥                                                               Object ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -331,7 +331,7 @@ class Numeric
   def max n
     n > self ? n : self
   end unless method_defined? :max
-  def clamp min, max
+  def clamp min,max
     self < min ? min : (self > max ? max : self)
   end unless method_defined? :clamp
   def unary
@@ -411,12 +411,9 @@ class String
   end
   def as_bool
     case self.upcase
-    when *MACL::Parsers::STRS_TRUE
-      return true
-    when *MACL::Parsers::STRS_FALSE
-      return false
-    else
-      return nil
+      when *MACL::Parser::STRS_TRUE  ; return true
+      when *MACL::Parser::STRS_FALSE ; return false
+      else                           ; return nil
     end
   end
 end
@@ -640,16 +637,19 @@ class << MACL
     @client ||= get_client
   end
 end
-# ╒╕ ■                                                        MACL::Parsers ╒╕
+warn 'MACL::Parser is already imported' if ($imported||={})['MACL::Parser']
+($imported||={})['MACL::Parser']=0x10002
+# ╒╕ ■                                                         MACL::Parser ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-module MACL::Parsers
-  STRS_TRUE  = ["TRUE","YES","ON","T","Y"]
-  STRS_FALSE = ["FALSE","NO","OFF","F","N"]
+module MACL::Parser
+  STRS_TRUE  = ["TRUE" ,"YES","ON" ,"T","Y"]
+  STRS_FALSE = ["FALSE","NO" ,"OFF","F","N"]
   STRS_BOOL  = STRS_TRUE + STRS_FALSE
   module Regexp
     BOOL = /(?:#{STRS_BOOL.join(?|)})/i
-    INT = /\d+/
-    FLT = /\d+\.\d+/
+    INT  = /\d+/
+    FLT  = /\d+\.\d+/
+    PRATE= /\d+%/i
   end
   def self.Singulize array
     return array.size == 1 ? array[0] : array
@@ -661,9 +661,9 @@ module MACL::Parsers
   def self.str2bool *strs
     Singulize(strs.collect do |str|
       case str.upcase
-      when *STRS_TRUE  ; true
-      when *STRS_FALSE ; false
-      else             ; nil
+        when *STRS_TRUE  ; true
+        when *STRS_FALSE ; false
+        else             ; nil
       end
     end)
   end
@@ -672,6 +672,12 @@ module MACL::Parsers
   end
   def self.str2flt *strs
     Singulize(strs.collect do |str| Float str end)
+  end
+  def self.str2prate *strs
+    Singulize(strs.collect do |str| str.to_i/100.0 end)
+  end
+  def self.str2rate *strs
+    Singulize(strs.collect do |str| str.to_i/1.0 end)
   end
   def self.str2int_a str
     str.scan(/\d+/).map! &:to_i
@@ -688,6 +694,8 @@ module MACL::Parsers
     else # // Guess type
       if str =~ Regexp::FLT
         str2flt str
+      elsif str =~ Regexp::PRATE  
+        str2prate str  
       elsif str =~ Regexp::INT
         str2int str
       elsif str =~ Regexp::BOOL_REGEX
@@ -721,12 +729,12 @@ module MACL::Parsers
     ["string" ,"str" ]=> proc {|args|args.map!(&:to_s) },
     ["integer","int" ]=> proc {|args|args.map!(&:to_i) },
     ["boolean","bool"]=> proc {|args|args.collect!{|s|str2bool(s)}},
+    ["percent","perc"]=> proc {|args|args.collect!{|s|str2prate(s)}},
+    ["rate"   ,"rt"  ]=> proc {|args|args.collect!{|s|str2rate(s)}},
     ["float"  ,"flt" ]=> proc {|args|args.map!(&:to_f) },
     ["hex"]           => proc {|args|args.map!(&:hex)  }
   }
-  @structs ||= {
-  }
-  @data_types.merge @structs
+  #@data_types.merge @structs
   str = "(a-)?(%s):(.*)" % @data_types.keys.collect{|a|"(?:"+a.join(?|)+?)}.join(?|)
   DTREGEX = /#{str}/i
   @data_types.enum2keys!
@@ -764,6 +772,12 @@ warn 'TableExpansion is already imported' if ($imported||={})['TableExpansion']
 # ╒╕ ■                                          MACL::Mixin::TableExpansion ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL::Mixin::TableExpansion
+  def area
+    xsize*ysize
+  end
+  def volume
+    xsize*ysize*zsize
+  end
   def iterate
     x,y,z=[0]*3
     if zsize > 1
@@ -860,13 +874,15 @@ end
 # ╒╕ ♥                                                                Point ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 warn 'Point is already imported' if ($imported||={})['Point']
-($imported||={})['Point']=0x10001
+($imported||={})['Point']=0x10002
 class Point
-  def self.to_point array
-    Point.new *array[0,1]
+  def self.convert2point array
+    Point.new(*array[0..1])
   end
   attr_accessor :x, :y
-  class << self ; alias :[] :new ; end
+  class << self
+    alias :[] :new
+  end
   def initialize x=0,y=0
     @x,@y = x,y
   end
@@ -876,7 +892,7 @@ class Point
   end
   alias old_to_s to_s
   def to_s
-    "<#{self.class.name}: %s, %s>" % [self.x,self.y]
+    return "<#{self.class.name}: %s, %s>" % [self.x,self.y]
   end
   def to_a
     return @x,@y
@@ -885,10 +901,10 @@ class Point
     return {x: @x, y: @y}
   end
   def hash
-    [@x,@y].hash
+    return [@x,@y].hash
   end
   def unaries
-    [@x <=> 0, @y <=> 0]
+    return [@x <=> 0, @y <=> 0]
   end
 end
 warn 'Cube is already imported' if ($imported||={})['Cube']
@@ -934,6 +950,18 @@ module MACL
     def empty
       set
       self
+    end
+    def area1
+      @width*@height
+    end
+    def area2
+      @width*@length
+    end
+    def area3
+      @height*@length
+    end
+    def volume
+      @width*@height*@length
     end
   end
 end
@@ -1055,17 +1083,17 @@ module MACL
       sym,regex,func,params = [nil]*4
       Hash[commands.collect do |(sym,regex,func,params)| [sym,[regex,func,params]] end]
     end
-    def enum_commands
-      sym,regex,func,params = [nil]*4
-      each do |(sym,regex,func,params)|
-        yield sym,regex,func,params
-      end
-    end
     def add_command sym,regex,params=[],&func
       @commands.push [sym,regex,func,params]
     end
     def shift_command sym,regex,params=[],&func
       @commands.unshift [sym,regex,func,params]
+    end
+    def enum_commands
+      sym,regex,func,params = [nil]*4
+      each do |(sym,regex,func,params)|
+        yield sym,regex,func,params
+      end
     end
     def match_command str
       sym,regex,func,params = [nil]*4
@@ -1078,7 +1106,7 @@ module MACL
     def exec_command str
       sym,mtch,func,params = [nil]*4
       match_command str do |sym,mtch,func,params|
-        func.call mtch
+        return func.call mtch
       end
     end
   end
@@ -1327,27 +1355,11 @@ class Rect
   def to_rect
     Rect.new *to_a
   end
+  def area
+    self.width*self.height
+  end
   def empty?
     self.width == 0 and self.height == 0
-  end
-end
-# ╒╕ ♥                                                              Vector4 ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-class Vector4 < Rect
-  def rwidth
-    self.width - self.x
-  end
-  def rheight
-    self.height - self.y
-  end
-  def vwidth
-    self.width
-  end
-  def vheight
-    self.height
-  end
-  def self.v4a_to_rect v4a
-    return Rect.new v4a[0], v4a[1], v4a[2]-v4a[0], v4a[3]-v4a[1]
   end
 end
 # ╒╕ ♥                                                                Table ╒╕
@@ -1383,7 +1395,7 @@ class Bitmap
       yield if block_given? 
     end
   end
-  def recolor f_color,t_color=nil 
+  def recolor! f_color,t_color=nil 
     if f_color.is_a? Color and t_color.is_a? Color 
       hsh = { f_color => t_color }
     elsif f_color.is_a? Array && t_color 
@@ -1393,10 +1405,15 @@ class Bitmap
       hsh = f_color
     end  
     x,y,color = nil,nil,nil
-    iterate_do { |x,y,color| set_pixel(x,y,hsh[color]||color) }
+    iterate do |x,y,color| 
+      set_pixel(x,y,hsh[color]||color) 
+    end
   end 
+  def recolor *args,&block
+    dup.recolor! *args,&block
+  end
   def iterate_map 
-    iterate_do { |x,y,color| set_pixel(x,y,yield(x,y,color)) }
+    iterate { |x,y,color| set_pixel(x,y,yield(x,y,color)) }
   end
   def legacy_recolor color1,color2
     for y in 0...height
@@ -1410,7 +1427,7 @@ class Bitmap
     iterate_do true do |x,y,color| pallete << color.to_a end
     pallete.to_a.sort.collect do |a|Color.new *a end
   end  
-  def iterate_do return_only=false 
+  def iterate return_only=false 
     x, y = nil, nil
     for y in 0...height
       for x in 0...width
@@ -1442,12 +1459,21 @@ class Bitmap
     end  
   end
   def set_pixel_weighted x,y,color,weight=1
-    weight.times do |i| set_pixel(x,y+i,color) end
+    even = ((weight % 2) == 0) ? 1 : 0
+    half = weight / 2
+    for px in (x-half)..(x+half-even)
+      for py in (y-half)..(y+half-even)
+        self.set_pixel(px, py, color) 
+      end
+    end
   end
 end
 # ╒╕ ♥                                                               Sprite ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Sprite
+  def move x,y
+    self.x,self.y=x,y
+  end
   def to_rect
     Rect.new x,y,width,height
   end
@@ -1468,7 +1494,7 @@ module RPG
         select_commands *COMMENT_CODES
       end
       def comments_a
-        comments.map!(&:parameters).flatten!
+        comments.map(&:parameters).flatten
       end
     end
   end
@@ -1476,8 +1502,8 @@ end
 # ╒╕ ♥                                                          Game::Event ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Game_Event
-  def comment_a
-    @page.comment_a
+  def comments_a
+    @page.comments_a
   end
 end
 # ╒╕ ■                                                         SceneManager ╒╕

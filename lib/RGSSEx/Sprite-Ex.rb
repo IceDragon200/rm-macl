@@ -1,6 +1,9 @@
 # ╒╕ ♥                                                               Sprite ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Sprite
+  def move x,y
+    self.x,self.y=x,y
+  end
   def to_rect
     Rect.new x,y,width,height
   end

@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"l",
+				"length"
+			],
+			[
 				"res",
 				"results"
 			],
@@ -88,30 +92,6 @@
 	"buffers":
 	[
 		{
-			"file": "src/build_tools/asm_folder.rb",
-			"settings":
-			{
-				"buffer_size": 1703,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/build_tools/script_assembler.rb",
-			"settings":
-			{
-				"buffer_size": 529,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/build_tools/skinj_this.rb",
-			"settings":
-			{
-				"buffer_size": 423,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "src/build_tools/Skinj.rb",
 			"settings":
 			{
@@ -163,7 +143,7 @@
 			"file": "rgss3macl.rb",
 			"settings":
 			{
-				"buffer_size": 40818,
+				"buffer_size": 41074,
 				"line_ending": "Unix"
 			}
 		},
@@ -187,7 +167,7 @@
 			"file": "src/XpanLib/RectExpansion.rb",
 			"settings":
 			{
-				"buffer_size": 4014,
+				"buffer_size": 4119,
 				"line_ending": "Unix"
 			}
 		},
@@ -224,10 +204,10 @@
 			}
 		},
 		{
-			"contents": "module MACL\n  module \n  end\nend",
+			"file": "src/XpanLib/Vectrix.rb",
 			"settings":
 			{
-				"buffer_size": 31,
+				"buffer_size": 457,
 				"line_ending": "Windows",
 				"name": "module MACL"
 			}
@@ -252,7 +232,7 @@
 			"file": "src/XpanLib/Cube.rb",
 			"settings":
 			{
-				"buffer_size": 1149,
+				"buffer_size": 1331,
 				"line_ending": "Unix"
 			}
 		},
@@ -277,7 +257,7 @@
 			"file": "src/XpanLib/Grid.rb",
 			"settings":
 			{
-				"buffer_size": 1387,
+				"buffer_size": 1527,
 				"line_ending": "Windows"
 			}
 		},
@@ -368,7 +348,7 @@
 			"file": "src/RGSSEx/Rect_Ex.rb",
 			"settings":
 			{
-				"buffer_size": 806,
+				"buffer_size": 850,
 				"line_ending": "Unix"
 			}
 		},
@@ -376,7 +356,7 @@
 			"file": "src/RGSSEx/Bitmap_Ex.rb",
 			"settings":
 			{
-				"buffer_size": 2296,
+				"buffer_size": 2545,
 				"line_ending": "Windows",
 				"name": "#-inject gen_class_header 'Bitmap'"
 			}
@@ -417,7 +397,7 @@
 			"file": "src/StandardLibEx/Numeric_Ex.rb",
 			"settings":
 			{
-				"buffer_size": 1147,
+				"buffer_size": 1146,
 				"line_ending": "Windows"
 			}
 		},
@@ -446,6 +426,47 @@
 				"buffer_size": 211,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "src/RGSSEx/RPG_Event_Page_Ex.rb",
+			"settings":
+			{
+				"buffer_size": 478,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/XpanLib/TableExpansion.rb",
+			"settings":
+			{
+				"buffer_size": 2158,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/RGSSEx/Sprite-Ex.rb",
+			"settings":
+			{
+				"buffer_size": 198,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/XpanLib/Surface.rb",
+			"settings":
+			{
+				"buffer_size": 6706,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/MACL/MACL-Constants.rb",
+			"settings":
+			{
+				"buffer_size": 501,
+				"line_ending": "Windows",
+				"name": "module MACL"
+			}
 		}
 	],
 	"build_system": "",
@@ -472,6 +493,9 @@
 	},
 	"file_history":
 	[
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/skinj_this.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/script_assembler.rb",
+		"/C/Lib/Git/RGSS3-MACL/src/build_tools/asm_folder.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/FunLib/Ohms_Law.rb",
 		"/C/Lib/Git/RGSS3-MACL/build_ins/macl_list_def_std.rb",
 		"/C/Lib/Git/RGSS3-MACL/build_ins/macl_list_edos.rb",
@@ -524,8 +548,6 @@
 		"/C/Lib/Git/RGSS3-MACL/src/RCG.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/Registry.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/macl_build_order.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/build_tools/asm_folder.rb",
-		"/C/Lib/Git/RGSS3-MACL/src/build_tools/script_assembler.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/build_tools/Skrip/skpck2folder.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/build_tools/Skrip/Skrip2.rb",
 		"/C/Lib/Git/RGSS3-MACL/src/build_tools/Skrip/Skrip2_reader.rb",
@@ -598,8 +620,7 @@
 		"/C/Lib/Git/RGSS3-MACL/src/RelayIO.rb",
 		"/C/Lib/Git/RGSS3-MACL/algorithim/conditional_branches.rb",
 		"/C/Lib/Git/RGSS3-MACL/rgss3macl_std.rb",
-		"/C/Lib/Git/RGSS3-MACL/macl_dev_list.rb",
-		"/C/Lib/Git/RGSS3-MACL/doc/StandardLibEx_help.txt"
+		"/C/Lib/Git/RGSS3-MACL/macl_dev_list.rb"
 	],
 	"find":
 	{
@@ -618,6 +639,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"def (.+)\\((.*)\\)",
+			"def (.+)\\( (.*) \\)",
+			"ANCHOR_(?<name>\\S+)",
+			"cx",
+			"iterate",
+			"tableexpansion",
 			"()",
 			"recolor",
 			"REGEXP_JUMP",
@@ -657,9 +684,12 @@
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			"def $1 $2",
+			"ANCHOR[:$1]",
+			"ANCHOR[$1]",
 			"",
 			"'",
 			"",
@@ -688,95 +718,11 @@
 	"groups":
 	[
 		{
-			"selected": 24,
+			"selected": 14,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/build_tools/asm_folder.rb",
-					"settings":
-					{
-						"buffer_size": 1703,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								944,
-								944
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 37.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/build_tools/script_assembler.rb",
-					"settings":
-					{
-						"buffer_size": 529,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								529
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/build_tools/skinj_this.rb",
-					"settings":
-					{
-						"buffer_size": 423,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								364,
-								364
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"file": "src/build_tools/Skinj.rb",
 					"settings":
 					{
@@ -798,13 +744,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 834.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 1,
 					"file": "src/build_tools/Skinj_commands.rb",
 					"settings":
 					{
@@ -832,7 +778,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 2,
 					"file": "build_macl.bat",
 					"settings":
 					{
@@ -858,7 +804,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 3,
 					"file": "build_ins/macl_list_edos_dev.rb",
 					"settings":
 					{
@@ -884,7 +830,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 4,
 					"file": "build_ins/macl_list_edos_std.rb",
 					"settings":
 					{
@@ -910,7 +856,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 5,
 					"file": "headers/macl_header.rb",
 					"settings":
 					{
@@ -938,11 +884,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 6,
 					"file": "rgss3macl.rb",
 					"settings":
 					{
-						"buffer_size": 40818,
+						"buffer_size": 41074,
 						"regions":
 						{
 						},
@@ -966,7 +912,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 7,
 					"file": "demo/macl_dev_test01.rb",
 					"settings":
 					{
@@ -994,7 +940,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 8,
 					"file": "src/XpanLib/Point_basic.rb",
 					"settings":
 					{
@@ -1022,19 +968,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 9,
 					"file": "src/XpanLib/RectExpansion.rb",
 					"settings":
 					{
-						"buffer_size": 4014,
+						"buffer_size": 4119,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2595,
-								2595
+								1668,
+								1668
 							]
 						],
 						"settings":
@@ -1044,13 +990,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1636.0,
+						"translation.y": 489.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 10,
 					"file": "src/MACL/MACL_Mixins.rb",
 					"settings":
 					{
@@ -1078,7 +1024,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 11,
 					"file": "src/build_tools/header_gen.rb",
 					"settings":
 					{
@@ -1106,7 +1052,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 12,
 					"file": "src/RGSSEx/Audio_Ex.rb",
 					"settings":
 					{
@@ -1134,7 +1080,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 13,
 					"file": "src/XpanLib/Archijust.rb",
 					"settings":
 					{
@@ -1162,25 +1108,25 @@
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 14,
+					"file": "src/XpanLib/Vectrix.rb",
 					"settings":
 					{
-						"buffer_size": 31,
+						"buffer_size": 457,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								21,
-								21
+								247,
+								247
 							]
 						],
 						"settings":
 						{
 							"auto_name": "module MACL",
-							"default_dir": "C:\\Lib\\Git\\RGSS3-MACL\\src\\XpanLib",
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1189,7 +1135,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 15,
 					"file": "src/StandardLibEx/MatchData_Ex.rb",
 					"settings":
 					{
@@ -1217,7 +1163,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 16,
 					"file": "src/XpanLib/Pos.rb",
 					"settings":
 					{
@@ -1245,19 +1191,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 17,
 					"file": "src/XpanLib/Cube.rb",
 					"settings":
 					{
-						"buffer_size": 1149,
+						"buffer_size": 1331,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								181,
-								181
+								1295,
+								1295
 							]
 						],
 						"settings":
@@ -1273,7 +1219,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 18,
 					"file": "src/XpanLib/Matrix.rb",
 					"settings":
 					{
@@ -1300,7 +1246,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 19,
 					"file": "src/StandardLibEx/Module_Ex.rb",
 					"settings":
 					{
@@ -1328,19 +1274,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 20,
 					"file": "src/XpanLib/Grid.rb",
 					"settings":
 					{
-						"buffer_size": 1387,
+						"buffer_size": 1527,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								77,
-								77
+								1527,
+								1527
 							]
 						],
 						"settings":
@@ -1356,7 +1302,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 21,
 					"file": "src/RGSSEx/build_order.rb",
 					"settings":
 					{
@@ -1382,7 +1328,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 22,
 					"file": "src/XpanLib/Hashnex.rb",
 					"settings":
 					{
@@ -1409,7 +1355,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 23,
 					"file": "build_ins/macl_list.rb",
 					"settings":
 					{
@@ -1437,7 +1383,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 24,
 					"file": "src/XpanLib/Tween.rb",
 					"settings":
 					{
@@ -1465,7 +1411,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 25,
 					"file": "src/StandardLibEx/Array_Ex.rb",
 					"settings":
 					{
@@ -1493,7 +1439,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 26,
 					"file": "demo/array_reverse_index.rb",
 					"settings":
 					{
@@ -1522,7 +1468,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 27,
 					"file": "demo/electrical_demo.rb",
 					"settings":
 					{
@@ -1550,7 +1496,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 28,
 					"file": "src/FunLib/RCG.rb",
 					"settings":
 					{
@@ -1578,7 +1524,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 29,
 					"file": "src/FunLib/Mimi.rb",
 					"settings":
 					{
@@ -1607,7 +1553,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 30,
 					"file": "src/RGSSEx/Color_Ex.rb",
 					"settings":
 					{
@@ -1618,8 +1564,8 @@
 						"selection":
 						[
 							[
-								104,
-								104
+								524,
+								524
 							]
 						],
 						"settings":
@@ -1635,19 +1581,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 31,
 					"file": "src/RGSSEx/Rect_Ex.rb",
 					"settings":
 					{
-						"buffer_size": 806,
+						"buffer_size": 850,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								76,
-								76
+								436,
+								436
 							]
 						],
 						"settings":
@@ -1663,19 +1609,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 32,
 					"file": "src/RGSSEx/Bitmap_Ex.rb",
 					"settings":
 					{
-						"buffer_size": 2296,
+						"buffer_size": 2545,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								50,
-								50
+								2540,
+								2540
 							]
 						],
 						"settings":
@@ -1692,7 +1638,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 33,
 					"file": "src/XpanLib/Drool.rb",
 					"settings":
 					{
@@ -1720,7 +1666,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 34,
 					"file": "src/XpanLib/Interpolate.rb",
 					"settings":
 					{
@@ -1748,7 +1694,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 35,
 					"file": "src/XpanLib/load_order.skt",
 					"settings":
 					{
@@ -1774,7 +1720,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 36,
 					"file": "src/XpanLib/Morph.rb",
 					"settings":
 					{
@@ -1802,19 +1748,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 40,
+					"buffer": 37,
 					"file": "src/StandardLibEx/Numeric_Ex.rb",
 					"settings":
 					{
-						"buffer_size": 1147,
+						"buffer_size": 1146,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								605,
-								605
+								206,
+								206
 							]
 						],
 						"settings":
@@ -1824,13 +1770,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 223.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 38,
 					"file": "src/FunLib/Dice.rb",
 					"settings":
 					{
@@ -1859,7 +1805,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 39,
 					"file": "demo/for_loop_test.rb",
 					"settings":
 					{
@@ -1886,7 +1832,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 40,
 					"file": "src/RGSSEx/RPG_Metric.rb",
 					"settings":
 					{
@@ -1904,6 +1850,145 @@
 						"settings":
 						{
 							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 41,
+					"file": "src/RGSSEx/RPG_Event_Page_Ex.rb",
+					"settings":
+					{
+						"buffer_size": 478,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								346,
+								346
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 42,
+					"file": "src/XpanLib/TableExpansion.rb",
+					"settings":
+					{
+						"buffer_size": 2158,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								159,
+								159
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 43,
+					"file": "src/RGSSEx/Sprite-Ex.rb",
+					"settings":
+					{
+						"buffer_size": 198,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								90,
+								35
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 44,
+					"file": "src/XpanLib/Surface.rb",
+					"settings":
+					{
+						"buffer_size": 6706,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2898,
+								2898
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1545.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 45,
+					"file": "src/MACL/MACL-Constants.rb",
+					"settings":
+					{
+						"buffer_size": 501,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								31,
+								31
+							]
+						],
+						"settings":
+						{
+							"auto_name": "module MACL",
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1970,6 +2055,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 240.0,
+	"side_bar_width": 222.0,
 	"status_bar_visible": true
 }

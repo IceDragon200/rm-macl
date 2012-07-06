@@ -1,9 +1,9 @@
 =begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
- Version : 0x10008
- Last Build: 23/06/2012 (MM/DD/YYYY) (0x10007)
- Date Built: 02/07/2012 (MM/DD/YYYY) (0x10008)
+ Version : 0x10009
+ Last Build: 02/07/2012 (MM/DD/YYYY) (0x10008)
+ Date Built: 06/07/2012 (MM/DD/YYYY) (0x10009)
  ──────────────────────────────────────────────────────────────────────────────
  ■ Module
  ♥ Class
@@ -249,7 +249,7 @@ RGSSEx Expansion
       ● Return
           Boolean
 =end
-($imported||={})['RGSS3-MACL']=0x10008
+($imported||={})['RGSS3-MACL']=0x10009
 # // Standard Library
 # ╒╕ ♥                                                               Object ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -331,7 +331,7 @@ class Numeric
   def max n
     n > self ? n : self
   end unless method_defined? :max
-  def clamp min, max
+  def clamp min,max
     self < min ? min : (self > max ? max : self)
   end unless method_defined? :clamp
   def unary
@@ -411,12 +411,9 @@ class String
   end
   def as_bool
     case self.upcase
-    when *MACL::Parsers::STRS_TRUE
-      return true
-    when *MACL::Parsers::STRS_FALSE
-      return false
-    else
-      return nil
+      when *MACL::Parser::STRS_TRUE  ; return true
+      when *MACL::Parser::STRS_FALSE ; return false
+      else                           ; return nil
     end
   end
 end
@@ -640,16 +637,19 @@ class << MACL
     @client ||= get_client
   end
 end
-# ╒╕ ■                                                        MACL::Parsers ╒╕
+warn 'MACL::Parser is already imported' if ($imported||={})['MACL::Parser']
+($imported||={})['MACL::Parser']=0x10002
+# ╒╕ ■                                                         MACL::Parser ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-module MACL::Parsers
-  STRS_TRUE  = ["TRUE","YES","ON","T","Y"]
-  STRS_FALSE = ["FALSE","NO","OFF","F","N"]
+module MACL::Parser
+  STRS_TRUE  = ["TRUE" ,"YES","ON" ,"T","Y"]
+  STRS_FALSE = ["FALSE","NO" ,"OFF","F","N"]
   STRS_BOOL  = STRS_TRUE + STRS_FALSE
   module Regexp
     BOOL = /(?:#{STRS_BOOL.join(?|)})/i
-    INT = /\d+/
-    FLT = /\d+\.\d+/
+    INT  = /\d+/
+    FLT  = /\d+\.\d+/
+    PRATE= /\d+%/i
   end
   def self.Singulize array
     return array.size == 1 ? array[0] : array
@@ -661,9 +661,9 @@ module MACL::Parsers
   def self.str2bool *strs
     Singulize(strs.collect do |str|
       case str.upcase
-      when *STRS_TRUE  ; true
-      when *STRS_FALSE ; false
-      else             ; nil
+        when *STRS_TRUE  ; true
+        when *STRS_FALSE ; false
+        else             ; nil
       end
     end)
   end
@@ -672,6 +672,12 @@ module MACL::Parsers
   end
   def self.str2flt *strs
     Singulize(strs.collect do |str| Float str end)
+  end
+  def self.str2prate *strs
+    Singulize(strs.collect do |str| str.to_i/100.0 end)
+  end
+  def self.str2rate *strs
+    Singulize(strs.collect do |str| str.to_i/1.0 end)
   end
   def self.str2int_a str
     str.scan(/\d+/).map! &:to_i
@@ -688,6 +694,8 @@ module MACL::Parsers
     else # // Guess type
       if str =~ Regexp::FLT
         str2flt str
+      elsif str =~ Regexp::PRATE  
+        str2prate str  
       elsif str =~ Regexp::INT
         str2int str
       elsif str =~ Regexp::BOOL_REGEX
@@ -721,12 +729,12 @@ module MACL::Parsers
     ["string" ,"str" ]=> proc {|args|args.map!(&:to_s) },
     ["integer","int" ]=> proc {|args|args.map!(&:to_i) },
     ["boolean","bool"]=> proc {|args|args.collect!{|s|str2bool(s)}},
+    ["percent","perc"]=> proc {|args|args.collect!{|s|str2prate(s)}},
+    ["rate"   ,"rt"  ]=> proc {|args|args.collect!{|s|str2rate(s)}},
     ["float"  ,"flt" ]=> proc {|args|args.map!(&:to_f) },
     ["hex"]           => proc {|args|args.map!(&:hex)  }
   }
-  @structs ||= {
-  }
-  @data_types.merge @structs
+  #@data_types.merge @structs
   str = "(a-)?(%s):(.*)" % @data_types.keys.collect{|a|"(?:"+a.join(?|)+?)}.join(?|)
   DTREGEX = /#{str}/i
   @data_types.enum2keys!
@@ -789,6 +797,12 @@ warn 'TableExpansion is already imported' if ($imported||={})['TableExpansion']
 # ╒╕ ■                                          MACL::Mixin::TableExpansion ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL::Mixin::TableExpansion
+  def area
+    xsize*ysize
+  end
+  def volume
+    xsize*ysize*zsize
+  end
   def iterate
     x,y,z=[0]*3
     if zsize > 1
@@ -885,13 +899,15 @@ end
 # ╒╕ ♥                                                                Point ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 warn 'Point is already imported' if ($imported||={})['Point']
-($imported||={})['Point']=0x10001
+($imported||={})['Point']=0x10002
 class Point
-  def self.to_point array
-    Point.new *array[0,1]
+  def self.convert2point array
+    Point.new(*array[0..1])
   end
   attr_accessor :x, :y
-  class << self ; alias :[] :new ; end
+  class << self
+    alias :[] :new
+  end
   def initialize x=0,y=0
     @x,@y = x,y
   end
@@ -901,7 +917,7 @@ class Point
   end
   alias old_to_s to_s
   def to_s
-    "<#{self.class.name}: %s, %s>" % [self.x,self.y]
+    return "<#{self.class.name}: %s, %s>" % [self.x,self.y]
   end
   def to_a
     return @x,@y
@@ -910,10 +926,10 @@ class Point
     return {x: @x, y: @y}
   end
   def hash
-    [@x,@y].hash
+    return [@x,@y].hash
   end
   def unaries
-    [@x <=> 0, @y <=> 0]
+    return [@x <=> 0, @y <=> 0]
   end
 end
 warn 'Cube is already imported' if ($imported||={})['Cube']
@@ -960,6 +976,18 @@ module MACL
       set
       self
     end
+    def area1
+      @width*@height
+    end
+    def area2
+      @width*@length
+    end
+    def area3
+      @height*@length
+    end
+    def volume
+      @width*@height*@length
+    end
   end
 end
 Cube = MACL::Cube
@@ -998,7 +1026,7 @@ module MACL
   end
 end
 warn 'RectExpansion is already imported' if ($imported||={})['RectExpansion']
-($imported||={})['RectExpansion']=0x10000
+($imported||={})['RectExpansion']=0x10001
 # ─┤ ● Rect.center ├──────────────────────────────────────────────────────────
 def Rect.center r1,r2
   Rect.new r1.x+(r1.width-r2.width)/2,r1.y+(r1.height-r2.height)/2,r2.width,r2.height
@@ -1032,6 +1060,12 @@ module MACL::Mixin::RectExpansion
   end
   def cy
     y+height/2
+  end
+  def cx= x
+    self.x = x - self.width / 2.0
+  end
+  def cy= y
+    self.y = y - self.height / 2.0
   end
   # // Destructive
   def contract! n=0,orn=0
@@ -1111,16 +1145,16 @@ module MACL::Mixin::Surface
   def vy 
     self.y
   end  
-  def vx=(n)
+  def vx= n
     self.x = n
   end
-  def vy=(n)
+  def vy= n
     self.y = n
   end  
-  def vwidth()
+  def vwidth 
     self.vx + self.rwidth
   end  
-  def vheight()
+  def vheight 
     self.vy + self.rheight
   end 
   def vx2
@@ -1129,26 +1163,26 @@ module MACL::Mixin::Surface
   def vy2
     vheight
   end  
-  def vx2=( n )
+  def vx2= n
     self.x = n - self.rwidth
   end  
-  def vy2=( n )
+  def vy2= n
     self.y = n - self.rheight
   end 
-  def vset(x=nil,y=nil,x2=nil,y2=nil)
+  def vset x=nil,y=nil,x2=nil,y2=nil
     self.vx = x  || self.vx
     self.vy = y  || self.vy
     self.vx2= x2 || self.vx2
     self.vy2= y2 || self.vy2
     self
   end    
-  def to_a()   ;return self.vx, self.vy, self.rwidth, self.rheight;end
-  def to_v4a() ;return self.vx, self.vy, self.vwidth, self.vheight;end
-  def to_v4()  ;Vector4.new(*to_v4a());end
-  def to_rect();Rect.new(*to_a());end
+  def to_a   ;return self.vx, self.vy, self.rwidth, self.rheight;end
+  def to_v4a ;return self.vx, self.vy, self.vwidth, self.vheight;end
+  def to_v4  ;Vector4.new *to_v4a ;end
+  def to_rect;Rect.new *to_a ;end
   alias rect to_rect
   # // 02/19/2012 [
-  def salign(xn=-1,yn=-1,rx=0,ry=0,rwidth=Graphics.width,rheight=Graphics.height)
+  def salign xn=-1,yn=-1,rx=0,ry=0,rwidth=Graphics.width,rheight=Graphics.height 
     case xn
     when -1; # // Do Nothing
     when 0 ; self.x = rx
@@ -1164,18 +1198,21 @@ module MACL::Mixin::Surface
     self
   end  
   # // 02/19/2012 ]
-  def offset_vert!(n=1.0)
+  def offset n,anchor
+    
+  end
+  def offset_vert! n=1.0
     self.vy += (self.rheight * n).to_i
     self
   end  
-  def offset_horz!(n=1.0)
+  def offset_horz! n=1.0
     self.vx += (self.rwidth * n).to_i
     self
   end 
-  def offset_vert(n=1.0)
+  def offset_vert n=1.0
     dup.offset_vert!(n)
   end  
-  def offset_horz(n=1.0)
+  def offset_horz n=1.0
     dup.offset_horz!(n)
   end 
   def area
@@ -1196,57 +1233,57 @@ module MACL::Mixin::Surface
   def space_height
     0
   end  
-  def clamp_to_space()
+  def clamp_to_space 
     v4 = (viewport || Graphics).rect.to_v4
     cx, cw = v4.x + space_x, v4.vwidth - self.rwidth - space_width
     cy, ch = v4.y + space_y, v4.vheight - self.rheight - space_height
     self.x, self.y = self.x.clamp(cx,cw), self.y.clamp(cy,ch)
   end 
   # . x . Only works with Padded stuff
-  #def _surface_padding()
+  #def _surface_padding 
   #  (respond_to?(:padding) ? padding : 0)
   #end  
-  def _surface_padding()
+  def _surface_padding 
     standard_padding
   end  
-  def adjust_x4contents(x,pad=_surface_padding)
+  def adjust_x4contents x,pad=_surface_padding
     x + pad
   end  
-  def adjust_y4contents(y,pad=_surface_padding)
+  def adjust_y4contents y,pad=_surface_padding
     y + pad
   end  
-  def adjust_w4contents(w,pad=_surface_padding)
+  def adjust_w4contents w,pad=_surface_padding
     w - (pad * 2)
   end  
-  def adjust_h4contents(h,pad=_surface_padding)
+  def adjust_h4contents h,pad=_surface_padding
     h - (pad * 2)
   end
-  def adjust_xywh4contents(x,y,w,h)
+  def adjust_xywh4contents x,y,w,h
     return [adjust_x4contents(x),adjust_y4contents(y),adjust_w4contents(w),adjust_h4contents(h)]
   end
-  def adjust_rect4contents(rect) 
+  def adjust_rect4contents rect 
     Rect.new(*adjust_xywh4contents(*rect.to_a))
   end  
-  def adjust_x4window(x,pad=_surface_padding)
+  def adjust_x4window x,pad=_surface_padding
     x - pad
   end  
-  def adjust_y4window(y,pad=_surface_padding)
+  def adjust_y4window y,pad=_surface_padding
     y - pad
   end  
-  def adjust_w4window(w,pad=_surface_padding)
+  def adjust_w4window w,pad=_surface_padding
     w + (pad * 2)
   end  
-  def adjust_h4window(h,pad=_surface_padding)
+  def adjust_h4window h,pad=_surface_padding
     h + (pad * 2)
   end
-  def adjust_xywh4window(x,y,w,h)
+  def adjust_xywh4window x,y,w,h
     return [adjust_x4window(x),adjust_y4window(y),adjust_w4window(w),adjust_h4window(h)]
   end
-  def adjust_rect4contents(rect) 
+  def adjust_rect4contents rect 
     Rect.new(*adjust_xywh4window(*rect.to_a))
   end  
   # O_O
-  def calc_pressure_horz( n, invert=false )
+  def calc_pressure_horz n, invert=false
     return 0 if n < self.x || n > self.vwidth
     n = n - self.x
     n2 = (self.vwidth - self.x)
@@ -1254,7 +1291,7 @@ module MACL::Mixin::Surface
     n = n / n2.to_f
     return n
   end
-  def calc_pressure_vert( n, invert=false )
+  def calc_pressure_vert n, invert=false
     return 0 if n < self.y || n > self.vheight
     n = n - self.y
     n2 = (self.vheight - self.y)
@@ -1262,12 +1299,12 @@ module MACL::Mixin::Surface
     n = n / n2.to_f
     return n
   end
-  def in_area?( ax, ay )
-    return ax.between?( self.vx, self.vwidth ) && 
-      ay.between?( self.vy, self.vheight )
+  def in_area? ax, ay
+    return ax.between?(self.vx, self.vwidth) && 
+      ay.between?(self.vy, self.vheight)
   end 
-  def intersect?( v4 )  
-    return in_area?( v4.x, v4.y ) || in_area?( v4.width, v4.height )
+  def intersect? v4  
+    return in_area?(v4.x, v4.y) || in_area?(v4.width,v4.height)
   end  ##
 end 
 # ╒╕ ♥                                                              Surface ╒╕
@@ -1276,19 +1313,19 @@ class Surface
   include MACL::Mixin::RectExpansion
   include MACL::Mixin::RectExpansion::RectOnly
   include MACL::Mixin::Surface
-  def self.area_rect( *objs )
+  def self.area_rect *objs
     mx = objs.min { |a, b| a.x <=> b.x }
     my = objs.min { |a, b| a.y <=> b.y }
     mw = objs.max { |a, b| a.vwidth <=> b.vwidth }
     mh = objs.max { |a, b| a.vheight <=> b.vheight }
     return Vector4.v4a_to_rect( [mx.x, my.y, mw.vwidth, mh.vheight] )
   end 
-  def initialize(x=0,y=0,width=0,height=0)
+  def initialize x=0,y=0,width=0,height=0
     self.x,self.y,self.width,self.height = x, y, width, height
   end  
-  def set(*args)
+  def set *args
     obj,=args
-    a = (obj.respond_to?(:to_rect)) ? obj.to_rect.to_a : args
+    a = obj.respond_to?(:to_rect) ? obj.to_rect.to_a : args
     self.x,self.y,self.width,self.height = a
   end  
 end
@@ -1299,7 +1336,21 @@ class Rect
 end  
 # ╒╕ ♥                                                              Vector4 ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class Vector4 < Rect
+class Vector4
+  include MACL::Mixin::Surface
+  attr_accessor :x,:y,:width,:height
+  def initialize *args
+    _set *args
+  end
+  def _set x=nil,y=nil,w=nil,h=nil
+    return self.x,self.y,self.width,self.height = 0,0,0,0 if [x,y,w,h].all? &:nil?
+    return self.x,self.y,self.width,self.height = x.to_v4a if x.kind_of?(MACL::Mixin::Surface)
+    self.x,self.y,self.width,self.height = x||@x||0,y||@y||0,w||@width||0,h||@height||0
+  end
+  private :_set
+  def set *args
+    _set *args
+  end
   def rwidth
     self.width - self.x
   end
@@ -1312,8 +1363,15 @@ class Vector4 < Rect
   def vheight
     self.height
   end  
-  def self.v4a_to_rect( v4a )
-    return Rect.new( v4a[0], v4a[1], v4a[2]-v4a[0], v4a[3]-v4a[1] )
+  def to_rect
+    self.class.v4a_to_rect to_a
+  end
+  alias :old_to_s :to_s
+  def to_s
+    "<#{self.class.name} x#{x} y#{y} width#{width} height#{height}>"
+  end
+  def self.v4a_to_rect v4a
+    return Rect.new v4a[0],v4a[1],v4a[2]-v4a[0],v4a[3]-v4a[1] 
   end  
 end
 # ╒╕ ♥                                                               Window ╒╕
@@ -1553,53 +1611,64 @@ warn 'Grid is already imported' if ($imported||={})['Grid']
 ($imported||={})['Grid']=0x10001
 # ╒╕ ♥                                                                 Grid ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class MACL::Grid
-  def self.qcell_r columns,rows,cell_width,cell_height,index=0
-    new(columns,rows,cell_width,cell_height).cell_r index
+module MACL
+  class Grid
+    def self.qcell_r columns,rows,cell_width,cell_height,index=0
+      new(columns,rows,cell_width,cell_height).cell_r index
+    end
+    def initialize columns,rows,cell_width,cell_height
+      @columns,@rows,@cell_width,@cell_height=columns,rows,cell_width,cell_height
+    end
+    attr_accessor :columns, :rows
+    attr_accessor :cell_width, :cell_height
+    def width
+      columns * cell_width
+    end
+    def height
+      rows * cell_height
+    end
+    def area1
+      rows*columns
+    end
+    def area2
+      width*height
+    end
+    def cell_a index=0,y=nil
+      return [0,0,0,0] if columns == 0
+      index = xy2index index,y if y
+      [cell_width*(index%columns),
+       cell_height*(index/columns),
+       cell_width,cell_height]
+    end
+    def cell_r index=0,y=nil
+      Rect.new 0,0,0,0 if columns == 0
+      index = xy2index index,y if y
+      Rect.new(
+        cell_width*(index%columns),
+        cell_height*(index/columns),
+        cell_width,cell_height
+      )
+    end
+    def xy2index x,y
+       x % columns  +  y * columns
+    end
+    def column_r x
+      Rect.new cell_width * x,0,cell_width,cell_height * rows
+    end
+    def row_r y
+      Rect.new 0,cell_height*y,cell_width*columns,cell_height
+    end
+    # // Column, index array
+    def column_ia x
+      (0...rows).collect { |y| xy2index x,y }
+    end
+    # // Row, index array
+    def row_ia y
+      (0...columns).collect { |x| xy2index x,y }
+    end
   end
-  def initialize columns,rows,cell_width,cell_height
-    @columns,@rows,@cell_width,@cell_height=columns,rows,cell_width,cell_height
-  end
-  attr_accessor :columns, :rows
-  attr_accessor :cell_width, :cell_height
-  def width
-    columns * cell_width
-  end
-  def height
-    rows * cell_height
-  end
-  def cell_a index=0,y=nil
-    return [0,0,0,0] if columns == 0
-    index = xy2index index,y if y
-    [cell_width*(index%columns),
-     cell_height*(index/columns),
-     cell_width,cell_height]
-  end
-  def cell_r index=0,y=nil
-    Rect.new 0,0,0,0 if columns == 0
-    index = xy2index index,y if y
-    Rect.new(
-      cell_width*(index%columns),
-      cell_height*(index/columns),
-      cell_width,cell_height
-    )
-  end
-  def xy2index x,y
-     x % columns  +  y * columns
-  end
-  def column_r x
-    Rect.new cell_width * x,0,cell_width,cell_height * rows
-  end
-  def row_r y
-    Rect.new 0,cell_height*y,cell_width*columns,cell_height
-  end
-  # // Column, index array
-  def column_ia x
-    (0...rows).collect { |y| xy2index x,y }
-  end
-  # // Row, index array
-  def row_ia y
-    (0...columns).collect { |x| xy2index x,y }
+  class Grid_Matrix < Grid
+    
   end
 end
 warn 'Tween is already imported' if ($imported||={})['Tween']
@@ -2485,17 +2554,17 @@ module MACL
       sym,regex,func,params = [nil]*4
       Hash[commands.collect do |(sym,regex,func,params)| [sym,[regex,func,params]] end]
     end
-    def enum_commands
-      sym,regex,func,params = [nil]*4
-      each do |(sym,regex,func,params)|
-        yield sym,regex,func,params
-      end
-    end
     def add_command sym,regex,params=[],&func
       @commands.push [sym,regex,func,params]
     end
     def shift_command sym,regex,params=[],&func
       @commands.unshift [sym,regex,func,params]
+    end
+    def enum_commands
+      sym,regex,func,params = [nil]*4
+      each do |(sym,regex,func,params)|
+        yield sym,regex,func,params
+      end
     end
     def match_command str
       sym,regex,func,params = [nil]*4
@@ -2508,7 +2577,7 @@ module MACL
     def exec_command str
       sym,mtch,func,params = [nil]*4
       match_command str do |sym,mtch,func,params|
-        func.call mtch
+        return func.call mtch
       end
     end
   end
@@ -2757,27 +2826,11 @@ class Rect
   def to_rect
     Rect.new *to_a
   end
+  def area
+    self.width*self.height
+  end
   def empty?
     self.width == 0 and self.height == 0
-  end
-end
-# ╒╕ ♥                                                              Vector4 ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-class Vector4 < Rect
-  def rwidth
-    self.width - self.x
-  end
-  def rheight
-    self.height - self.y
-  end
-  def vwidth
-    self.width
-  end
-  def vheight
-    self.height
-  end
-  def self.v4a_to_rect v4a
-    return Rect.new v4a[0], v4a[1], v4a[2]-v4a[0], v4a[3]-v4a[1]
   end
 end
 # ╒╕ ♥                                                                Table ╒╕
@@ -2813,7 +2866,7 @@ class Bitmap
       yield if block_given? 
     end
   end
-  def recolor f_color,t_color=nil 
+  def recolor! f_color,t_color=nil 
     if f_color.is_a? Color and t_color.is_a? Color 
       hsh = { f_color => t_color }
     elsif f_color.is_a? Array && t_color 
@@ -2823,10 +2876,15 @@ class Bitmap
       hsh = f_color
     end  
     x,y,color = nil,nil,nil
-    iterate_do { |x,y,color| set_pixel(x,y,hsh[color]||color) }
+    iterate do |x,y,color| 
+      set_pixel(x,y,hsh[color]||color) 
+    end
   end 
+  def recolor *args,&block
+    dup.recolor! *args,&block
+  end
   def iterate_map 
-    iterate_do { |x,y,color| set_pixel(x,y,yield(x,y,color)) }
+    iterate { |x,y,color| set_pixel(x,y,yield(x,y,color)) }
   end
   def legacy_recolor color1,color2
     for y in 0...height
@@ -2840,7 +2898,7 @@ class Bitmap
     iterate_do true do |x,y,color| pallete << color.to_a end
     pallete.to_a.sort.collect do |a|Color.new *a end
   end  
-  def iterate_do return_only=false 
+  def iterate return_only=false 
     x, y = nil, nil
     for y in 0...height
       for x in 0...width
@@ -2872,12 +2930,21 @@ class Bitmap
     end  
   end
   def set_pixel_weighted x,y,color,weight=1
-    weight.times do |i| set_pixel(x,y+i,color) end
+    even = ((weight % 2) == 0) ? 1 : 0
+    half = weight / 2
+    for px in (x-half)..(x+half-even)
+      for py in (y-half)..(y+half-even)
+        self.set_pixel(px, py, color) 
+      end
+    end
   end
 end
 # ╒╕ ♥                                                               Sprite ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Sprite
+  def move x,y
+    self.x,self.y=x,y
+  end
   def to_rect
     Rect.new x,y,width,height
   end
@@ -2898,7 +2965,7 @@ module RPG
         select_commands *COMMENT_CODES
       end
       def comments_a
-        comments.map!(&:parameters).flatten!
+        comments.map(&:parameters).flatten
       end
     end
   end
@@ -2906,8 +2973,8 @@ end
 # ╒╕ ♥                                                          Game::Event ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Game_Event
-  def comment_a
-    @page.comment_a
+  def comments_a
+    @page.comments_a
   end
 end
 # ╒╕ ■                                                         SceneManager ╒╕

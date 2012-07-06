@@ -6,7 +6,7 @@ class Numeric
   def max n
     n > self ? n : self
   end unless method_defined? :max
-  def clamp min, max
+  def clamp min,max
     self < min ? min : (self > max ? max : self)
   end unless method_defined? :clamp
   def unary

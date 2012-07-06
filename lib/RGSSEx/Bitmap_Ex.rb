@@ -26,7 +26,7 @@ class Bitmap
       yield if block_given? 
     end
   end
-  def recolor f_color,t_color=nil 
+  def recolor! f_color,t_color=nil 
     if f_color.is_a? Color and t_color.is_a? Color 
       hsh = { f_color => t_color }
     elsif f_color.is_a? Array && t_color 
@@ -36,10 +36,15 @@ class Bitmap
       hsh = f_color
     end  
     x,y,color = nil,nil,nil
-    iterate_do { |x,y,color| set_pixel(x,y,hsh[color]||color) }
+    iterate do |x,y,color| 
+      set_pixel(x,y,hsh[color]||color) 
+    end
   end 
+  def recolor *args,&block
+    dup.recolor! *args,&block
+  end
   def iterate_map 
-    iterate_do { |x,y,color| set_pixel(x,y,yield(x,y,color)) }
+    iterate { |x,y,color| set_pixel(x,y,yield(x,y,color)) }
   end
   def legacy_recolor color1,color2
     for y in 0...height
@@ -53,7 +58,7 @@ class Bitmap
     iterate_do true do |x,y,color| pallete << color.to_a end
     pallete.to_a.sort.collect do |a|Color.new *a end
   end  
-  def iterate_do return_only=false 
+  def iterate return_only=false 
     x, y = nil, nil
     for y in 0...height
       for x in 0...width
@@ -85,6 +90,12 @@ class Bitmap
     end  
   end
   def set_pixel_weighted x,y,color,weight=1
-    weight.times do |i| set_pixel(x,y+i,color) end
+    even = ((weight % 2) == 0) ? 1 : 0
+    half = weight / 2
+    for px in (x-half)..(x+half-even)
+      for py in (y-half)..(y+half-even)
+        self.set_pixel(px, py, color) 
+      end
+    end
   end
 end

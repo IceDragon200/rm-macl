@@ -24,17 +24,17 @@ module MACL
       sym,regex,func,params = [nil]*4
       Hash[commands.collect do |(sym,regex,func,params)| [sym,[regex,func,params]] end]
     end
-    def enum_commands
-      sym,regex,func,params = [nil]*4
-      each do |(sym,regex,func,params)|
-        yield sym,regex,func,params
-      end
-    end
     def add_command sym,regex,params=[],&func
       @commands.push [sym,regex,func,params]
     end
     def shift_command sym,regex,params=[],&func
       @commands.unshift [sym,regex,func,params]
+    end
+    def enum_commands
+      sym,regex,func,params = [nil]*4
+      each do |(sym,regex,func,params)|
+        yield sym,regex,func,params
+      end
     end
     def match_command str
       sym,regex,func,params = [nil]*4
@@ -47,7 +47,7 @@ module MACL
     def exec_command str
       sym,mtch,func,params = [nil]*4
       match_command str do |sym,mtch,func,params|
-        func.call mtch
+        return func.call mtch
       end
     end
   end
