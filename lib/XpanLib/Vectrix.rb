@@ -1,7 +1,5 @@
 # // 05/07/2012
 # // 06/07/2012
-warn 'MACL::Vectrix is already imported' if ($imported||={})['MACL::Vectrix']
-($imported||={})['MACL::Vectrix']=0x08000
 # ╒╕ ♥                                                        MACL::Vectrix ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
@@ -72,20 +70,11 @@ module MACL
     end
     include Constants
     DataType = Struct.new :type, :params
-    XRect = Struct.new :x,:y,:width,:height
-    class XRect
-      def to_s
-        [self.x,self.y,self.width,self.height].inspect
-      end
-      def to_rect
-        Rect.new(self.x,self.y,self.width,self.height)
-      end
-    end
     class DataType
       def as_type
         case type
         when 'pos','point'          ; Point.new *params
-        when 'rect', 'box'          ; XRect.new *params
+        when 'rect', 'box'          ; Surface.new *params
         when 'color', 'rgb', 'rgba' ; Color.new *params
         when 'v4', 'vector4'        ; Vector4.new *params
         when 'int', 'integer'       ; params[0]
@@ -106,12 +95,14 @@ module MACL
     @@blaz.add_command :draw_pixel, draw_pixel do |params|
       [COMMAND_DRAW_PIXEL,[Parser.parse_str(params[:pos]),Parser.parse_str(params[:color])]]
     end
+ 
     @@blaz.add_command :draw_line, draw_line do |params|
       [COMMAND_DRAW_LINE,
         [Parser.parse_str(params[:pos1]),Parser.parse_str(params[:pos2]),
          Parser.parse_str(params[:color]),Parser.parse_str(params[:weight]||'int(1)')]
       ]
     end
+ 
     @@blaz.add_command :draw_box, draw_box do |params|
       [COMMAND_DRAW_BOX,[Parser.parse_str(params[:rect]),Parser.parse_str(params[:color])]]
     end

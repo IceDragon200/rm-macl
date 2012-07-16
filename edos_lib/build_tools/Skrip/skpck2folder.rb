@@ -5,6 +5,7 @@ require 'Skrip2'
 require 'Skrip2_reader'
 require 'Win32API'
 #require 'curses'
+ 
 def unpack_skpck source
   Dir.mkdir("C:/Lib/skpck2out/") unless(File.exist?("C:/Lib/skpck2out/"))
   source  = source.dup.gsub("\\","/")

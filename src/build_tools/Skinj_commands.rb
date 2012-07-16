@@ -2,7 +2,6 @@ class Skinj
   module Constants
     # // Base
     REGEXP_ASMB_COM   = /\#\-(\d+)?(.+)/i
-    REGEXP_FOLD_OPN   = /\A(?:(?:if|unless)(?:not|n)?def|skip)/i
     # // Commands
     REGEXP_COMMENT    = /\A\/\/(.*)/i
     REGEXP_INDENT     = /\Aindent\s([+-])?(\d+)/i
@@ -13,7 +12,7 @@ class Skinj
     REGEXP_INSERT     = /\Ainsert\s(.+)/i
     REGEXP_SWITCH     = /\Aswitch\s(\w+):(ON|TRUE|OFF|FALSE|TOGGLE|FLIP)/i
     REGEXP_UNDEF      = /\A(?:undefine|undef)\s(\w+)/i
-    REGEXP_DEFINE     = /\Adefine\s(?<key>\w+)(?:$|(?<param>[\#\&\|]{0,3})\=(?<value>.+))/i
+    REGEXP_DEFINE     = /\Adefine\s(?<key>\w+)(?:\s*(?<param>[\#\&\|]{0,3})\=\s*(?<value>.+)|:?)/i
     REGEXP_IF         = /\A(?<cond>(?:if|unless))(?<mod>(?:not|n))?(?<def>def)?\s(?<value>.+)/i
     REGEXP_ELSE       = /\Aelse\:/i
     REGEXP_END        = /\Aend(?:if|unless|\:)/i
@@ -21,13 +20,15 @@ class Skinj
     REGEXP_ASMSHOW    = /\Aasmshow\s(.+)/i
     REGEXP_WAIT       = /\Await\s(\d+.\d+)/i
     REGEXP_PRINT      = /\Aprint\s(.+)/i
-    REGEXP_JUMP       = /\A(?:jump[_ ]?to|jump)\s(?:(?<index>\d+|(?<label>\w+)))/i
-    REGEXP_LABEL      = /\Alabel\s(\w+)/i
+    REGEXP_LABEL      = /\A(?:label|marker)\s(\w+)/i
+    REGEXP_JUMP       = /\A(?:jumpto|jump)\s(?:(?<index>\d+|(?<label>\w+)))/i
     REGEXP_MACRO      = /\A(?:replay|macro)\s(\w+)/i
-    REGEXP_MACRO_REC  = /\A(?:record|rec)(?:macro|mcr)?\s(\w+)/i
+    REGEXP_MACRO_REC  = /\A(?:record|rec|append|apnd)(?:macro|mcr)?\s(\w+)/i
     REGEXP_MACRO_STOP = /\A(?:stop|stp)(?:macro|mcr)?\s(\w+)/i
     REGEXP_MACRO_CLEAR= /\A(?:clear|clr)(?:macro|mcr)\s(\w+)/i
     REGEXP_TO_FILE    = /\A(?:build|save|assemble)\sto\s(?<filename>.+)/i
+    FOLD_OPN = [REGEXP_IF,REGEXP_SKIP,REGEXP_MACRO_REC]
+    #/\A(?:(?:if|unless)(?:not|n)?def|skip|(?:rec|apnd|record|append)(?:macro|mcr))/i
   end
   include Constants
   @@commands = []
@@ -207,9 +208,12 @@ class Skinj
     true
   end
   add_command :skip, REGEXP_SKIP do
+    collapse_branch
     if n=params[1] and !n.empty?
-      jump_to_rindex n
+      debug_puts "Skip: %s lines" % n
+      jump_to_rindex n.to_i
     else
+      debug_puts "Skip: to next end"
       jump_to_next_end
     end
   end
@@ -247,17 +251,23 @@ class Skinj
     name = params[1]
     debug_puts 'Recording Macro: %s' % name
     #@macros[:record] << params[1]
-    collect_line do |line|
-      unless command_line?(REGEXP_MACRO_STOP)
-        debug_puts ' >>>Collecting line: %s' % line
-        macro_record name,line
-        false
-      else ;
-        debug_puts 'Recorded Macro: %s' % name
-        true
-      end
+    collapse_branch
+    jump_to_next_end do |line| 
+      debug_puts ' >>>Collecting line: %s' % line
+      macro_record name,line 
     end
-    @index += 1
+    debug_puts 'Recorded Macro: %s' % name
+    #collect_line do |line|
+    #  unless command_line?(REGEXP_MACRO_STOP)
+    #    debug_puts ' >>>Collecting line: %s' % line
+    #    macro_record name,line
+    #    false
+    #  else ;
+    #    debug_puts 'Recorded Macro: %s' % name
+    #    true
+    #  end
+    #end
+    #@index += 1
     #debug_puts @macros[:store][params[1]].inspect
     true
   end

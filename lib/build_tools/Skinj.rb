@@ -61,43 +61,47 @@ class Skinj
   def macro_record name,str
     (@macros[:store][name]||=[]) << str
   end
-  def command_line? rgx
-    mtch = @lines[@index].match REGEXP_ASMB_COM
+  def command_line? rgx,index=@index,lines=@lines
+    mtch = lines[index].match REGEXP_ASMB_COM
     return false unless mtch
     return mtch[2].match rgx
   end
   def current_line
     @lines[@index]
   end
-  def jump_to_next_end
-    jump_to_else false
+  def jump_to_next_end &block
+    jump_to_else false,&block
   end
   def jump_to_else with_else=true
     org_index = @index
     @target_indent = @skj_indent
     @skj_indent += 1
-    while true
+    command = method(:command_line?)
+    while true 
       break debug_puts 'EOF' if @index >= @lines.size
-      if command_line? REGEXP_INDENT
+      if FOLD_OPN.any?(&command) #or command_line? REGEXP_INDENT
         @skj_indent += 1
       elsif command_line? REGEXP_END
         @skj_indent -= 1
-      elsif with_else and command_line?(REGEXP_ELSE) && !@branch[@skj_indent]
+      elsif with_else and command_line?(REGEXP_ELSE) and !@branch[@skj_indent]
         @skj_indent -= 1
       end
+      yield current_line if block_given? unless @skj_indent == @target_indent
       jump_to_rindex 1
       break if @skj_indent == @target_indent
       raise "Negative indent at index %s" % @index if @skj_indent < 0
     end
     true
   end
+  def get_label_index str,lines=@lines
+    debug_puts '>Finding label %s<' % str
+    lines.index do |s|
+      (n = command_line?(s)) ? (n[1] =~ REGEXP_LABEL ? $1 == str : false) : false
+    end
+  end
   def jump_to_label str
     debug_puts '>Jumping to label %s<' % str
-    lookup = /\A\#-label #{str}/i
-    @index = @lines.index do |s|
-      !!(s =~ lookup)
-    end
-    @index ||= @lines.size
+    @index = get_label_index(str) || @lines.size
     true
   end
   def jump_to_index index,silent=true
@@ -132,19 +136,22 @@ class Skinj
     $console_out.puts *args,&block unless $console_out == $stdout
     puts *args,&block
   end
+  $walk_command = 0.0
   def self.skinj_str str,*args
     str = str.join "\n" if str.is_a? Array # // Reference protect
     skinj = new *args
     ic = Iconv.new 'UTF-8//IGNORE', 'UTF-8'
-    skinj.lines = ic.iconv(str).split(/[\r\n]+/)
+    skinj.lines = ic.iconv(str).split(/[\r\n]/)
     skinj.index, skinj.line = 0, nil
     loop do
       skinj.line = skinj.lines[skinj.index]
       break unless skinj.line
+      skinj.line = ' ' if skinj.line.empty?
       skinj.index += 1
       if skinj.line =~ REGEXP_ASMB_COM
         i, n = ($1 || 0).to_i, $2
         com = skinj.execute_command(i,n)
+        sleep $walk_command if $walk_command > 0 if com
         next if com
         #next if com.respond_to?(:call) ? instance_exec(&com) : true if com
       end
@@ -174,6 +181,7 @@ class Skinj
     @branch     = []
     @data       = []
     setup_macros
+ 
     #debug_puts 'Skinj created: %s' % self.inspect
   end
   def settings
@@ -217,6 +225,20 @@ class Skinj
   def incur_mode?
     !!@switches["INCUR"]
   end
+  def setup_imported 
+    rgx = /\(\$imported\|\|\=\{\}\)\['(.+)'\]=(\S+)/i
+    imports = @data.select do |s| s =~ rgx end
+    @data.delete_if do |s| s =~ rgx end
+    matches = imports.collect do |s| s.match(rgx) end.compact 
+    length  = matches.max_by do |mtd| mtd[1].length end[1].length + 2
+    str = matches.collect do |mtd| 
+      %Q(%-0#{length}s => #{mtd[2]}) % "'#{mtd[1]}'" 
+    end.sort#.join("\n")
+    str.collect! do |s| s.indent(2) end
+    str = str.join(",\n")
+    fstr = %Q(($imported||={}).merge!(\n#{str}\n)).split(/[\r\n]/)
+    add_lines *fstr
+  end    
   def build
     @data.invoke_collect :indent,@indent
   end

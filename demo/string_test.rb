@@ -4,7 +4,7 @@ _demo_block do
 puts %Q(
 -Sword and shield-
 If given a sword, you take a shield.
-If give a shield, you take a spear.
+If given a shield, you take a spear.
 In life, there is death.
 In death there is silence.
 You speak not of what you see.

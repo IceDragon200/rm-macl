@@ -1,7 +1,9 @@
 #-// Drool A per line processor
-#-// By IceDragon 
-#-inject gen_scr_imported_ww 'Drool', '0x10000'
-#-inject gen_class_header 'Drool'
+#-// By IceDragon
+#-apndmacro _imported_ 
+#-inject gen_scr_imported 'MACL::Drool', '0x10000'
+#-end:
+#-inject gen_class_header 'MACL::Drool'
 module MACL
   class Drool
     attr_accessor :list,:index,:default

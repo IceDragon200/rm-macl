@@ -55,6 +55,12 @@ class Rect
     @x, @y, @width, @height = x||0, y||0, w||0, h||0
   end
   alias :_set :set
+  def empty
+    self.x = self.y = self.width = self.height = 0
+  end
+  def to_s
+    "<#{self.class.name} x: #{x} y: #{y} width: #{width} height: #{height}>"
+  end
 end
 class Viewport
   def initialize(x=nil,y=nil,w=nil,h=nil)

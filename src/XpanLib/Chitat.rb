@@ -1,7 +1,9 @@
 #-// 05/11/2012
 #-// 06/02/2012
-#-inject gen_scr_imported_ww 'Chitat', '0x10000'
-#-inject gen_module_header 'Chitat'
+#-apndmacro _imported_
+#-inject gen_scr_imported 'MACL::Chitat', '0x10001'
+#-end:
+#-inject gen_module_header 'MACL::Chitat'
 module MACL
   class Chitat
     class Stack < Array
@@ -10,7 +12,7 @@ module MACL
         @match_data = match_data
         super *args,&block
       end
-      alias :arra_inspect :inspect
+      alias arra_inspect inspect
       def inspect
         "<#{self.class.name} %s: %s>" % [@match_data.to_s, arra_inspect]
       end

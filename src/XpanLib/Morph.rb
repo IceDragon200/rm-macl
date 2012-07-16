@@ -1,5 +1,7 @@
+#-apndmacro _imported_
+#-inject gen_scr_imported 'MACL::Morph', '0x10000'
+#-end:
 #-inject gen_module_header 'MACL::Morph'
-#-inject gen_scr_imported_ww 'MACL::Morph', '0x10000'
 module MACL::Morph
 #-inject gen_class_header 'Growth'
 #-// 12/14/2011

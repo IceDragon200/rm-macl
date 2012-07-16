@@ -1,5 +1,11 @@
 ﻿#-inject gen_class_header 'Numeric'
 class Numeric
+  def negative?
+    self < 0
+  end
+  def positive?
+    self > 0
+  end
   def min n
     n < self ? n : self
   end unless method_defined? :min
@@ -11,10 +17,10 @@ class Numeric
   end unless method_defined? :clamp
   def unary
     self <=> 0
-  end unless method_defined? :pole
+  end unless method_defined? :unary
   def unary_inv
     -pole
-  end unless method_defined? :pole_inv
+  end unless method_defined? :unary_inv
   # // ROMAN and to_roman by Zetu
   ROMAN = {
         1 => "I",    5 => "V",    10 => "X",

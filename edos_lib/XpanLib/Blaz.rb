@@ -1,6 +1,5 @@
-warn 'Blaz is already imported' if ($imported||={})['Blaz']
-($imported||={})['Blaz']=0x10002
-# ╒╕ ♥                                                                 Blaz ╒╕
+($imported||={})['MACL::Blaz']=0x10002
+# ╒╕ ♥                                                           MACL::Blaz ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
   class Blaz

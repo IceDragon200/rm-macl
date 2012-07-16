@@ -1,27 +1,25 @@
 # // Xpansion Library
-#-// PUB: Point_basic, Chitat
+#-// PUB: Point
 #-// DEV: 
-#-unlessdef XPANLBEX
-  #-define XPANLBEX#=C:/Lib/Git/RGSS3-MACL/src/XpanLib
+#-unlessdef _XPANLBEX
+  #-define _XPANLBEX#=C:/Lib/Git/RGSS3-MACL/src/XpanLib
 #-end:
+#-include _XPANLBEX/Archijust.rb
+#-include _XPANLBEX/TableExpansion.rb
+#-include _XPANLBEX/Point.rb
+#-include _XPANLBEX/Cube.rb
 #-ifdef xMACLDEVBLD
-  #-include XPANLBEX/Archijust.rb
+  #-include _XPANLBEX/ArrayTable.rb
+  #-include _XPANLBEX/Surface.rb
+  #-include _XPANLBEX/Pallete.rb
+  #-include _XPANLBEX/Morph.rb
+  #-include _XPANLBEX/Interpolate.rb
+  #-include _XPANLBEX/Grid.rb
+  #-include _XPANLBEX/Sequencer.rb  
+  #-include _XPANLBEX/Tween.rb
+  #-include _XPANLBEX/Tween-easers.rb
+  #-include _XPANLBEX/Task.rb
+  #-include _XPANLBEX/Fifo.rb
+  #-include _XPANLBEX/Chitat.rb
+  #-include _XPANLBEX/Blaz.rb
 #-end:
-#-include XPANLBEX/TableExpansion.rb
-#-include XPANLBEX/Point_basic.rb
-#-include XPANLBEX/Cube.rb
-#-ifdef xMACLDEVBLD
-  #-include XPANLBEX/ArrayTable.rb
-  #-include XPANLBEX/RectExpansion.rb
-  #-include XPANLBEX/Surface.rb
-  #-include XPANLBEX/Pallete.rb
-  #-include XPANLBEX/Morph.rb
-  #-include XPANLBEX/Interpolate.rb
-  #-include XPANLBEX/Grid.rb
-  #-include XPANLBEX/Tween.rb
-  #-include XPANLBEX/Sequencer.rb
-  #-include XPANLBEX/Task.rb
-  #-include XPANLBEX/Fifo.rb
-#-end:
-#-include XPANLBEX/Chitat.rb
-#-include XPANLBEX/Blaz.rb

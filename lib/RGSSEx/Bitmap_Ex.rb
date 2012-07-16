@@ -66,28 +66,48 @@ class Bitmap
       end
     end   
   end 
-  def draw_line point1,point2,color,weight
-    x1,y1 = point1.to_a
-    x2,y2 = point2.to_a
-    dx = x2 - x1
-    dy = y2 - y1
-    sx = x1 < x2 ? 1 : -1
-    sy = y1 < y2 ? 1 : -1
-    err= (dx-dy).to_f
-    e2 = 0
-    loop do
-      set_pixel_weighted x1,x2,color,weight 
-      break if x1 == x2 and y1 == y2 
-      e2 = 2*err
-      if e2 > -dy 
-        err = err - dy
-        x1  = x1 + sx  
+  def draw_line point1,point2,color,weight=1
+    weight = weight.max(1).to_i
+    x1,y1 = point1.to_a.map! &:to_i
+    x2,y2 = point2.to_a.map! &:to_i
+    # Bresenham's line algorithm
+    a = (y2 - y1).abs
+    b = (x2 - x1).abs
+    s = (a > b)
+    dx = (x2 < x1) ? -1 : 1
+    dy = (y2 < y1) ? -1 : 1
+    if s
+      c = a
+      a = b
+      b = c
+    end
+    df1 = ((b - a) << 1)
+    df2 = -(a << 1)
+    d = b - (a << 1)
+    set_pixel_weighted(x1, y1, color, weight) 
+    if(s)
+      while y1 != y2
+        y1 += dy
+        if d < 0
+          x1 += dx
+          d += df1
+        else
+          d += df2
+        end
+        set_pixel_weighted(x1, y1, color, weight) 
       end
-      if e2 < dx 
-        err = err + dx
-        y1  = y1 + sy 
+    else
+      while x1 != x2
+        x1 += dx
+        if d < 0
+          y1 += dy
+          d += df1
+        else
+          d += df2
+        end
+        set_pixel_weighted(x1, y1, color, weight) 
       end
-    end  
+    end 
   end
   def set_pixel_weighted x,y,color,weight=1
     even = ((weight % 2) == 0) ? 1 : 0

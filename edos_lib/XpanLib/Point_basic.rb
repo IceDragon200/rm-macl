@@ -14,7 +14,7 @@ class Point
     @x,@y = x,y
   end
   def set x=0,y=0
-    @x,@y = x,y
+    @x,@y = x||@x,y||@y
     self
   end
   alias old_to_s to_s

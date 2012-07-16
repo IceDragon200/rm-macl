@@ -3,6 +3,7 @@
 $LOAD_PATH << "C:/Lib/iExRuby/"
 require 'Skrip2'
 require 'Skrip2_reader'
+ 
 begin
   Dir.mkdir "C:/Lib/skpck2out/" unless File.exist? "C:/Lib/skpck2out/"
   source, = args

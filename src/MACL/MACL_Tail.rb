@@ -1,1 +1,0 @@
-MACL.run_init;

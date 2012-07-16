@@ -1,7 +1,7 @@
 =begin
   Written by IceDragon
   Conditional Branching Algorithim
-  When starting an indent of 0 is assumed:
+  When starting, an indent of 0 is assumed:
     indent = 0
   When a branch is detected increase the indent by 1
     indent += 1

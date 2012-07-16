@@ -1,6 +1,4 @@
-warn 'Drool is already imported' if ($imported||={})['Drool']
-($imported||={})['Drool']=0x10000
-# ╒╕ ♥                                                                Drool ╒╕
+# ╒╕ ♥                                                          MACL::Drool ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
   class Drool

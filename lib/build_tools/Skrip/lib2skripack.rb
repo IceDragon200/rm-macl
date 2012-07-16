@@ -1,6 +1,7 @@
 $LOAD_PATH << "C:/Lib/iExRuby/"
 require 'zlib'
 require 'iExRuby'
+ 
 def file2string(file)
   a = Req2File.import_require(file)
   puts a

@@ -2,6 +2,13 @@
 module MACL
   @@initialized = []
   @@inits = []
+  def self.init
+    constants.collect(&method(:const_get)).each(&method(:invoke_init))
+    run_init # // Extended scripts
+  end
+  def self.invoke_init nodule
+    nodule.init if nodule.respond_to? :init
+  end
   def self.add_init sym,func
     @@inits << [sym,func]
   end

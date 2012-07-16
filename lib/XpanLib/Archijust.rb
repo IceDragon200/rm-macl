@@ -1,6 +1,4 @@
-warn 'Archijust is already imported' if ($imported||={})['Archijust']
-($imported||={})['Archijust']=0x10001
-# ╒╕ ■                                                            Archijust ╒╕
+# ╒╕ ■                                               MACL::Mixin::Archijust ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
   module Mixin
@@ -19,6 +17,12 @@ module MACL
         hash.each_pair do |k,v|
           module_eval %Q(def #{k}= n; @#{k} = n.clamp(#{v[0]},#{v[1]}) end)
         end
+      end
+      # // stuff! and stuff
+      def define_exfunc sym,&func
+        str = sym.to_s+'!'
+        define_method str,&func
+        define_method sym do |*args,&block| dup.__send__(str,*args,&block) end
       end
     end
   end

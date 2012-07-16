@@ -1,7 +1,9 @@
 #-// 04/19/2012
 #-// 04/19/2012
-#-inject gen_scr_imported_ww 'ArrayTable', '0x10001'
-#-inject gen_class_header 'ArrayTable'
+#-apndmacro _imported_
+#-inject gen_scr_imported 'MACL::ArrayTable', '0x10001'
+#-end:
+#-inject gen_class_header 'MACL::ArrayTable'
 module MACL
   class ArrayTable
     include MACL::Mixin::TableExpansion

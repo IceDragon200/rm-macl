@@ -1,6 +1,9 @@
 #-// Task by CaptainJet
 #-// Rewritten by IceDragon (06/15/2012)
+#-apndmacro _imported_
 #-inject gen_scr_imported 'Task', '0x10000'
+#-end:
+#-// Sequenex Compatable
 class Task
   FUNC_TASK_SELECT = proc do |t| t.update;!t.done? end 
   @@single = []
@@ -41,7 +44,7 @@ class Task
   class Looped < self
     def update
       return unless super
-      reset if @called
+      reset! if @called
     end
   end
   attr_accessor :time, :function, :called  
@@ -56,11 +59,11 @@ class Task
   end
   def update
     return false if @terminated
-    @time = @time.pred.max 0
+    @time = @time.pred.max 0 if @time > 0
     (@function.call; @called = true) if @time == 0 unless @called
     true
   end
-  def reset
+  def reset!
     @time = @time_cap
     @called = false
   end

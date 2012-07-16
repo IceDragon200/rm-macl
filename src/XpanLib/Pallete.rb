@@ -1,10 +1,13 @@
 #-// 12/??/2011
 #-// 06/06/2012
 #-// Version : 1.0
+#-apndmacro _imported_
+#-inject gen_scr_imported 'Pallete', '0x10001'
+#-end:
 #-inject gen_module_header 'Pallete'
-#-inject gen_scr_imported_ww 'Pallete', '0x10000'
 module Pallete
   @sym_colors = {}
+  @ext_colors = {}
   #--------------------------------------------------------------------------#
   # ● module-method :pallete
   #/------------------------------------------------------------------------\#
@@ -35,7 +38,7 @@ module Pallete
   #     Color
   #\------------------------------------------------------------------------/#
   def self.sym_color symbol
-    get_color( @sym_colors[symbol] || 0 )
+    @ext_colors[symbol] || get_color(@sym_colors[symbol] || 0)
   end
   #--------------------------------------------------------------------------#
   # ● module-method :[]
@@ -44,6 +47,6 @@ module Pallete
   #     get_color
   #\------------------------------------------------------------------------/#
   def self.[] n
-    n.is_a?(Symbol) ? sym_color(n) : get_color(n)
+    n.is_a?(String) ? sym_color(n) : get_color(n)
   end
 end

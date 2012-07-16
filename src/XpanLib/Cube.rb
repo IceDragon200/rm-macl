@@ -1,5 +1,7 @@
-#-inject gen_scr_imported_ww 'Cube', '0x10002'
-#-inject gen_class_header 'Cube'
+#-apndmacro _imported_
+#-inject gen_scr_imported 'MACL::Cube', '0x10002'
+#-end:
+#-inject gen_class_header 'MACL::Cube'
 module MACL
   class Cube
     SYM_ARGS = [:x,:y,:z,:width,:height,:length]
@@ -10,9 +12,12 @@ module MACL
     def hash
       [@x,@y,@z,@width,@height,@length].hash
     end
+    def translate x,y,z
+      @x, @y, @z = x, y, z
+    end
     def set x=0,y=0,z=0,w=0,h=0,l=0
-      @x,@y,@z=x,y,z
-      @width,@height,@length=w,h,l
+      @x, @y, @z = x, y, z
+      @width, @height, @length = w, h, l
     end
     def xset x=nil,y=nil,z=nil,w=nil,h=nil,l=nil
       x,y,z,w,h,l = *x if x.is_a? Array

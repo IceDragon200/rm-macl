@@ -1,6 +1,4 @@
-warn 'Fifo is already imported' if ($imported||={})['Fifo']
-($imported||={})['Fifo']=0x10000
-# ╒╕ ♥                                                                 Fifo ╒╕
+# ╒╕ ♥                                                           MACL::Fifo ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
   class Fifo
@@ -14,14 +12,14 @@ module MACL
       rng.first.max(0)..rng.last.min(@size)
     end
     def at *args
-      raise ArgumentError.new if args.size == 0
+      raise(ArgumentError,'No Parameters given') if args.size == 0
       if args.size == 1
         n, = args
         if n.is_a? Numeric  ; return @data[n.to_i % @size]
         elsif n.is_a? Range ; return @data[_clamp_range(n)]
         end 
       else
-        raise ArgumentError.new unless args.all? {|i|i.is_a?(Numeric)}
+        raise(ArgumentError,'All Parameters must be Numeric') unless args.all? {|i|i.is_a?(Numeric)}
         return args.collect{|i|@data[i.to_i % @size]}
       end
       @default  

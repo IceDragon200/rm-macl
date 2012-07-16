@@ -1,3 +1,0 @@
-class MACL::Matrix
-
-end

@@ -1,5 +1,7 @@
-#-inject gen_scr_imported_ww 'Archijust', '0x10001'
-#-inject gen_module_header 'Archijust'
+#-apndmacro _imported_
+#-inject gen_scr_imported 'Archijust', '0x10001'
+#-end:
+#-inject gen_module_header 'MACL::Mixin::Archijust'
 module MACL
   module Mixin
     module Archijust
@@ -17,6 +19,12 @@ module MACL
         hash.each_pair do |k,v|
           module_eval %Q(def #{k}= n; @#{k} = n.clamp(#{v[0]},#{v[1]}) end)
         end
+      end
+      # // stuff! and stuff
+      def define_exfunc sym,&func
+        str = sym.to_s+'!'
+        define_method str,&func
+        define_method sym do |*args,&block| dup.__send__(str,*args,&block) end
       end
     end
   end

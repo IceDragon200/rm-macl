@@ -1,8 +1,8 @@
 #-// Blaz is a Sequencer class used for commands for Yggdrasil, REI and
 #-// other systems
 #-// By IceDragon
-#-inject gen_scr_imported_ww 'Blaz', '0x10002'
-#-inject gen_class_header 'Blaz'
+#-inject gen_scr_imported 'MACL::Blaz', '0x10002'
+#-inject gen_class_header 'MACL::Blaz'
 module MACL
   class Blaz
     include Enumerable

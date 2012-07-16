@@ -3,6 +3,13 @@
 module MACL
   @@initialized = []
   @@inits = []
+  def self.init
+    constants.collect(&method(:const_get)).each(&method(:invoke_init))
+    run_init # // Extended scripts
+  end
+  def self.invoke_init nodule
+    nodule.init if nodule.respond_to? :init
+  end
   def self.add_init sym,func
     @@inits << [sym,func]
   end
@@ -22,200 +29,62 @@ module MACL
   module Mixin
   end
 end
+module MACL
+  module Constants
+    ANCHOR = {
+    # // Standard
+      null: 0,
+      center: 5,
+      horizontal: 11, # // Horizontal
+      horz: 11,
+      horz0: 12, # // Horizontal Top
+      horz1: 13, # // Horizontal Mid
+      horz2: 14, # // Horizontal Bottom
+      # // Vertical
+      vertical: 15, # // Vertical
+      vert: 15,
+      vert0: 16, # // Vertical Top
+      vert1: 17, # // Vertical Mid
+      vert2: 18, # // Vertical Bottom
+      # // Based on NUMPAD
+      left: 4,
+      right: 6,
+      top: 8,
+      up: 8,
+      bottom: 2,
+      down: 2,
+      top_left: 7,
+      top_right: 9,
+      bottom_left: 1,
+      bottom_right: 3
+    }
+  end
+end
 # ╒╕ ■                                                          MACL::Mixin ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-#-define xNOTESCAN:
-module MACL::Mixin
+module MACL
+  module Mixin
 # ╒╕ ■                                                    BaseItem_NoteScan ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-  module BaseItem_NoteScan
-    private
-    def pre_note_scan
-      @note.each_line { |line| parse_note_line(line, :pre) }
-    end
-    def note_scan
-      @note.each_line { |line| parse_note_line(line, :mid) }
-    end
-    def post_note_scan
-      @note.each_line { |line| parse_note_line(line, :post) }
-    end
-    def parse_note_line line, section
-    end
-    public
-    def do_note_scan
-      pre_note_scan
-      note_scan
-      post_note_scan
-    end
-  end
-end
-# ╒╕ ■                                                                  RPG ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module RPG
-# ╒╕ ♥                                                             BaseItem ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-  class BaseItem
-    include MACL::Mixin::BaseItem_NoteScan
-  end
-# ╒╕ ♥                                                                  Map ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-  class Map
-    include MACL::Mixin::BaseItem_NoteScan
-  end
-end
-# ╒╕ ■                                                                 MACL ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-class << MACL
-  def mk_null_str(size=256)
-    string = "\0" * size
-  end
-  @w32_funcs = {
-    'GPPSA' => Win32API.new('kernel32', 'GetPrivateProfileStringA', 'pppplp', 'l'),
-    'GetClientRect' => Win32API.new('user32', 'GetClientRect', 'lp', 'i'),
-    #'GetWindowRect' => Win32API.new('user32', 'GetWindowRect', 'lp', 'i'),
-    'FindWindowEx'  => Win32API.new('user32','FindWindowEx','llpp','l')
-  }
-  def get_client
-    string = mk_null_str(256)
-    @w32_funcs['GPPSA'].call('Game','Title','',string,255,".\\Game.ini")
-    @w32_funcs['FindWindowEx'].call(0, 0, nil, string.delete!("\0"))
-  end
-  private :get_client
-  def client_rect
-    rect = [0, 0, 0, 0].pack('l4')
-    @w32_funcs['GetClientRect'].call(client, rect)
-    Rect.new(*rect.unpack('l4').map!(&:to_i))
-  end
-  def client
-    @client ||= get_client
-  end
-end
-warn 'MACL::Parser is already imported' if ($imported||={})['MACL::Parser']
-($imported||={})['MACL::Parser']=0x10002
-# ╒╕ ■                                                         MACL::Parser ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module MACL::Parser
-  STRS_TRUE  = ["TRUE" ,"YES","ON" ,"T","Y"]
-  STRS_FALSE = ["FALSE","NO" ,"OFF","F","N"]
-  STRS_BOOL  = STRS_TRUE + STRS_FALSE
-  module Regexp
-    BOOL = /(?:#{STRS_BOOL.join(?|)})/i
-    INT  = /\d+/
-    FLT  = /\d+\.\d+/
-    PRATE= /\d+%/i
-  end
-  def self.Singulize array
-    return array.size == 1 ? array[0] : array
-  end
-  # // Converters
-  def self.obj2str *objs
-    Singulize(objs.collect do |obj| String obj end)
-  end
-  def self.str2bool *strs
-    Singulize(strs.collect do |str|
-      case str.upcase
-        when *STRS_TRUE  ; true
-        when *STRS_FALSE ; false
-        else             ; nil
+    module BaseItem_NoteScan
+      private
+      def pre_note_scan
+        @note.each_line { |line| parse_note_line(line, :pre) }
       end
-    end)
-  end
-  def self.str2int *strs
-    Singulize(strs.collect do |str| Integer str end)
-  end
-  def self.str2flt *strs
-    Singulize(strs.collect do |str| Float str end)
-  end
-  def self.str2prate *strs
-    Singulize(strs.collect do |str| str.to_i/100.0 end)
-  end
-  def self.str2rate *strs
-    Singulize(strs.collect do |str| str.to_i/1.0 end)
-  end
-  def self.str2int_a str
-    str.scan(/\d+/).map! &:to_i
-  end
-  def self.str2array str,splitter=?,
-    str.split splitter
-  end
-  def self.str2obj str,type=:nil
-    case type
-    when :int, :integer ; str2int str
-    when :flt, :float   ; str2flt str
-    when :bool,:boolean ; str2bool str
-    when :str, :string  ; str.to_s
-    else # // Guess type
-      if str =~ Regexp::FLT
-        str2flt str
-      elsif str =~ Regexp::PRATE  
-        str2prate str  
-      elsif str =~ Regexp::INT
-        str2int str
-      elsif str =~ Regexp::BOOL_REGEX
-        str2bool str
-      else # // String
-        str.to_s
+      def note_scan
+        @note.each_line { |line| parse_note_line(line, :mid) }
+      end
+      def post_note_scan
+        @note.each_line { |line| parse_note_line(line, :post) }
+      end
+      def parse_note_line line, section
+      end
+      public
+      def do_note_scan
+        pre_note_scan
+        note_scan
+        post_note_scan
       end
     end
-  end
-  # // Get dtstr
-  def self.obj_data_type obj
-    case obj
-    when Float     ; "flt"
-    when Numeric   ; "int" # // Float is also Numeric type
-    when String    ; "str"
-    when true,false; "bool"
-    else           ; nil
-    end
-  end
-  # // 100 => int:100, "stuff"=>str:stuff
-  def self.obj2dtstr obj
-    if obj.is_a?(Array)
-      "%s:%s" % [obj_data_type(obj.first),obj.join(?,)]
-    else
-      type = obj_data_type(obj)
-      type ? "%s:%s" % [type,obj] : nil
-    end
-  end
-  @data_types = {
-    # // [keywords..] => proc { |s| parse_to_proper_type }
-    ["string" ,"str" ]=> proc {|args|args.map!(&:to_s) },
-    ["integer","int" ]=> proc {|args|args.map!(&:to_i) },
-    ["boolean","bool"]=> proc {|args|args.collect!{|s|str2bool(s)}},
-    ["percent","perc"]=> proc {|args|args.collect!{|s|str2prate(s)}},
-    ["rate"   ,"rt"  ]=> proc {|args|args.collect!{|s|str2rate(s)}},
-    ["float"  ,"flt" ]=> proc {|args|args.map!(&:to_f) },
-    ["hex"]           => proc {|args|args.map!(&:hex)  }
-  }
-  #@data_types.merge @structs
-  str = "(a-)?(%s):(.*)" % @data_types.keys.collect{|a|"(?:"+a.join(?|)+?)}.join(?|)
-  DTREGEX = /#{str}/i
-  @data_types.enum2keys!
-  # // Notebox
-  TAG_REGEXP = /(.+):\s*(.+)/
-  # // key: value
-  def self.parse_knv_str tag,types=[:nil],has_array=false
-    types = Array(types)
-    mtch = tag.match TAG_REGEXP
-    return nil unless mtch
-    key,value = mtch[1,2]
-    values = has_array ? value.split(?,) : Array(value)
-    values = values.each_with_index.to_a
-    values.collect!{|(n,index)|value2obj(n,types[index]||:nil)}
-    return key, values
-  end
-  # // Chitat Main
-  # // str:Stuff, int:2, flt:0.2, bool:TRUE
-  def self.parse_dtstr dtstr,return_type=:value
-    mtch = dtstr.match DTREGEX
-    raise "Malformed Data String %s" % dtstr unless mtch
-    is_array, dt_type, value = mtch[1,3]
-    return is_array, dt_type if return_type == :data_type
-    is_array = !!is_array
-    parser = @data_types[dt_type.downcase]
-    #puts "is_array?[%s] dt_type[%s] value[%s]" % [is_array, dt_type, value]
-    value = parser.call(is_array ? value.split(?,) : Array(value))
-    return value if return_type == :value
-    return is_array, dt_type, value # // return_type == :all
   end
 end

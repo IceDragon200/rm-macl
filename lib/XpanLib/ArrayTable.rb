@@ -1,6 +1,4 @@
-warn 'ArrayTable is already imported' if ($imported||={})['ArrayTable']
-($imported||={})['ArrayTable']=0x10001
-# ╒╕ ♥                                                           ArrayTable ╒╕
+# ╒╕ ♥                                                     MACL::ArrayTable ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
   class ArrayTable

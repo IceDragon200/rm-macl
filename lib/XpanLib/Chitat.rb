@@ -1,6 +1,4 @@
-warn 'Chitat is already imported' if ($imported||={})['Chitat']
-($imported||={})['Chitat']=0x10000
-# ╒╕ ■                                                               Chitat ╒╕
+# ╒╕ ■                                                         MACL::Chitat ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
   class Chitat
@@ -10,7 +8,7 @@ module MACL
         @match_data = match_data
         super *args,&block
       end
-      alias :arra_inspect :inspect
+      alias arra_inspect inspect
       def inspect
         "<#{self.class.name} %s: %s>" % [@match_data.to_s, arra_inspect]
       end

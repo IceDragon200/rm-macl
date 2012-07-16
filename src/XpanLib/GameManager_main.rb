@@ -14,7 +14,7 @@
 #     ♣ 02/02/2012 V1.0a 
 #==============================================================================#
 module GameManager
-  raise "GameManager (Setup) is not installed" unless const_defined? :SETUP
+  raise(LoadError,"GameManager (Setup) is not installed") unless const_defined? :SETUP
   #--------------------------------------------------------------------------#
   # ♦ Constant(s)
   #--------------------------------------------------------------------------#  
@@ -52,7 +52,7 @@ module GameManager
     attr_accessor :name
     attr_accessor :description
     attr_accessor :gsym
-    def initialize( code, name, description, gsym )
+    def initialize code, name, description, gsym
       @code        = code
       @name        = name
       @description = description
@@ -65,7 +65,7 @@ module GameManager
   # ● Yields
   #     Hash
   #\------------------------------------------------------------------------/#
-  def self.open_config()
+  def self.open_config
     save_data((yield load_data(GAME_CONFIG)), GAME_CONFIG)
   end  
   #--------------------------------------------------------------------------#
@@ -74,7 +74,7 @@ module GameManager
   # ● Yields
   #     Hash[game_id] = Code_Hash
   #\------------------------------------------------------------------------/#
-  def self.open_acmt()
+  def self.open_acmt
     hsh = load_data(ACMT_SAVE)
     yield hsh
     save_data(hsh, ACMT_SAVE)
@@ -85,7 +85,7 @@ module GameManager
   # ● Yields
   #     Hash[code] = Achievement
   #\------------------------------------------------------------------------/#
-  def self.get_acmts_for( game_id )
+  def self.get_acmts_for game_id
     open_acmt { |hsh| yield hsh[game_id] }
   end 
   #--------------------------------------------------------------------------#
@@ -94,8 +94,8 @@ module GameManager
   # ● Yields
   #     Hash[code] = Achievement
   #\------------------------------------------------------------------------/#
-  def self.edit_game_acmt_hash()
-    get_acmts_for( GAME_ID ) { |hsh| yield hsh }
+  def self.edit_game_acmt_hash
+    get_acmts_for GAME_ID { |hsh| yield hsh }
   end 
   #--------------------------------------------------------------------------#
   # ■|► module-method :make_acmt
@@ -103,7 +103,7 @@ module GameManager
   # ● Returns
   #     [code(Integer), values(Array[string, string])]
   #\------------------------------------------------------------------------/#
-  def self.make_acmt( code, name, description )
+  def self.make_acmt code, name, description
     return [code, name, description]
   end  
   #--------------------------------------------------------------------------#
@@ -112,21 +112,24 @@ module GameManager
   # ● Parameters
   #     [code(Integer), values(Array[string, string])], n, n, ....
   #\------------------------------------------------------------------------/#
-  def self.add_acmts( *acs )
-    acs.each { |aca| code, name, des = *aca
-      ac = Achievement.new( code, name, des, GAME_SYM )
-      edit_game_acmt_hash { |hsh| hsh[code] = ac } }
+  def self.add_acmts *acs
+    edit_game_acmt_hash do |hsh|
+      acs.each do |(code, name, des)|
+        ac = Achievement.new code, name, des, GAME_SYM
+        hsh[code] = ac
+      end
+    end
   end
   #--------------------------------------------------------------------------#
   # ■|● module-method :clear_acmts
   #--------------------------------------------------------------------------#
-  def self.clear_acmts()
+  def self.clear_acmts
     edit_game_acmt_hash { |hsh| hsh.clear }
   end
   #--------------------------------------------------------------------------#
   # ■|● module-method :save_game_id
   #--------------------------------------------------------------------------#
-  def self.save_game_id()
+  def self.save_game_id
     hsh = load_data(GMID_SAVE)
     hsh[GAME_NAME] = GAME_ID  
     save_data(hsh, GMID_SAVE)
@@ -135,13 +138,13 @@ module GameManager
   #--------------------------------------------------------------------------#
   # ■|● module-method :init_acmt
   #--------------------------------------------------------------------------#
-  def self.init_acmt()
+  def self.init_acmt
     open_acmt { |hsh| hsh[GAME_ID] ||= {} }
   end  
   attr_reader :gm_game_ids
   module_function :gm_game_ids
-  init_acmt()
-  save_game_id()
+  init_acmt
+  save_game_id
 end  
 #=■==========================================================================■=#
 #                           // ● End of File ● //                              #

@@ -1,7 +1,10 @@
 #-// Vector
 #-// By FenixFyreX
 #-// 05/12/2012
-#-inject gen_scr_imported_ww 'MACL::Vector', '0x10000'
+#-apndmacro _imported_
+#-inject gen_scr_imported 'MACL::Vector', '0x10000'
+#-end:
+#-inject gen_class_header 'Rect'
 class Rect
   def in_rect?(rect)
     return false if x < rect.x
@@ -17,11 +20,11 @@ class Rect
     "<Rect: #{to_a}>"
   end
 end
+#-inject gen_class_header 'Vector'
 class Vector
   def initialize(a=[])
-    @points = Array.new(a.size)
-    @points.each_index do |i|
-      @points[i] = Point.new(a[i])
+    @points = Array.new(a.size) do |i|
+      Point.new(a[i])
     end
     @points.uniq!
   end

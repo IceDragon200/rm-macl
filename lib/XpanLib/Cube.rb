@@ -1,6 +1,4 @@
-warn 'Cube is already imported' if ($imported||={})['Cube']
-($imported||={})['Cube']=0x10002
-# ╒╕ ♥                                                                 Cube ╒╕
+# ╒╕ ♥                                                           MACL::Cube ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
   class Cube
@@ -12,9 +10,12 @@ module MACL
     def hash
       [@x,@y,@z,@width,@height,@length].hash
     end
+    def translate x,y,z
+      @x, @y, @z = x, y, z
+    end
     def set x=0,y=0,z=0,w=0,h=0,l=0
-      @x,@y,@z=x,y,z
-      @width,@height,@length=w,h,l
+      @x, @y, @z = x, y, z
+      @width, @height, @length = w, h, l
     end
     def xset x=nil,y=nil,z=nil,w=nil,h=nil,l=nil
       x,y,z,w,h,l = *x if x.is_a? Array

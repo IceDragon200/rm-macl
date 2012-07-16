@@ -1,7 +1,9 @@
 #-// 04/12/2012
 #-// 04/19/2012
-#-inject gen_scr_imported_ww 'Grid', '0x10001'
-#-inject gen_class_header 'Grid'
+#-apndmacro _imported_
+#-inject gen_scr_imported 'MACL::Grid', '0x10001'
+#-end:
+#-inject gen_class_header 'MACL::Grid'
 module MACL
   class Grid
     def self.qcell_r columns,rows,cell_width,cell_height,index=0

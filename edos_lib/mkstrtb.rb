@@ -2,6 +2,7 @@
 # // 04/21/2012
 $LOAD_PATH << "C:/Lib/iExRuby"
 require 'iExRuby'
+ 
 FILE_EXTS = [".txt",".ini",".inf",".rb"]
 def File.bsnm_ext(str)
   File.basename(str,File.extname(str))

@@ -1,6 +1,8 @@
 # // 05/07/2012
 # // 06/07/2012
-#-inject gen_scr_imported_ww 'MACL::Vectrix', '0x08000'
+#-apndmacro _imported_
+#-inject gen_scr_imported 'MACL::Vectrix', '0x08000'
+#-end:
 #-inject gen_class_header 'MACL::Vectrix'
 module MACL
   class Vectrix
@@ -70,20 +72,11 @@ module MACL
     end
     include Constants
     DataType = Struct.new :type, :params
-    XRect = Struct.new :x,:y,:width,:height
-    class XRect
-      def to_s
-        [self.x,self.y,self.width,self.height].inspect
-      end
-      def to_rect
-        Rect.new(self.x,self.y,self.width,self.height)
-      end
-    end
     class DataType
       def as_type
         case type
         when 'pos','point'          ; Point.new *params
-        when 'rect', 'box'          ; XRect.new *params
+        when 'rect', 'box'          ; Surface.new *params
         when 'color', 'rgb', 'rgba' ; Color.new *params
         when 'v4', 'vector4'        ; Vector4.new *params
         when 'int', 'integer'       ; params[0]

@@ -2,8 +2,10 @@
 #-// This is a limited size Array, which will always contain n elements.
 #-// 16/06/2012 (DD/MM/YYYY)
 #-// 16/06/2012 (DD/MM/YYYY)
-#-inject gen_scr_imported_ww 'Fifo', '0x10000'
-#-inject gen_class_header 'Fifo'
+#-apndmacro _imported_
+#-inject gen_scr_imported 'MACL::Fifo', '0x10002'
+#-end:
+#-inject gen_class_header 'MACL::Fifo'
 module MACL
   class Fifo
     include Enumerable
@@ -16,14 +18,14 @@ module MACL
       rng.first.max(0)..rng.last.min(@size)
     end
     def at *args
-      raise ArgumentError.new if args.size == 0
+      raise(ArgumentError,'No Parameters given') if args.size == 0
       if args.size == 1
         n, = args
         if n.is_a? Numeric  ; return @data[n.to_i % @size]
         elsif n.is_a? Range ; return @data[_clamp_range(n)]
         end 
       else
-        raise ArgumentError.new unless args.all? {|i|i.is_a?(Numeric)}
+        raise(ArgumentError,'All Parameters must be Numeric') unless args.all? {|i|i.is_a?(Numeric)}
         return args.collect{|i|@data[i.to_i % @size]}
       end
       @default  

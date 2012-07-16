@@ -1,5 +1,5 @@
-warn 'MACL::Vector is already imported' if ($imported||={})['MACL::Vector']
-($imported||={})['MACL::Vector']=0x10000
+# ╒╕ ♥                                                                 Rect ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
 class Rect
   def in_rect?(rect)
     return false if x < rect.x
@@ -15,11 +15,12 @@ class Rect
     "<Rect: #{to_a}>"
   end
 end
+# ╒╕ ♥                                                               Vector ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
 class Vector
   def initialize(a=[])
-    @points = Array.new(a.size)
-    @points.each_index do |i|
-      @points[i] = Point.new(a[i])
+    @points = Array.new(a.size) do |i|
+      Point.new(a[i])
     end
     @points.uniq!
   end

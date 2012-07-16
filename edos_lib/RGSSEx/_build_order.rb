@@ -29,7 +29,7 @@ end
 # ╒╕ ■                                                                Audio ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module Audio
-  @vol_rate = {
+  @@vol_rate = {
     default: 1.0,
     bgm: 1.0,
     bgs: 1.0,
@@ -37,24 +37,33 @@ module Audio
     se: 1.0
   }
   def self.vol_rate sym
-    @vol_rate[sym]
+    @@vol_rate[sym]
+  end
+  def self.vol_rate_set sym,value
+    @@vol_rate[sym] = value
   end
 end
-module MACL::Mixin::AudioVolume
-  def audio_sym
-    :default
-  end
-  def audio_path
-    'Audio/%s'
-  end
-  def vol_rate
-    Audio.vol_rate audio_sym
-  end
-  def volume_abs
-    @volume
-  end
-  def volume
-    volume_abs * vol_rate
+# ╒╕ ■                                             MACL::Mixin::AudioVolume ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+module MACL
+  module Mixin
+    module AudioVolume
+      def audio_sym
+        :default
+      end
+      def audio_path
+        'Audio/%s'
+      end
+      def vol_rate
+        Audio.vol_rate audio_sym
+      end
+      def volume_abs
+        @volume
+      end
+      def volume
+        volume_abs * vol_rate
+      end
+    end
   end
 end
 # ╒╕ ♥                                                             RPG::BGM ╒╕
@@ -253,8 +262,6 @@ end
 class Table
   include MACL::Mixin::TableExpansion  
 end
-warn 'Bitmap_Ex is already imported' if ($imported||={})['Bitmap_Ex']
-($imported||={})['Bitmap_Ex']=0x10002
 # ╒╕ ♥                                                               Bitmap ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Bitmap
@@ -263,7 +270,7 @@ class Bitmap
     nodes = []
     nodes << [sx,sy]
     table = Table.new width,height 
-    nx=ny=x=y=0
+    nx = ny = x = y =0
     while nodes.size > 0
       x,y = nodes.shift
       next unless x and y
@@ -278,7 +285,6 @@ class Bitmap
           nodes << [nx,ny] 
         end
       end
-      yield if block_given? 
     end
   end
   def recolor! f_color,t_color=nil 
@@ -321,28 +327,48 @@ class Bitmap
       end
     end   
   end 
-  def draw_line point1,point2,color,weight
-    x1,y1 = point1.to_a
-    x2,y2 = point2.to_a
-    dx = x2 - x1
-    dy = y2 - y1
-    sx = x1 < x2 ? 1 : -1
-    sy = y1 < y2 ? 1 : -1
-    err= (dx-dy).to_f
-    e2 = 0
-    loop do
-      set_pixel_weighted x1,x2,color,weight 
-      break if x1 == x2 and y1 == y2 
-      e2 = 2*err
-      if e2 > -dy 
-        err = err - dy
-        x1  = x1 + sx  
+  def draw_line point1,point2,color,weight=1
+    weight = weight.max(1).to_i
+    x1,y1 = point1.to_a.map! &:to_i
+    x2,y2 = point2.to_a.map! &:to_i
+    # Bresenham's line algorithm
+    a = (y2 - y1).abs
+    b = (x2 - x1).abs
+    s = (a > b)
+    dx = (x2 < x1) ? -1 : 1
+    dy = (y2 < y1) ? -1 : 1
+    if s
+      c = a
+      a = b
+      b = c
+    end
+    df1 = ((b - a) << 1)
+    df2 = -(a << 1)
+    d = b - (a << 1)
+    set_pixel_weighted(x1, y1, color, weight) 
+    if(s)
+      while y1 != y2
+        y1 += dy
+        if d < 0
+          x1 += dx
+          d += df1
+        else
+          d += df2
+        end
+        set_pixel_weighted(x1, y1, color, weight) 
       end
-      if e2 < dx 
-        err = err + dx
-        y1  = y1 + sy 
+    else
+      while x1 != x2
+        x1 += dx
+        if d < 0
+          y1 += dy
+          d += df1
+        else
+          d += df2
+        end
+        set_pixel_weighted(x1, y1, color, weight) 
       end
-    end  
+    end 
   end
   def set_pixel_weighted x,y,color,weight=1
     even = ((weight % 2) == 0) ? 1 : 0
@@ -357,6 +383,7 @@ end
 # ╒╕ ♥                                                               Sprite ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Sprite
+  include MACL::Mixin::Surface
   def move x,y
     self.x,self.y=x,y
   end
@@ -365,89 +392,5 @@ class Sprite
   end
   def to_cube
     Cube.new x,y,z,width,height,0
-  end
-end
-# ╒╕ ♥                                                     RPG::Event::Page ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module RPG
-  class Event
-    class Page
-      COMMENT_CODES = [108,408]
-      def select_commands *codes
-        @list.select do |c| codes.include?(c.code) end
-      end
-      def comments
-        select_commands *COMMENT_CODES
-      end
-      def comments_a
-        comments.map(&:parameters).flatten
-      end
-    end
-  end
-end
-# ╒╕ ♥                                                          Game::Event ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-class Game_Event
-  def comments_a
-    @page.comments_a
-  end
-end
-# ╒╕ ■                                                         SceneManager ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module SceneManager
-  def self.recall
-    goto(@scene.class)
-  end
-end
-# ╒╕ ■                                                           MapManager ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module MapManager
-  @@maps = {}
-  def self.load_map id
-    get_map(id).deep_clone
-  end 
-  def self.get_map id
-    unless @@maps.has_key? id
-      @@maps[id] = load_data("Data/Map%03d.rvdata2" % id)
-      @@maps[id].do_note_scan
-    end
-    @@maps[id]
-  end
-end
-# ╒╕ ♥                                                            Game::Map ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-class Game_Map
-  def pre_load_map
-  end
-  def post_load_map
-  end
-  # // Overwrite
-  def setup map_id 
-    @map_id = map_id
-    pre_load_map
-    @map = MapManager.load_map @map_id 
-    post_load_map
-    @tileset_id = @map.tileset_id
-    @display_x = 0
-    @display_y = 0
-    referesh_vehicles
-    setup_events
-    setup_scroll
-    setup_parallax
-    setup_battleback
-    @need_refresh = false
-  end
-end
-# ╒╕ ♥                                                       Game::Switches ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-class Game_Switches
-  def on? id 
-    !!self[id]
-  end
-  def off? id
-    !self[id]
-  end
-  def toggle id
-    self[id] = !self[id]
   end
 end

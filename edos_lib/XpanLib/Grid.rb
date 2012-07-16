@@ -1,6 +1,4 @@
-warn 'Grid is already imported' if ($imported||={})['Grid']
-($imported||={})['Grid']=0x10001
-# ╒╕ ♥                                                                 Grid ╒╕
+# ╒╕ ♥                                                           MACL::Grid ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
   class Grid

@@ -1,255 +1,13 @@
 =begin
  ──────────────────────────────────────────────────────────────────────────────
  RGSS3-MACL
- Version : 0x10009
- Last Build: 02/07/2012 (MM/DD/YYYY) (0x10008)
- Date Built: 06/07/2012 (MM/DD/YYYY) (0x10009)
+ Version : 0x1000B
+ Last Build: 13/07/2012 (MM/DD/YYYY) (0x1000A)
+ Date Built: 13/07/2012 (MM/DD/YYYY) (0x1000B)
  ──────────────────────────────────────────────────────────────────────────────
  ■ Module
  ♥ Class
- Parameter, Return : Help
-   -Help       Ruby Object
-     <self>    (Parent Object)
-     <Object>  (Varied Object)
-     N[]       (Array of N Object)
-     String    String
-     Boolean   (TrueClass or FalseClass)
-     Numeric   (Integer,Bignum,Float)
-     Integer   Integer
-     Float     Float
-     Array     Array
-     Hash      Hash
-     Symbol    Symbol
-────────────────────────────────────────────────────────────────────────────────
-Standard Library
-────────────────────────────────────────────────────────────────────────────────
-  ♥ Object
-    deep_clone 
-      ● Return
-          <self>
-    if_eql?(obj,alt=nil), if_neql?(obj,alt=nil)
-      ● Parameters 
-          <Object> obj, alt
-      ● Return
-          if block_given:
-            <Object> from yield
-          else:
-            alt from Parameters
-    if_nil?(alt=nil)
-      ● Parameters 
-          <Object> alt
-      ● Return
-          if block_given:
-            <Object> from yield
-          else:
-            alt from Parameters
-    to_bool 
-      ● Return
-          Boolean
-  ■ Kernel
-    load_data(filename) [None-RGSS2/3]
-      ● Parameters 
-          String filename
-      ● Return
-          <Object>
-    save_data(obj,filename) [None-RGSS2/3]
-      ● Parameters 
-          <Object> obj
-          String filename
-      ● Return
-          <Object>
-    load_data_cin(filename) { obj }
-      ● Parameters 
-          String filename
-      ● Return
-          <Object>
-    Boolean(obj)
-      ● Parameters 
-          Object obj 
-      ● Return
-          Boolean 
-  ♥ Numeric
-    min(n), max(n)
-      ● Parameters 
-          Numeric n
-      ● Return
-          Numeric
-    clamp(min,max)
-      ● Parameters 
-          Numeric min, max
-      ● Return
-          Numeric
-    pole
-      ● Return
-          Numeric{0,1}
-    pole_inv
-      ● Return
-          not pole
-  ■ Enumerable
-    pick
-      ● Return
-          <Object>
-    reverse_index(obj), reverse_index { |obj| Compare }
-      ● Parameters 
-          <Object> obj
-      ● Return
-          Integer
-    invoke(meth_sym,*args)
-      ● Parameters 
-          Symbol     meth_sym
-          <Object>[] args
-      ● Return
-          <self>
-    invoke_collect(meth_sym,*args)
-      ● Parameters 
-          Symbol     meth_sym
-          <Object>[] args
-      ● Return
-          <Object>[]
-  ♥ Array
-    pick!
-      ● Return
-          <Object>
-    pad(n, obj), pad!(n, obj), pad(n) { obj }, pad!(n) { obj }
-      ● Parameters 
-          <Object> obj
-      ● Return
-          <self>
-    uniq_arrays(groups), uniq_arrays!(groups)
-      ● Parameters 
-          <Object>[] groups
-      ● Return
-          Array or <self>
-    remove_this(obj,n)
-      ● Parameters 
-          <Object> obj
-          Integer n
-      ● Return
-          <self>
-  ♥ Hash
-    get_values(*keys)
-      ● Parameters 
-          <Object>[] keys
-      ● Return
-          <Object>[]
-    enum2keys,enum2keys!
-      ● Return
-          Hash or <self>
-────────────────────────────────────────────────────────────────────────────────
-eXpansion Library
-────────────────────────────────────────────────────────────────────────────────
-  ♥ Point
-    .new(x,y), .[x,y]
-      ● Parameters 
-          Integer x, y
-      ● Return
-          Point
-    set
-      ● Parameters 
-          Integer x, y
-      ● Return
-          <self>
-    to_a
-      ● Return
-          Numeric[x, y]
-    to_s
-      ● Return
-          String
-    to_hsh
-      ● Return
-          Hash[:x,:y]
-    hash
-      ● Return
-          Integer
-  ♥ Chitat
-    .new(open_tag,close_tag)
-      ● Parameters 
-          Regexp open_tag, close_tag
-      ● Return
-          Chitat
-    mk_and_set_tag(str)      
-      ● Parameters 
-          String str
-      ● Return
-          <self>
-    parse_str(str)
-      ● Parameters 
-          String str
-      ● Return
-          String[]
-────────────────────────────────────────────────────────────────────────────────
-RGSSEx Expansion
-────────────────────────────────────────────────────────────────────────────────
-  ♥ Color, ♥ Tone
-    to_a
-      ● Return
-          Numeric[red, green, blue, alpha]
-    to_a_na, to_a_ng
-      ● Return
-          Numeric[red, green, blue]
-    to_hex
-      ● Return
-          String hex
-    to_flash
-      ● Return
-          Integer
-    to_color
-      ● Return
-          Color
-    to_tone
-      ● Return
-          Tone
-    rgb_sym
-      ● Return
-          Symbol[:red, :green, :blue]
-  ♥ Font
-    to_hsh, marshal_dump
-      ● Return
-          Hash[:color, :out_color, :name, :size, :bold, :italic, :shadow, :outline]
-    marshal_load(font_hash)
-      ● Parameters 
-          Hash font_hash
-  ♥ Rect
-    to_a
-      ● Return
-          Numeric[x, y, width, height]
-    to_va
-      ● Return
-          Numeric[x, y, vwidth, vheight]
-    to_rect
-      ● Return
-          Rect
-  ♥ RPG::BaseItem
-  ♥ RPG::Event::Page
-    select_commands(*codes)
-      ● Parameters 
-          Integer[]
-      ● Return
-          RPG::Event::Page[]
-    comments
-      ● Return
-          RPG::EventCommand[]
-    comments_a
-      ● Return
-          String[]
-  ♥ Game::Switches
-    on?(id)
-      ● Parameters 
-          Integer id
-      ● Return
-          Boolean
-    off?(id)
-      ● Parameters 
-          Integer id
-      ● Return
-          Boolean      
-    toggle(id)
-      ● Parameters 
-          Integer id
-      ● Return
-          Boolean
 =end
-($imported||={})['RGSS3-MACL']=0x10009
 # // Standard Library
 # ╒╕ ♥                                                               Object ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
@@ -325,6 +83,12 @@ end
 # ╒╕ ♥                                                              Numeric ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Numeric
+  def negative?
+    self < 0
+  end
+  def positive?
+    self > 0
+  end
   def min n
     n < self ? n : self
   end unless method_defined? :min
@@ -336,10 +100,10 @@ class Numeric
   end unless method_defined? :clamp
   def unary
     self <=> 0
-  end unless method_defined? :pole
+  end unless method_defined? :unary
   def unary_inv
     -pole
-  end unless method_defined? :pole_inv
+  end unless method_defined? :unary_inv
   # // ROMAN and to_roman by Zetu
   ROMAN = {
         1 => "I",    5 => "V",    10 => "X",
@@ -550,6 +314,13 @@ end
 module MACL
   @@initialized = []
   @@inits = []
+  def self.init
+    constants.collect(&method(:const_get)).each(&method(:invoke_init))
+    run_init # // Extended scripts
+  end
+  def self.invoke_init nodule
+    nodule.init if nodule.respond_to? :init
+  end
   def self.add_init sym,func
     @@inits << [sym,func]
   end
@@ -569,312 +340,203 @@ module MACL
   module Mixin
   end
 end
+module MACL
+  module Constants
+    ANCHOR = {
+    # // Standard
+      null: 0,
+      center: 5,
+      horizontal: 11, # // Horizontal
+      horz: 11,
+      horz0: 12, # // Horizontal Top
+      horz1: 13, # // Horizontal Mid
+      horz2: 14, # // Horizontal Bottom
+      # // Vertical
+      vertical: 15, # // Vertical
+      vert: 15,
+      vert0: 16, # // Vertical Top
+      vert1: 17, # // Vertical Mid
+      vert2: 18, # // Vertical Bottom
+      # // Based on NUMPAD
+      left: 4,
+      right: 6,
+      top: 8,
+      up: 8,
+      bottom: 2,
+      down: 2,
+      top_left: 7,
+      top_right: 9,
+      bottom_left: 1,
+      bottom_right: 3
+    }
+  end
+end
 # ╒╕ ■                                                          MACL::Mixin ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-#-define xNOTESCAN:
-module MACL::Mixin
+module MACL
+  module Mixin
 # ╒╕ ■                                                    BaseItem_NoteScan ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-  module BaseItem_NoteScan
-    private
-    def pre_note_scan
-      @note.each_line { |line| parse_note_line(line, :pre) }
-    end
-    def note_scan
-      @note.each_line { |line| parse_note_line(line, :mid) }
-    end
-    def post_note_scan
-      @note.each_line { |line| parse_note_line(line, :post) }
-    end
-    def parse_note_line line, section
-    end
-    public
-    def do_note_scan
-      pre_note_scan
-      note_scan
-      post_note_scan
-    end
-  end
-end
-# ╒╕ ■                                                                  RPG ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module RPG
-# ╒╕ ♥                                                             BaseItem ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-  class BaseItem
-    include MACL::Mixin::BaseItem_NoteScan
-  end
-# ╒╕ ♥                                                                  Map ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-  class Map
-    include MACL::Mixin::BaseItem_NoteScan
-  end
-end
-# ╒╕ ■                                                                 MACL ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-class << MACL
-  def mk_null_str(size=256)
-    string = "\0" * size
-  end
-  @w32_funcs = {
-    'GPPSA' => Win32API.new('kernel32', 'GetPrivateProfileStringA', 'pppplp', 'l'),
-    'GetClientRect' => Win32API.new('user32', 'GetClientRect', 'lp', 'i'),
-    #'GetWindowRect' => Win32API.new('user32', 'GetWindowRect', 'lp', 'i'),
-    'FindWindowEx'  => Win32API.new('user32','FindWindowEx','llpp','l')
-  }
-  def get_client
-    string = mk_null_str(256)
-    @w32_funcs['GPPSA'].call('Game','Title','',string,255,".\\Game.ini")
-    @w32_funcs['FindWindowEx'].call(0, 0, nil, string.delete!("\0"))
-  end
-  private :get_client
-  def client_rect
-    rect = [0, 0, 0, 0].pack('l4')
-    @w32_funcs['GetClientRect'].call(client, rect)
-    Rect.new(*rect.unpack('l4').map!(&:to_i))
-  end
-  def client
-    @client ||= get_client
-  end
-end
-warn 'MACL::Parser is already imported' if ($imported||={})['MACL::Parser']
-($imported||={})['MACL::Parser']=0x10002
-# ╒╕ ■                                                         MACL::Parser ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module MACL::Parser
-  STRS_TRUE  = ["TRUE" ,"YES","ON" ,"T","Y"]
-  STRS_FALSE = ["FALSE","NO" ,"OFF","F","N"]
-  STRS_BOOL  = STRS_TRUE + STRS_FALSE
-  module Regexp
-    BOOL = /(?:#{STRS_BOOL.join(?|)})/i
-    INT  = /\d+/
-    FLT  = /\d+\.\d+/
-    PRATE= /\d+%/i
-  end
-  def self.Singulize array
-    return array.size == 1 ? array[0] : array
-  end
-  # // Converters
-  def self.obj2str *objs
-    Singulize(objs.collect do |obj| String obj end)
-  end
-  def self.str2bool *strs
-    Singulize(strs.collect do |str|
-      case str.upcase
-        when *STRS_TRUE  ; true
-        when *STRS_FALSE ; false
-        else             ; nil
+    module BaseItem_NoteScan
+      private
+      def pre_note_scan
+        @note.each_line { |line| parse_note_line(line, :pre) }
       end
-    end)
-  end
-  def self.str2int *strs
-    Singulize(strs.collect do |str| Integer str end)
-  end
-  def self.str2flt *strs
-    Singulize(strs.collect do |str| Float str end)
-  end
-  def self.str2prate *strs
-    Singulize(strs.collect do |str| str.to_i/100.0 end)
-  end
-  def self.str2rate *strs
-    Singulize(strs.collect do |str| str.to_i/1.0 end)
-  end
-  def self.str2int_a str
-    str.scan(/\d+/).map! &:to_i
-  end
-  def self.str2array str,splitter=?,
-    str.split splitter
-  end
-  def self.str2obj str,type=:nil
-    case type
-    when :int, :integer ; str2int str
-    when :flt, :float   ; str2flt str
-    when :bool,:boolean ; str2bool str
-    when :str, :string  ; str.to_s
-    else # // Guess type
-      if str =~ Regexp::FLT
-        str2flt str
-      elsif str =~ Regexp::PRATE  
-        str2prate str  
-      elsif str =~ Regexp::INT
-        str2int str
-      elsif str =~ Regexp::BOOL_REGEX
-        str2bool str
-      else # // String
-        str.to_s
+      def note_scan
+        @note.each_line { |line| parse_note_line(line, :mid) }
+      end
+      def post_note_scan
+        @note.each_line { |line| parse_note_line(line, :post) }
+      end
+      def parse_note_line line, section
+      end
+      public
+      def do_note_scan
+        pre_note_scan
+        note_scan
+        post_note_scan
       end
     end
-  end
-  # // Get dtstr
-  def self.obj_data_type obj
-    case obj
-    when Float     ; "flt"
-    when Numeric   ; "int" # // Float is also Numeric type
-    when String    ; "str"
-    when true,false; "bool"
-    else           ; nil
-    end
-  end
-  # // 100 => int:100, "stuff"=>str:stuff
-  def self.obj2dtstr obj
-    if obj.is_a?(Array)
-      "%s:%s" % [obj_data_type(obj.first),obj.join(?,)]
-    else
-      type = obj_data_type(obj)
-      type ? "%s:%s" % [type,obj] : nil
-    end
-  end
-  @data_types = {
-    # // [keywords..] => proc { |s| parse_to_proper_type }
-    ["string" ,"str" ]=> proc {|args|args.map!(&:to_s) },
-    ["integer","int" ]=> proc {|args|args.map!(&:to_i) },
-    ["boolean","bool"]=> proc {|args|args.collect!{|s|str2bool(s)}},
-    ["percent","perc"]=> proc {|args|args.collect!{|s|str2prate(s)}},
-    ["rate"   ,"rt"  ]=> proc {|args|args.collect!{|s|str2rate(s)}},
-    ["float"  ,"flt" ]=> proc {|args|args.map!(&:to_f) },
-    ["hex"]           => proc {|args|args.map!(&:hex)  }
-  }
-  #@data_types.merge @structs
-  str = "(a-)?(%s):(.*)" % @data_types.keys.collect{|a|"(?:"+a.join(?|)+?)}.join(?|)
-  DTREGEX = /#{str}/i
-  @data_types.enum2keys!
-  # // Notebox
-  TAG_REGEXP = /(.+):\s*(.+)/
-  # // key: value
-  def self.parse_knv_str tag,types=[:nil],has_array=false
-    types = Array(types)
-    mtch = tag.match TAG_REGEXP
-    return nil unless mtch
-    key,value = mtch[1,2]
-    values = has_array ? value.split(?,) : Array(value)
-    values = values.each_with_index.to_a
-    values.collect!{|(n,index)|value2obj(n,types[index]||:nil)}
-    return key, values
-  end
-  # // Chitat Main
-  # // str:Stuff, int:2, flt:0.2, bool:TRUE
-  def self.parse_dtstr dtstr,return_type=:value
-    mtch = dtstr.match DTREGEX
-    raise "Malformed Data String %s" % dtstr unless mtch
-    is_array, dt_type, value = mtch[1,3]
-    return is_array, dt_type if return_type == :data_type
-    is_array = !!is_array
-    parser = @data_types[dt_type.downcase]
-    #puts "is_array?[%s] dt_type[%s] value[%s]" % [is_array, dt_type, value]
-    value = parser.call(is_array ? value.split(?,) : Array(value))
-    return value if return_type == :value
-    return is_array, dt_type, value # // return_type == :all
   end
 end
 # // Xpansion Library
-warn 'TableExpansion is already imported' if ($imported||={})['TableExpansion']
-($imported||={})['TableExpansion']=0x10000
+# ╒╕ ■                                               MACL::Mixin::Archijust ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+module MACL
+  module Mixin
+    module Archijust
+      def define_as hash
+        hash.each_pair do |k,v| define_method k do v end end
+      end
+      # // Update on change
+      def define_uoc *syms
+        syms.each do |sym|
+          alias_method "set_#{sym}", "#{sym}="
+          module_eval %Q(def #{sym}= n; set_#{sym} n if @#{sym} != n end)
+        end
+      end
+      def define_clamp_writer hash
+        hash.each_pair do |k,v|
+          module_eval %Q(def #{k}= n; @#{k} = n.clamp(#{v[0]},#{v[1]}) end)
+        end
+      end
+      # // stuff! and stuff
+      def define_exfunc sym,&func
+        str = sym.to_s+'!'
+        define_method str,&func
+        define_method sym do |*args,&block| dup.__send__(str,*args,&block) end
+      end
+    end
+  end
+end
 # ╒╕ ■                                          MACL::Mixin::TableExpansion ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-module MACL::Mixin::TableExpansion
-  def area
-    xsize*ysize
-  end
-  def volume
-    xsize*ysize*zsize
-  end
-  def iterate
-    x,y,z=[0]*3
-    if zsize > 1
-      for x in 0...xsize
-        for y in 0...ysize
-          for z in 0...zsize
-            yield self[x,y,z], x, y, z
+module MACL
+  module Mixin
+    module TableExpansion
+      def area
+        xsize*ysize
+      end
+      def volume
+        xsize*ysize*zsize
+      end
+      def iterate
+        x,y,z=[0]*3
+        if zsize > 1
+          for x in 0...xsize
+            for y in 0...ysize
+              for z in 0...zsize
+                yield self[x,y,z], x, y, z
+              end
+            end
+          end
+        elsif ysize > 1
+          for x in 0...xsize
+            for y in 0...ysize
+              yield self[x,y], x, y
+            end
+          end  
+        else
+          for x in 0...xsize
+            yield self[x], x
+          end  
+        end
+        Graphics.frame_reset
+        self
+      end
+      def iterate_map
+        i=0;xyz=[0,0,0]
+        iterate do |i,*xyz|
+          self[*xyz] = yield i, *xyz
+        end
+        self
+      end
+      def replace table
+        i=0;xyz=[0,0,0]
+        resize table.xsize, table.ysize, table.zsize
+        iterate do |i,*xyz|
+          self[*xyz] = table[*xyz]
+        end
+        self
+      end
+      def clear
+        resize 1
+        self
+      end
+      def nudge nx,ny,nz 
+        tabclone = self.dup
+        xs,ys,zs = tabclone.xsize, tabclone.ysize,tabclone.zsize
+        i,x,y,z=[0]*4
+        if zs > 0
+          tabclone.iterate do |i,x,y,z| self[(x+nx)%xs,(y+ny)%ys,(z+nz)%zs] = i end
+        elsif ys > 0  
+          tabclone.iterate do |i,x,y| self[(x+nx)%xs,(y+ny)%ys] = i end
+        else  
+          tabclone.iterate do |i,x| self[(x+nx)%xs] = i end
+        end  
+        self
+      end  
+      def oor? x,y=0,z=0
+        return true if x < 0 || y < 0 || z < 0
+        return true if xsize <= x
+        return true if ysize <= y if ysize > 0
+        return true if zsize <= z if zsize > 0
+        return false
+      end
+      def to_a
+        tabe = begin
+          if @zsize > 1
+            Array.new @xsize do 
+              Array.new @ysize do 
+                Array.new @zsize, 0 
+              end 
+            end
+          elsif @ysize > 1
+            Array.new @xsize do 
+              Array.new @ysize, 0
+            end
+          else
+            Array.new @xsize, 0
+          end
+        end  
+        x,y,z,n,xyz = [nil]*5
+        iterate do |n,*xyz|
+          x,y,z = *xyz
+          if xyz.size == 3
+            tabe[x][y][z] = n
+          elsif xyz.size == 2
+            tabe[x][y] = n
+          else
+            tabe[x] = n  
           end
         end
-      end
-    elsif ysize > 1
-      for x in 0...xsize
-        for y in 0...ysize
-          yield self[x,y], x, y
-        end
-      end  
-    else
-      for x in 0...xsize
-        yield self[x], x
-      end  
-    end
-    Graphics.frame_reset
-    self
-  end
-  def iterate_map
-    i=0;xyz=[0,0,0]
-    iterate do |i,*xyz|
-      self[*xyz] = yield i, *xyz
-    end
-    self
-  end
-  def replace table
-    i=0;xyz=[0,0,0]
-    resize table.xsize, table.ysize, table.zsize
-    iterate do |i,*xyz|
-      self[*xyz] = table[*xyz]
-    end
-    self
-  end
-  def clear
-    resize 1
-    self
-  end
-  def nudge nx,ny,nz 
-    tabclone = self.dup
-    xs,ys,zs = tabclone.xsize, tabclone.ysize,tabclone.zsize
-    i,x,y,z=[0]*4
-    if zs > 0
-      tabclone.iterate do |i,x,y,z| self[(x+nx)%xs,(y+ny)%ys,(z+nz)%zs] = i end
-    elsif ys > 0  
-      tabclone.iterate do |i,x,y| self[(x+nx)%xs,(y+ny)%ys] = i end
-    else  
-      tabclone.iterate do |i,x| self[(x+nx)%xs] = i end
-    end  
-    self
-  end  
-  def oor? x,y=0,z=0
-    return true if x < 0 || y < 0 || z < 0
-    return true if xsize <= x
-    return true if ysize <= y if ysize > 0
-    return true if zsize <= z if zsize > 0
-    return false
-  end
-  def to_a
-    tabe = begin
-      if @zsize > 1
-        Array.new @xsize do 
-          Array.new @ysize do 
-            Array.new @zsize, 0 
-          end 
-        end
-      elsif @ysize > 1
-        Array.new @xsize do 
-          Array.new @ysize, 0
-        end
-      else
-        Array.new @xsize, 0
-      end
-    end  
-    x,y,z,n,xyz = [nil]*5
-    iterate do |n,*xyz|
-      x,y,z = *xyz
-      if xyz.size == 3
-        tabe[x][y][z] = n
-      elsif xyz.size == 2
-        tabe[x][y] = n
-      else
-        tabe[x] = n  
+        tabe
       end
     end
-    tabe
   end
 end
 # ╒╕ ♥                                                                Point ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-warn 'Point is already imported' if ($imported||={})['Point']
-($imported||={})['Point']=0x10002
 class Point
   def self.convert2point array
     Point.new(*array[0..1])
@@ -887,7 +549,7 @@ class Point
     @x,@y = x,y
   end
   def set x=0,y=0
-    @x,@y = x,y
+    @x,@y = x||@x,y||@y
     self
   end
   alias old_to_s to_s
@@ -907,9 +569,7 @@ class Point
     return [@x <=> 0, @y <=> 0]
   end
 end
-warn 'Cube is already imported' if ($imported||={})['Cube']
-($imported||={})['Cube']=0x10002
-# ╒╕ ♥                                                                 Cube ╒╕
+# ╒╕ ♥                                                           MACL::Cube ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
   class Cube
@@ -921,9 +581,12 @@ module MACL
     def hash
       [@x,@y,@z,@width,@height,@length].hash
     end
+    def translate x,y,z
+      @x, @y, @z = x, y, z
+    end
     def set x=0,y=0,z=0,w=0,h=0,l=0
-      @x,@y,@z=x,y,z
-      @width,@height,@length=w,h,l
+      @x, @y, @z = x, y, z
+      @width, @height, @length = w, h, l
     end
     def xset x=nil,y=nil,z=nil,w=nil,h=nil,l=nil
       x,y,z,w,h,l = *x if x.is_a? Array
@@ -966,151 +629,6 @@ module MACL
   end
 end
 Cube = MACL::Cube
-warn 'Chitat is already imported' if ($imported||={})['Chitat']
-($imported||={})['Chitat']=0x10000
-# ╒╕ ■                                                               Chitat ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module MACL
-  class Chitat
-    class Stack < Array
-      attr_reader :match_data
-      def initialize match_data,*args,&block
-        @match_data = match_data
-        super *args,&block
-      end
-      alias :arra_inspect :inspect
-      def inspect
-        "<#{self.class.name} %s: %s>" % [@match_data.to_s, arra_inspect]
-      end
-    end
-    class Tag
-      attr_reader :sym,:params
-      def initialize sym,match_data
-        @sym,@params = sym,match_data.to_a
-      end
-      def param i
-        @params[i]
-      end
-    end
-    attr_accessor :open_rgx,:close_rgx
-    attr_reader :tags
-    def initialize open_tag=nil,close_tag=nil
-      @tags = []
-      if open_tag.is_a?(String) and close_tag.is_a?(String)
-        open_tag = mk_open_rgx open_tag
-        close_tag = mk_close_rgx close_tag
-      end
-      if !close_tag and open_tag
-        mk_and_set_rgx open_tag
-      else
-        @open_rgx,@close_rgx = open_tag,close_tag
-      end
-      yield self if block_given?
-    end
-    # //
-    def set_tag sym, regexp
-      @tags << {sym: sym, regexp: regexp}
-    end
-    def mk_tag str
-      @tags.each do |hsh|
-        sym,regexp = hsh.get_values :sym,:regexp
-        mtch = str.match regexp
-        return Tag.new sym, mtch if mtch
-      end
-      return nil
-    end
-    def mk_open_rgx str
-      /<#{str}>/i
-    end
-    def mk_close_rgx str
-      /<\/#{str}>/i
-    end
-    def mk_and_set_rgx str
-      @open_rgx,@close_rgx = mk_open_rgx(str),mk_close_rgx(str)
-      self
-    end
-    def parse_str str
-      raise "Regexp has not been set!" unless @open_rgx and @close_rgx
-      lines  = str.split(/[\r\n]+/i)
-      i,line,result,arra = 0, nil,[],[]
-      while i < lines.size
-        line = lines[i]
-        if mtch = line.match(@open_rgx)
-          while true
-            i += 1
-            line = lines[i]
-            break if line =~ @close_rgx
-            result << line
-            raise "End of note reached!" if i > lines.size
-          end
-          arra.push Stack.new(mtch,result)
-          result = []
-        end
-        i += 1
-      end
-      arra
-    end
-    def parse_str4tags str
-      arra = parse_str str
-      arra.each do |a| a.collect! { |s| mk_tag s }; a.compact! end
-      arra.reject! do |a| a and a.empty? end
-      arra
-    end
-  end
-end
-warn 'Blaz is already imported' if ($imported||={})['Blaz']
-($imported||={})['Blaz']=0x10002
-# ╒╕ ♥                                                                 Blaz ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module MACL
-  class Blaz
-    include Enumerable
-    def initialize &block
-      @commands = []
-      instance_exec &block if block_given?
-    end
-    def command_syms
-      commands.collect &:first
-    end
-    def each &block
-      @commands.each &block
-    end
-    attr_accessor :commands
-    def to_a
-      commands.to_a
-    end
-    def to_hash
-      sym,regex,func,params = [nil]*4
-      Hash[commands.collect do |(sym,regex,func,params)| [sym,[regex,func,params]] end]
-    end
-    def add_command sym,regex,params=[],&func
-      @commands.push [sym,regex,func,params]
-    end
-    def shift_command sym,regex,params=[],&func
-      @commands.unshift [sym,regex,func,params]
-    end
-    def enum_commands
-      sym,regex,func,params = [nil]*4
-      each do |(sym,regex,func,params)|
-        yield sym,regex,func,params
-      end
-    end
-    def match_command str
-      sym,regex,func,params = [nil]*4
-      enum_commands do |sym,regex,func,params|
-        regex = regex.call if regex.respond_to? :call
-        mtch = str.match regex
-        return if yield sym, mtch, func, params if mtch
-      end
-    end
-    def exec_command str
-      sym,mtch,func,params = [nil]*4
-      match_command str do |sym,mtch,func,params|
-        return func.call mtch
-      end
-    end
-  end
-end
 #// RGGSEx
 class Game ; end
 # ╒╕ ■                                                          RPG::Metric ╒╕
@@ -1143,7 +661,7 @@ end
 # ╒╕ ■                                                                Audio ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module Audio
-  @vol_rate = {
+  @@vol_rate = {
     default: 1.0,
     bgm: 1.0,
     bgs: 1.0,
@@ -1151,24 +669,33 @@ module Audio
     se: 1.0
   }
   def self.vol_rate sym
-    @vol_rate[sym]
+    @@vol_rate[sym]
+  end
+  def self.vol_rate_set sym,value
+    @@vol_rate[sym] = value
   end
 end
-module MACL::Mixin::AudioVolume
-  def audio_sym
-    :default
-  end
-  def audio_path
-    'Audio/%s'
-  end
-  def vol_rate
-    Audio.vol_rate audio_sym
-  end
-  def volume_abs
-    @volume
-  end
-  def volume
-    volume_abs * vol_rate
+# ╒╕ ■                                             MACL::Mixin::AudioVolume ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+module MACL
+  module Mixin
+    module AudioVolume
+      def audio_sym
+        :default
+      end
+      def audio_path
+        'Audio/%s'
+      end
+      def vol_rate
+        Audio.vol_rate audio_sym
+      end
+      def volume_abs
+        @volume
+      end
+      def volume
+        volume_abs * vol_rate
+      end
+    end
   end
 end
 # ╒╕ ♥                                                             RPG::BGM ╒╕
@@ -1367,8 +894,6 @@ end
 class Table
   include MACL::Mixin::TableExpansion  
 end
-warn 'Bitmap_Ex is already imported' if ($imported||={})['Bitmap_Ex']
-($imported||={})['Bitmap_Ex']=0x10002
 # ╒╕ ♥                                                               Bitmap ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Bitmap
@@ -1377,7 +902,7 @@ class Bitmap
     nodes = []
     nodes << [sx,sy]
     table = Table.new width,height 
-    nx=ny=x=y=0
+    nx = ny = x = y =0
     while nodes.size > 0
       x,y = nodes.shift
       next unless x and y
@@ -1392,7 +917,6 @@ class Bitmap
           nodes << [nx,ny] 
         end
       end
-      yield if block_given? 
     end
   end
   def recolor! f_color,t_color=nil 
@@ -1435,28 +959,48 @@ class Bitmap
       end
     end   
   end 
-  def draw_line point1,point2,color,weight
-    x1,y1 = point1.to_a
-    x2,y2 = point2.to_a
-    dx = x2 - x1
-    dy = y2 - y1
-    sx = x1 < x2 ? 1 : -1
-    sy = y1 < y2 ? 1 : -1
-    err= (dx-dy).to_f
-    e2 = 0
-    loop do
-      set_pixel_weighted x1,x2,color,weight 
-      break if x1 == x2 and y1 == y2 
-      e2 = 2*err
-      if e2 > -dy 
-        err = err - dy
-        x1  = x1 + sx  
+  def draw_line point1,point2,color,weight=1
+    weight = weight.max(1).to_i
+    x1,y1 = point1.to_a.map! &:to_i
+    x2,y2 = point2.to_a.map! &:to_i
+    # Bresenham's line algorithm
+    a = (y2 - y1).abs
+    b = (x2 - x1).abs
+    s = (a > b)
+    dx = (x2 < x1) ? -1 : 1
+    dy = (y2 < y1) ? -1 : 1
+    if s
+      c = a
+      a = b
+      b = c
+    end
+    df1 = ((b - a) << 1)
+    df2 = -(a << 1)
+    d = b - (a << 1)
+    set_pixel_weighted(x1, y1, color, weight) 
+    if(s)
+      while y1 != y2
+        y1 += dy
+        if d < 0
+          x1 += dx
+          d += df1
+        else
+          d += df2
+        end
+        set_pixel_weighted(x1, y1, color, weight) 
       end
-      if e2 < dx 
-        err = err + dx
-        y1  = y1 + sy 
+    else
+      while x1 != x2
+        x1 += dx
+        if d < 0
+          y1 += dy
+          d += df1
+        else
+          d += df2
+        end
+        set_pixel_weighted(x1, y1, color, weight) 
       end
-    end  
+    end 
   end
   def set_pixel_weighted x,y,color,weight=1
     even = ((weight % 2) == 0) ? 1 : 0
@@ -1471,6 +1015,7 @@ end
 # ╒╕ ♥                                                               Sprite ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Sprite
+  include MACL::Mixin::Surface
   def move x,y
     self.x,self.y=x,y
   end
@@ -1479,31 +1024,6 @@ class Sprite
   end
   def to_cube
     Cube.new x,y,z,width,height,0
-  end
-end
-# ╒╕ ♥                                                     RPG::Event::Page ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module RPG
-  class Event
-    class Page
-      COMMENT_CODES = [108,408]
-      def select_commands *codes
-        @list.select do |c| codes.include?(c.code) end
-      end
-      def comments
-        select_commands *COMMENT_CODES
-      end
-      def comments_a
-        comments.map(&:parameters).flatten
-      end
-    end
-  end
-end
-# ╒╕ ♥                                                          Game::Event ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-class Game_Event
-  def comments_a
-    @page.comments_a
   end
 end
 # ╒╕ ■                                                         SceneManager ╒╕
@@ -1530,7 +1050,7 @@ module MapManager
 end
 # ╒╕ ♥                                                            Game::Map ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class Game_Map
+class Game::Map
   def pre_load_map
   end
   def post_load_map
@@ -1554,7 +1074,7 @@ class Game_Map
 end
 # ╒╕ ♥                                                       Game::Switches ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class Game_Switches
+class Game::Switches
   def on? id 
     !!self[id]
   end
@@ -1565,6 +1085,22 @@ class Game_Switches
     self[id] = !self[id]
   end
 end
-MACL.run_init;
+MACL.init;
+($imported||={}).merge!(
+  'Archijust'      => 0x10001,
+  'Core-Audio'     => 0x10001,
+  'Core-Bitmap'    => 0x10003,
+  'Core-Color'     => 0x10002,
+  'Core-Font'      => 0x10001,
+  'Core-Graphics'  => 0x10001,
+  'Core-Rect'      => 0x10001,
+  'Core-Sprite'    => 0x10001,
+  'Core-Table'     => 0x10001,
+  'Core-Tone'      => 0x10001,
+  'MACL::Cube'     => 0x10002,
+  'Point'          => 0x10002,
+  'RGSS3-MACL'     => 0x1000B,
+  'TableExpansion' => 0x10001
+)
 # ┌┬────────────────────────────────────────────────────────────────────────┬┐
 # ╘╛ ● End of File ●                                                        ╘╛
