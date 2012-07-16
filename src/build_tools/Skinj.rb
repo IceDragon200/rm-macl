@@ -4,7 +4,7 @@
  ──────────────────────────────────────────────────────────────────────────────
   Date Created  : 05/12/2012
   Date Modified : 06/06/2012
-  Version       : 0x10000
+  Version       : 0x12000
   Created By    : IceDragon
  ──────────────────────────────────────────────────────────────────────────────
   Change Log:
@@ -42,8 +42,22 @@ require_relative '../StandardLibEx/Array_Ex.rb'
 require_relative '../StandardLibEx/String_Ex.rb'
 require_relative 'Skinj_commands.rb'
 $console_out = $stdout #relay
-($imported||={})['Skinj'] = 0x1000A
+($imported||={})['Skinj'] = 0x12000
 class Skinj
+  @@skinj_str = "<SKINJ line[%04s] indent[%02s]> %s"
+  def debug_puts *args,&block
+    str = args.collect{|obj|@@skinj_str % [@index,@skj_indent,obj.to_s]}
+    Skinj.skinj_puts *str,&block
+  end
+  def self.debug_puts *args,&block
+    str = args.collect{|obj|"<@skinj> %s" % obj.to_s}
+    skinj_puts *str,&block
+  end
+  def self.skinj_puts *args, &block
+    $console_out.puts *args,&block unless $console_out == $stdout
+    puts *args,&block
+  end
+  $walk_command = 0.0
   def collect_line
     res = (@index...@lines.size).collect do |i|
       @index = i
@@ -117,26 +131,6 @@ class Skinj
   def jump_to_rindex index
     jump_to_index @index + index
   end
-  @@skinj_str = "<"
-  @@skinj_str += "SKINJ"#.green
-  @@skinj_str += " line"#.light_green
-  @@skinj_str += "[%04s]"#.light_white
-  @@skinj_str += " indent"#.light_green
-  @@skinj_str += "[%02s]"#.light_white
-  @@skinj_str += "> %s"
-  def debug_puts *args,&block
-    str = args.collect{|obj|@@skinj_str % [@index,@skj_indent,obj.to_s]}
-    Skinj.skinj_puts *str,&block
-  end
-  def self.debug_puts *args,&block
-    str = args.collect{|obj|"<@skinj> %s" % obj.to_s}
-    skinj_puts *str,&block
-  end
-  def self.skinj_puts *args, &block
-    $console_out.puts *args,&block unless $console_out == $stdout
-    puts *args,&block
-  end
-  $walk_command = 0.0
   def self.skinj_str str,*args
     str = str.join "\n" if str.is_a? Array # // Reference protect
     skinj = new *args
