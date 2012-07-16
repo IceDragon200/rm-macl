@@ -1,0 +1,13 @@
+_build.bat
+algorithim/
+crashes/
+edos_lib/
+old_references/
+build_ins/macl_list_edos.rb
+build_ins/macl_list_edos_dev.rb
+build_ins/macl_list_edos_std.rb
+builds(ex)/edos_rgss3macl.rb
+builds(ex)/edos_rgss3macl_dev.rb
+builds(ex)/edos_rgss3macl_std.rb
+src/dllwrappers/
+lib/dllwrappers/

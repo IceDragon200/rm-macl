@@ -1,0 +1,28 @@
+# ╒╕ ■                                                          MACL::Mixin ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+module MACL
+  module Mixin
+# ╒╕ ■                                                    BaseItem_NoteScan ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
+    module BaseItem_NoteScan
+      private
+      def pre_note_scan
+        @note.each_line { |line| parse_note_line(line, :pre) }
+      end
+      def note_scan
+        @note.each_line { |line| parse_note_line(line, :mid) }
+      end
+      def post_note_scan
+        @note.each_line { |line| parse_note_line(line, :post) }
+      end
+      def parse_note_line line, section
+      end
+      public
+      def do_note_scan
+        pre_note_scan
+        note_scan
+        post_note_scan
+      end
+    end
+  end
+end
