@@ -39,10 +39,10 @@ module MACL::Mixin::Surface
     self.y = n - self.rheight
   end 
   def cx
-    x+width/2
+    x + width / 2
   end
   def cy
-    y+height/2
+    y + height / 2
   end
   def cx= x
     self.x = x - self.width / 2.0

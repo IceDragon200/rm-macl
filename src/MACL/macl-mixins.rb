@@ -23,5 +23,9 @@ module MACL
         post_note_scan
       end
     end
+    module TableExpansion 
+    end
+    module Surface
+    end
   end
 end

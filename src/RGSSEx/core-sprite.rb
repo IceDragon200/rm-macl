@@ -2,6 +2,14 @@
 #-inject gen_scr_imported 'Core-Sprite', '0x10001'
 #-end:
 #-inject gen_class_header 'Sprite'
+#-skip:
+module MACL
+  module Mixin
+    module Surface
+    end
+  end
+end
+#-end:
 class Sprite
   include MACL::Mixin::Surface
   def move x,y

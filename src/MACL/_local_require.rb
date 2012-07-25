@@ -6,4 +6,5 @@
   'macl-Parsers.rb'
 ].each do |s|
   require_relative s
-end
+  puts "Loaded: #{s}"
+end if $macl_load_requests.include? 'macl'

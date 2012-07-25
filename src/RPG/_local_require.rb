@@ -4,4 +4,4 @@
   'rpg-event-page',
 ].each do |s|
   require_relative s
-end
+end if $macl_load_requests.include? 'rpg'

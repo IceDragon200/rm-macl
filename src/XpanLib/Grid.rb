@@ -9,7 +9,7 @@ module MACL
     def self.qcell_r columns,rows,cell_width,cell_height,index=0
       new(columns,rows,cell_width,cell_height).cell_r index
     end
-    def initialize columns,rows,cell_width,cell_height
+    def initialize columns=1,rows=1,cell_width=1,cell_height=1
       @columns,@rows,@cell_width,@cell_height=columns,rows,cell_width,cell_height
     end
     attr_accessor :columns, :rows

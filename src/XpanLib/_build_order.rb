@@ -13,7 +13,7 @@
   #-include _XPANLBEX/Surface.rb
   #-include _XPANLBEX/Pallete.rb
   #-include _XPANLBEX/Morph.rb
-  #-include _XPANLBEX/Interpolate.rb
+  #-//include _XPANLBEX/Interpolate.rb
   #-include _XPANLBEX/Grid.rb
   #-include _XPANLBEX/Sequencer.rb  
   #-include _XPANLBEX/Tween.rb

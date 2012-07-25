@@ -14,16 +14,16 @@ module MACL
       def iterate
         x,y,z=[0]*3
         if zsize > 1
-          for x in 0...xsize
+          for z in 0...zsize
             for y in 0...ysize
-              for z in 0...zsize
+              for x in 0...xsize
                 yield self[x,y,z], x, y, z
               end
             end
           end
         elsif ysize > 1
-          for x in 0...xsize
-            for y in 0...ysize
+          for y in 0...ysize
+            for x in 0...xsize
               yield self[x,y], x, y
             end
           end  

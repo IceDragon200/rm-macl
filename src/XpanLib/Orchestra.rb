@@ -1,16 +1,17 @@
 #-apndmacro _imported_
-#-inject gen_scr_imported 'MACL::Orchestra', '0x10000'
+#-inject gen_scr_imported 'MACL::Orchestra', '0x10001'
 #-end:
 #-inject gen_class_header 'MACL::Orchestra'
 module MACL
   class Orchestra
+    attr_accessor :switchboard
     def initialize
       @switchboard = MACL::Switchboard.new 10
-      @funcs = {}
+      @handlex     = MACL::Handlex.new
     end
     def update
       @switchboard.get_state true do |id|
-        @funcs[id].call if @funcs.has_key?(id)
+        @handlex.call id 
       end
     end
   end

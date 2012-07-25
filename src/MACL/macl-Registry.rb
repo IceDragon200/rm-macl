@@ -2,8 +2,8 @@
 # // 05/15/2012
 # // Created By : IceDragon
 module MACL ; end
-require_relative '../StandardLibEx/Hash_Ex'
-require_relative 'Parsers'
+#require_relative '../StandardLibEx/Hash_Ex'
+#require_relative 'Parsers'
 module Registry
   class RegError_NoRegistry < Exception
     def message
