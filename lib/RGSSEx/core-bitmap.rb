@@ -52,17 +52,16 @@ class Bitmap
   end 
   def palletize 
     pallete = Set.new
-    iterate_do true do |x,y,color| pallete << color.to_a end
-    pallete.to_a.sort.collect do |a|Color.new *a end
+    iterate do |x,y,color| pallete << color.to_a end
+    pallete.to_a.sort.collect do |a| Color.new *a end
   end  
-  def iterate return_only=false 
-    x, y = nil, nil
-    for y in 0...height
-      for x in 0...width
-        yield x,y,get_pixel(x,y) 
-      end
-    end   
-  end 
+  #def iterate
+  #  for y in 0...height
+  #    for x in 0...width
+  #      yield x, y, get_pixel(x,y) 
+  #    end
+  #  end   
+  #end 
   def draw_line point1,point2,color,weight=1
     weight = weight.max(1).to_i
     x1,y1 = point1.to_a.map! &:to_i

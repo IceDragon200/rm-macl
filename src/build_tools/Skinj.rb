@@ -37,7 +37,6 @@ Encoding.default_external = "UTF-8" # // Cause dumb shit happens otherwise
 #require_relative '../RelayIO.rb'
 #relay = IO_Relay.new
 #relay.add_relay $stdout
-require 'Iconv'
 require_relative '../StandardLibEx/Array_Ex.rb'
 require_relative '../StandardLibEx/String_Ex.rb'
 require_relative 'Skinj_commands.rb'

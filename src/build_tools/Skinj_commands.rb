@@ -17,6 +17,7 @@ class Skinj
     REGEXP_ELSE       = /\Aelse\:/i
     REGEXP_END        = /\Aend(?:if|unless|\:)/i
     REGEXP_SKIP       = /\Askip(?:\s(\d+)|\:)/i
+    REGEXP_SKIPX      = /\Askip\:/i
     REGEXP_ASMSHOW    = /\Aasmshow\s(.+)/i
     REGEXP_WAIT       = /\Await\s(\d+.\d+)/i
     REGEXP_PRINT      = /\Aprint\s(.+)/i
@@ -27,7 +28,7 @@ class Skinj
     REGEXP_MACRO_STOP = /\A(?:stop|stp)(?:macro|mcr)?\s(\w+)/i
     REGEXP_MACRO_CLEAR= /\A(?:clear|clr)(?:macro|mcr)\s(\w+)/i
     REGEXP_TO_FILE    = /\A(?:build|save|assemble)\sto\s(?<filename>.+)/i
-    FOLD_OPN = [REGEXP_IF,REGEXP_SKIP,REGEXP_MACRO_REC]
+    FOLD_OPN = [REGEXP_IF,REGEXP_SKIPX,REGEXP_MACRO_REC]
     #/\A(?:(?:if|unless)(?:not|n)?def|skip|(?:rec|apnd|record|append)(?:macro|mcr))/i
   end
   include Constants

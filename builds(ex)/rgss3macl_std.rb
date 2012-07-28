@@ -83,6 +83,13 @@ end
 # ╒╕ ♥                                                              Numeric ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Numeric
+  def count n=1
+    i = self
+    loop do
+      i = i + n
+      yield i
+    end
+  end
   def negative?
     self < 0
   end

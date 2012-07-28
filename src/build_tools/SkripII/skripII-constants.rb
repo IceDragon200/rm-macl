@@ -11,4 +11,5 @@ module SkripII
       info: 'skinf'
     }
   end
+  include Constants
 end

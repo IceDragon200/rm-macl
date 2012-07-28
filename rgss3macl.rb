@@ -83,6 +83,13 @@ end
 # ╒╕ ♥                                                              Numeric ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Numeric
+  def count n=1
+    i = self
+    loop do
+      i = i + n
+      yield i
+    end
+  end
   def negative?
     self < 0
   end
@@ -397,6 +404,10 @@ module MACL
         post_note_scan
       end
     end
+    module TableExpansion 
+    end
+    module Surface
+    end
   end
 end
 # // Xpansion Library
@@ -443,16 +454,16 @@ module MACL
       def iterate
         x,y,z=[0]*3
         if zsize > 1
-          for x in 0...xsize
+          for z in 0...zsize
             for y in 0...ysize
-              for z in 0...zsize
+              for x in 0...xsize
                 yield self[x,y,z], x, y, z
               end
             end
           end
         elsif ysize > 1
-          for x in 0...xsize
-            for y in 0...ysize
+          for y in 0...ysize
+            for x in 0...xsize
               yield self[x,y], x, y
             end
           end  
@@ -947,17 +958,16 @@ class Bitmap
   end 
   def palletize 
     pallete = Set.new
-    iterate_do true do |x,y,color| pallete << color.to_a end
-    pallete.to_a.sort.collect do |a|Color.new *a end
+    iterate do |x,y,color| pallete << color.to_a end
+    pallete.to_a.sort.collect do |a| Color.new *a end
   end  
-  def iterate return_only=false 
-    x, y = nil, nil
-    for y in 0...height
-      for x in 0...width
-        yield x,y,get_pixel(x,y) 
-      end
-    end   
-  end 
+  #def iterate
+  #  for y in 0...height
+  #    for x in 0...width
+  #      yield x, y, get_pixel(x,y) 
+  #    end
+  #  end   
+  #end 
   def draw_line point1,point2,color,weight=1
     weight = weight.max(1).to_i
     x1,y1 = point1.to_a.map! &:to_i

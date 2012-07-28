@@ -2,8 +2,9 @@
   'Archijust.rb',
   'TableExpansion.rb',
   'Fifo.rb',
-  'Point_basic.rb',
+  'Point.rb',
   'Cube.rb',
+  'Drool.rb',
   'ArrayTable.rb',
   'Surface.rb',
   'Pallete.rb',
@@ -14,7 +15,8 @@
   'Tween.rb',
   'Task.rb',
   'Chitat.rb',
-  'Blaz.rb'
+  'Blaz.rb',
+  'Geometry.rb'
 ].each do |s|
   require_relative s
-end
+end if $macl_load_requests.include? 'xpan'

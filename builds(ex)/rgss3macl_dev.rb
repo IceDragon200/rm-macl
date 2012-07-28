@@ -83,6 +83,13 @@ end
 # ╒╕ ♥                                                              Numeric ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Numeric
+  def count n=1
+    i = self
+    loop do
+      i = i + n
+      yield i
+    end
+  end
   def negative?
     self < 0
   end
@@ -397,6 +404,10 @@ module MACL
         post_note_scan
       end
     end
+    module TableExpansion 
+    end
+    module Surface
+    end
   end
 end
 # ╒╕ ■                                                           MACL::Dyna ╒╕
@@ -603,16 +614,16 @@ module MACL
       def iterate
         x,y,z=[0]*3
         if zsize > 1
-          for x in 0...xsize
+          for z in 0...zsize
             for y in 0...ysize
-              for z in 0...zsize
+              for x in 0...xsize
                 yield self[x,y,z], x, y, z
               end
             end
           end
         elsif ysize > 1
-          for x in 0...xsize
-            for y in 0...ysize
+          for y in 0...ysize
+            for x in 0...xsize
               yield self[x,y], x, y
             end
           end  
@@ -860,10 +871,10 @@ module MACL::Mixin::Surface
     self.y = n - self.rheight
   end 
   def cx
-    x+width/2
+    x + width / 2
   end
   def cy
-    y+height/2
+    y + height / 2
   end
   def cx= x
     self.x = x - self.width / 2.0
@@ -1411,44 +1422,6 @@ module MACL::Morph
     end 
   end 
 end
-# DeCasteljau Algorithm 
-# Hamburg (Germany), the 19th September 1999. Written by Nils Pipenbrinck aka Submissive/Cubic & $eeN 
-# Bezier Curve
-# Ported to Ruby by IceDragon
-# ╒╕ ♥                                                    MACL::Interpolate ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
-module MACL
-  module Interpolate
-    # // Point dest, a, b; float t
-    def self.lerp dest,a,b,t 
-      dest.x = a.x + (b.x-a.x)*t
-      dest.y = a.y + (b.y-a.y)*t
-    end
-    # // Point dest, *points; float t 
-    def self.bezier dest,t,*points 
-      result_points = []; pnt = nil
-      wpoints = points
-      begin 
-        for i in 0...(wpoints.size-1)
-          pnt = Point[0,0] 
-          lerp pnt,wpoints[i],wpoints[i+1],t 
-          result_points << pnt
-        end
-        wpoints = result_points
-        result_points = []
-      end until wpoints.size <= 2 
-      raise "Not enought points" if wpoints.size != 2
-      lerp dest,wpoints[0],wpoints[1],t
-      #ab,bc,cd,abbc,bccd = Array.new(5) { Point[0,0] }
-      #lerp(ab, a,b,t)           # // point between a and b (green)
-      #lerp(bc, b,c,t)           # // point between b and c (green)
-      #lerp(cd, c,d,t)           # // point between c and d (green)
-      #lerp(abbc, ab,bc,t)       # // point between ab and bc (blue)
-      #lerp(bccd, bc,cd,t)       # // point between bc and cd (blue)
-      #lerp(dest, abbc,bccd,t)   # // point on the bezier-curve (black)
-    end
-  end
-end
 # ╒╕ ♥                                                           MACL::Grid ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MACL
@@ -1456,7 +1429,7 @@ module MACL
     def self.qcell_r columns,rows,cell_width,cell_height,index=0
       new(columns,rows,cell_width,cell_height).cell_r index
     end
-    def initialize columns,rows,cell_width,cell_height
+    def initialize columns=1,rows=1,cell_width=1,cell_height=1
       @columns,@rows,@cell_width,@cell_height=columns,rows,cell_width,cell_height
     end
     attr_accessor :columns, :rows
@@ -2664,17 +2637,16 @@ class Bitmap
   end 
   def palletize 
     pallete = Set.new
-    iterate_do true do |x,y,color| pallete << color.to_a end
-    pallete.to_a.sort.collect do |a|Color.new *a end
+    iterate do |x,y,color| pallete << color.to_a end
+    pallete.to_a.sort.collect do |a| Color.new *a end
   end  
-  def iterate return_only=false 
-    x, y = nil, nil
-    for y in 0...height
-      for x in 0...width
-        yield x,y,get_pixel(x,y) 
-      end
-    end   
-  end 
+  #def iterate
+  #  for y in 0...height
+  #    for x in 0...width
+  #      yield x, y, get_pixel(x,y) 
+  #    end
+  #  end   
+  #end 
   def draw_line point1,point2,color,weight=1
     weight = weight.max(1).to_i
     x1,y1 = point1.to_a.map! &:to_i
@@ -2803,33 +2775,32 @@ class Game_Switches
 end
 MACL.init;
 ($imported||={}).merge!(
-  'Archijust'         => 0x10001,
-  'Core-Audio'        => 0x10001,
-  'Core-Bitmap'       => 0x10003,
-  'Core-Color'        => 0x10002,
-  'Core-Font'         => 0x10001,
-  'Core-Graphics'     => 0x10001,
-  'Core-Rect'         => 0x10001,
-  'Core-Sprite'       => 0x10001,
-  'Core-Table'        => 0x10001,
-  'Core-Tone'         => 0x10001,
-  'MACL::ArrayTable'  => 0x10001,
-  'MACL::Chitat'      => 0x10001,
-  'MACL::Cube'        => 0x10002,
-  'MACL::Fifo'        => 0x10002,
-  'MACL::Grid'        => 0x10001,
-  'MACL::Interpolate' => 0x10000,
-  'MACL::Morph'       => 0x10000,
-  'MACL::Parser'      => 0x11000,
-  'MACL::Sequencer'   => 0x10002,
-  'MACL::Sequenex'    => 0x10001,
-  'Pallete'           => 0x10001,
-  'Point'             => 0x10002,
-  'RGSS3-MACL'        => 0x1000B,
-  'Surface'           => 0x11000,
-  'TableExpansion'    => 0x10001,
-  'Task'              => 0x10000,
-  'Tween'             => 0x11000
+  'Archijust'        => 0x10001,
+  'Core-Audio'       => 0x10001,
+  'Core-Bitmap'      => 0x10003,
+  'Core-Color'       => 0x10002,
+  'Core-Font'        => 0x10001,
+  'Core-Graphics'    => 0x10001,
+  'Core-Rect'        => 0x10001,
+  'Core-Sprite'      => 0x10001,
+  'Core-Table'       => 0x10001,
+  'Core-Tone'        => 0x10001,
+  'MACL::ArrayTable' => 0x10001,
+  'MACL::Chitat'     => 0x10001,
+  'MACL::Cube'       => 0x10002,
+  'MACL::Fifo'       => 0x10002,
+  'MACL::Grid'       => 0x10001,
+  'MACL::Morph'      => 0x10000,
+  'MACL::Parser'     => 0x11000,
+  'MACL::Sequencer'  => 0x10002,
+  'MACL::Sequenex'   => 0x10001,
+  'Pallete'          => 0x10001,
+  'Point'            => 0x10002,
+  'RGSS3-MACL'       => 0x1000B,
+  'Surface'          => 0x11000,
+  'TableExpansion'   => 0x10001,
+  'Task'             => 0x10000,
+  'Tween'            => 0x11000
 )
 # ┌┬────────────────────────────────────────────────────────────────────────┬┐
 # ╘╛ ● End of File ●                                                        ╘╛

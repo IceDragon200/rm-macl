@@ -13,4 +13,4 @@
   'core-rect.rb',
 ].each do |s|
   require_relative s
-end
+end if $macl_load_requests.include? 'core'
