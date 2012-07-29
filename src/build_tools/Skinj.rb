@@ -4,46 +4,32 @@
  ──────────────────────────────────────────────────────────────────────────────
   Date Created  : 05/12/2012
   Date Modified : 06/06/2012
-  Version       : 0x12000
+  Version       : 0x13000
   Created By    : IceDragon
- ──────────────────────────────────────────────────────────────────────────────
-  Change Log:
-    05/17/2012
-      Added inject
-    06/04/2012
-      Added support for nested conditions
-      Added new command(s):
-        wait <float>
-          Puts skinj to sleep for <float> seconds
-        print <str>
-          Tells Skinj to print a message to the console
-        label <str>
-          Doesnt operate
-        jumpto <str>
-          Jumps to a given 'label' <str>
-        asmshow <str>
-    06/04/2012
-      Added new command(s):
-        indent +/-<int>
-        recmacro <str>
-        clrmacro <str>
-        stopmacro <str>
-        macro <str>
  ──────────────────────────────────────────────────────────────────────────────
 =end
 Encoding.default_external = "UTF-8" # // Cause dumb shit happens otherwise
-# ╒╕ ♥                                                                Skinj ╒╕
-# └┴────────────────────────────────────────────────────────────────────────┴┘
+begin
+  require 'colorize' 
+rescue LoadError
+  class String
+    def colorize sym
+      self
+    end
+  end  
+end  
+require_relative '../standardlibex/Array_Ex.rb'
+require_relative '../standardlibex/String_Ex.rb'
+require_relative 'Skinj_commands.rb'
+$console_out = $stdout #relay
 #require_relative '../RelayIO.rb'
 #relay = IO_Relay.new
 #relay.add_relay $stdout
-require_relative '../StandardLibEx/Array_Ex.rb'
-require_relative '../StandardLibEx/String_Ex.rb'
-require_relative 'Skinj_commands.rb'
-$console_out = $stdout #relay
 ($imported||={})['Skinj'] = 0x12000
+# ╒╕ ♥                                                                Skinj ╒╕
+# └┴────────────────────────────────────────────────────────────────────────┴┘
 class Skinj
-  @@skinj_str = "<SKINJ line[%04s] indent[%02s]> %s"
+  @@skinj_str = "<#{"SKINJ".colorize(:light_blue)} [#{"%04s".colorize(:light_red)}:#{"%02s".colorize(:light_green)}]> %s"
   def debug_puts *args,&block
     str = args.collect{|obj|@@skinj_str % [@index,@skj_indent,obj.to_s]}
     Skinj.skinj_puts *str,&block
@@ -133,13 +119,12 @@ class Skinj
   def self.skinj_str str,*args
     str = str.join "\n" if str.is_a? Array # // Reference protect
     skinj = new *args
-    ic = Iconv.new 'UTF-8//IGNORE', 'UTF-8'
-    skinj.lines = ic.iconv(str).split(/[\r\n]/)
+    skinj.lines = str.force_encoding('UTF-8').split(/[\r\n]/)
     skinj.index, skinj.line = 0, nil
     loop do
       skinj.line = skinj.lines[skinj.index]
       break unless skinj.line
-      skinj.line = ' ' if skinj.line.empty?
+      #skinj.line = ' ' if skinj.line.empty?
       skinj.index += 1
       if skinj.line =~ REGEXP_ASMB_COM
         i, n = ($1 || 0).to_i, $2

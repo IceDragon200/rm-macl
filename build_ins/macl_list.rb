@@ -8,7 +8,8 @@
 #-define SRCPATH#=DIRGTWD/src
 #-define _HEADER#=DIRGTWD/headers
 #-define _FOOTER#=DIRGTWD/footers
-#-define _STDLBEX#=SRCPATH/StandardLibEx
+#-define _STDLBEX#=SRCPATH/standardlibex
+#-define _MACLPATH#=SRCPATH/macl
 #-define _RGSSExPTH#=SRCPATH/rgssex
 #-define _RPGPTH#=SRCPATH/rpg
 #-define _GMCLSPTH#=SRCPATH/gm-classes
@@ -17,7 +18,7 @@
   #-// xpanlibex?
   #-define XPANLIB:
   #-ifdef XPANLIB
-    #-define _XPANLBEX#=SRCPATH/XpanLib
+    #-define _XPANLBEX#=SRCPATH/xpanlib
   #-end:
 #-end:
 #-// Include Headers
