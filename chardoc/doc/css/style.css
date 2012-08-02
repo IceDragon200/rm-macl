@@ -1,0 +1,129 @@
+/*
+  css/style.css
+
+  RGSS3-MACL Stylesheet by IceDragon
+*/
+@charset "utf-8";
+
+body 
+{
+  background-color: #161616;
+  font-family: 'Gudea', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  /*font-size: 13px;*/
+  font-size: 85%;/*24px;*/
+  text-transform: none;
+  text-decoration: none;
+  letter-spacing: 0em;
+  word-spacing: 0em;
+  line-height: 1.4;
+  color: #888888;
+  margin: 0px;
+  margin-left: 0px;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  vertical-align:top;
+  text-align: left;
+}
+
+p { 
+  margin-top:0 ;
+  margin-bottom:12;
+}
+
+a:link    {color:#B4CDCD;}
+a:visited {color:#a44134;}
+a:hover   {color: snow;}
+a:active  {color:#a44134;}
+
+.pageHeader 
+{
+  text-align: center;
+  border: thin solid #3d3d3d;
+  border-radius: 4px;
+  margin-left: 12%;
+  margin-right: 12%;
+  margin-top: 5%;
+  margin-bottom: 5%;  
+}
+
+.pageFooter
+{
+  text-align: center;
+  border: thin solid #3d3d3d;
+  border-radius: 4px;
+  margin: 4%;  
+}
+
+.pageBody 
+{
+  border: thin solid #3d3d3d;
+  border-radius: 4px;
+  margin-left: 12%;
+  margin-right: 12%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  /*background-color: ;*/
+}
+
+.pageContents
+{
+  margin: 1%;
+  background-color: #232323;
+  border: thin solid #3d3d3d;
+  border-radius: 4px;
+}
+
+.pageSubHeader
+{
+  font-size: 24px; 
+  margin-bottom: 0px;
+  margin-left: 2%;
+}
+
+.klassBody 
+{
+  background-color: #232323;
+  border: thin solid #3d3d3d;
+  border-radius: 4px;
+  margin: 1%;
+  padding: 4px;
+}
+
+.klassLink
+{
+  margin: 1%;
+  margin-right: 80%;
+  text-align: center;
+  font-size: 20px;
+  font-style: oblique;  
+  /*background-color: #71717A;*/
+  border: 1px solid #3D3D3D;
+  border-radius: 4px;
+  padding: 1px;
+}
+
+.klassIcon
+{
+  margin: 4px;
+  /*padding: 1%;*/
+  font-size: 32px;
+}
+
+.klassName 
+{
+
+}
+
+.methodBody {
+  background-color: #2C2C2C;
+  border: thin solid #3D3D3D; 
+  border-radius: 4px;
+  margin: 1%;
+}
+
+.methodName {
+  margin: 1%;
+}
