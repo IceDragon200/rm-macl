@@ -2,10 +2,12 @@
 # // 05/01/2012
 # // Created by IceDragon
 Encoding.default_external = "UTF-8"
+
 begin
   $LOAD_PATH << Dir.getwd
   require_relative '../StandardLibEx/Kernel_Ex.rb'
   require 'Zlib'
+  
   # // Order to my madness
   filename = ARGV[0]||"#{Dir.getwd.gsub("\\",'/')}/Scripts.rvdata"
   folder_name = ARGV[1]||File.basename(filename,File.extname(filename))

@@ -4,9 +4,13 @@
 =end
 require_relative 'header_gen'
 require_relative 'Skinj'
+
 class Skinj
+
   include Skinj_Gen
+  
 end
+
 begin
   in_filename, = ARGV
   in_filename = File.expand_path in_filename

@@ -1,3 +1,4 @@
+# //
 class Skinj
   module Constants
     # // Base

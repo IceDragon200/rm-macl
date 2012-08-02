@@ -1,10 +1,13 @@
 Encoding.default_external = "UTF-8"
+
 @default_def = {
   "ASMxROOT" => Dir.getwd,
 }
+
 @switches_def = {
   "INCUR" => false
 }
+
 def asm_folder source,target
   Dir.mkdir target unless File.exist? target
   files = Dir.entries("#{source}") - [".",".."]
@@ -39,6 +42,7 @@ def asm_folder source,target
 rescue Exception => ex
   Skinj.debug_puts ex.message
 end
+
 begin
   require_relative "header_gen"
   require 'C:/Lib/Git/RGSS3-MACL/src/build_tools/Skinj'

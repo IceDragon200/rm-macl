@@ -1,4 +1,4 @@
-path = File.dirname(__FILE__)+'/src/**/*_local_require.rb'
+path = File.dirname(__FILE__)+'/src/**/_local_require.rb'
 $macl_load_requests ||= ['std', 'macl', 'core', 'xpan', 'vxa-mod', 'vxa-cls', 'rpg', 'rgssx2']
 Dir[path].sort.each do |s|
   require_relative '%s' % s
