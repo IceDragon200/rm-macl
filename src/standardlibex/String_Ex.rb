@@ -5,42 +5,23 @@ class String
     dup.indent! *args
   end
 
-  def indent! n=0,s=" "
-    space =s * n 
+  def indent! n, spacer=" "
+    space = spacer * n 
     self.gsub!({ "\n" => "\n" + space, "\r" => "\r" + space })
-    self.replace space + self
+    self.replace(space + self)
+    self
   end
 
-  def word_wrap chars=80
-    char_count = 0
-    arra = []
-    result_str = ''
-    self.scan(/(\S+)/i).each do |str|
-      if char_count + str.size < str.chars
-        char_count += str.size
-        arra << str
-      else
-        result_str += arra.join(' ')+"\n"
-        char_count,arra = 0,[]
-      end
-    end
+  def word_wrap line_width=80
+    text = self
+    return text if line_width <= 0
+    text.split("\n").collect do |line|
+      line.length > line_width ? line.gsub(/(.{1,#{line_width}})(\s+|$)/, "\\1\n").strip : line
+    end * "\n"
   end
 
   def word_wrap! chars=80
     self.replace word_wrap(chars)
-  end
-
-  def character_wrap characters=459
-    text = self
-    return text if characters <= 0
-    white_space = " "
-    result,r = [],""
-    text.split(' ').each do |word|
-      (result << r;r = "") if r.size + word.size > characters
-      r << word+white_space
-    end
-    result << r unless r.empty?
-    result
   end
 
   def as_bool

@@ -13,11 +13,197 @@
     <div class="pageHeader">
       <h1><img src="icons/icon_gear.png" align="center">Numeric</h1>
     </div>         
+
+    <!-- Constants -->
+    <div class="pageBody">
+      <h2><img src="icons/icon_book-brown.png" align="center">Constants</h2>
+      <a name="Consts"></a>
+
+      <div class="methodBody">     
+        <div class="methodParameters"><h6><span class="methodParamType">Hash[Integer, String] <span class="methodArg">ROMAN</span></span></h6></div>
+        <p>Contains strings <span class="colorCore">for</span> converting to Roman Numerals</p>
+      </div>
+
+    </div>
+
+    <!-- Instance Methods -->
+    <div class="pageBody">
+      <h2><img src="icons/icon_disc.png" align="center">Instance Methods</h2>
+
+      <a name="clamp"></a>
+      <div class="methodBody">
+        <h3>clamp</h3>
+
+        <p class="methodName">clamp<span class="colorBrak">(<span class="methodArg">min, max</span>)</span></p>
+
+        <p><span class="colorCore">if</span> <span class="colorCore">self</span> is greater than <span class="colorArg">max</span>, <span class="colorCore">return</span> <span class="colorArg">max</span>, <span class="colorCore">if</span> <span class="colorCore">self</span> is less than <span class="colorArg">min</span>, <span class="colorCore">return</span> <span class="colorArg">min</span>, else <span class="colorCore">return</span> <span class="colorCore">self</span></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Numeric <span class="methodArg">min</span></span>,
+
+            <span class="methodParamType">Numeric <span class="methodArg">max</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Numeric</span></h6>
+        </div>
+
+      </div>
+
+      <a name="count"></a>
+      <div class="methodBody">
+        <h3>count</h3>
+
+        <p class="methodName">count<span class="colorBrak">(<span class="methodArg">n</span>) { <span class="methodArg">|n| do_with_n</span> }</span></p>
+
+        <p>Add <span class="colorArg">n</span> to <span class="colorCore">self</span> <span class="colorFunction">each</span> iteration, and executes the <span class="colorCore">block</span> with the value as the arg. Terminate the <span class="colorCore">block</span> using <span class="colorCore">break</span>, the value <span class="colorCore">return</span> is the last one produced</p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Integer <span class="methodArg">n</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Integer</span></h6>
+        </div>
+
+      </div>
+
+      <a name="max"></a>
+      <div class="methodBody">
+        <h3>max</h3>
+
+        <p class="methodName">max<span class="colorBrak">(<span class="methodArg">n</span>)</span></p>
+
+        <p><span class="colorCore">return</span> the larger value of <span class="colorCore">self</span> and <span class="colorArg">n</span></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Numeric <span class="methodArg">n</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Numeric</span></h6>
+        </div>
+
+      </div>
+
+      <a name="min"></a>
+      <div class="methodBody">
+        <h3>min</h3>
+
+        <p class="methodName">min<span class="colorBrak">(<span class="methodArg">n</span>)</span></p>
+
+        <p><span class="colorCore">return</span> the smaller value of <span class="colorCore">self</span> and <span class="colorArg">n</span></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Numeric <span class="methodArg">n</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Numeric</span></h6>
+        </div>
+
+      </div>
+
+      <a name="negative?"></a>
+      <div class="methodBody">
+        <h3>negative?</h3>
+
+        <p class="methodName">negative?<span class="colorBrak">(<span class="methodArg"></span>)</span></p>
+
+        <p><span class="colorCore">return</span> <span class="colorBoolean">true</span> <span class="colorCore">if</span> <span class="colorCore">self</span> is less than <span class="colorNumeric">0</span>, <span class="colorCore">return</span> <span class="colorBoolean">false</span> otherwise</p>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Boolean</span></h6>
+        </div>
+
+      </div>
+
+      <a name="positive?"></a>
+      <div class="methodBody">
+        <h3>positive?</h3>
+
+        <p class="methodName">positive?<span class="colorBrak">(<span class="methodArg"></span>)</span></p>
+
+        <p><span class="colorCore">return</span> <span class="colorBoolean">true</span> <span class="colorCore">if</span> <span class="colorCore">self</span> is greater than <span class="colorNumeric">0</span>, <span class="colorCore">return</span> <span class="colorBoolean">false</span> otherwise</p>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Boolean</span></h6>
+        </div>
+
+      </div>
+
+      <a name="to_roman"></a>
+      <div class="methodBody">
+        <h3>to_roman</h3>
+
+        <p class="methodName">to_roman<span class="colorBrak">(<span class="methodArg"></span>)</span></p>
+
+        <p>Converts <span class="colorCore">self</span> to Roman Numeral <span class="colorKlass">String</span></p>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">String</span></h6>
+        </div>
+
+      </div>
+
+      <a name="unary"></a>
+      <div class="methodBody">
+        <h3>unary</h3>
+
+        <p class="methodName">unary<span class="colorBrak">(<span class="methodArg"></span>)</span></p>
+
+        <p>Compares <span class="colorCore">self</span> using <span class="colorOperator"><=></span></p>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Integer(-1, 0, 1)</span></h6>
+        </div>
+
+      </div>
+
+      <a name="unary_inv"></a>
+      <div class="methodBody">
+        <h3>unary_inv</h3>
+
+        <p class="methodName">unary_inv<span class="colorBrak">(<span class="methodArg"></span>)</span></p>
+
+        <p>Compares <span class="colorCore">self</span> using <span class="colorOperator"><=></span> and <span class="colorCore">return</span> the inverse of the result</p>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Integer(-1, 0, 1)</span></h6>
+        </div>
+
+      </div>
+
+    </div>
   
   </body>
   <foot>
     <div class="pageFooter">
-      <p>Written by IceDragon200</p>
+      <p>Generated by Chardoc, Written by IceDragon200</p>
     </div>
   </foot>  
 </html>

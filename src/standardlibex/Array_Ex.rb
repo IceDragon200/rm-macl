@@ -2,14 +2,7 @@
 class Array
 
   def offset obj, reverse=false
-    if reverse
-      res = self.pop
-      self.unshift obj
-    else
-      res = self.shift
-      self.push obj
-    end
-    res
+    reverse ? (res = self.pop; self.unshift(obj)) : (res = self.shift; self.push(obj)); res
   end
 
   def pick!

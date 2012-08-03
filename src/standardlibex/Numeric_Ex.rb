@@ -4,9 +4,10 @@ class Numeric
   def count n=1
     i = self
     loop do
-      i = i + n
       yield i
+      i = i + n
     end
+    i
   end
 
   def negative?
@@ -25,7 +26,7 @@ class Numeric
     n > self ? n : self
   end unless method_defined? :max
 
-  def clamp min,max
+  def clamp min, max
     self < min ? min : (self > max ? max : self)
   end unless method_defined? :clamp
 
@@ -34,7 +35,7 @@ class Numeric
   end unless method_defined? :unary
 
   def unary_inv
-    -pole
+    -(self <=> 0)
   end unless method_defined? :unary_inv
 
   # // ROMAN and to_roman by Zetu
@@ -53,15 +54,15 @@ class Numeric
       case a
       when 0; next
       when 1, 2, 3
-        base += ROMAN[key]*a
+        base += ROMAN[key] * a
       when 4
         base += ROMAN[key]
-        base += ROMAN[key*5]
+        base += ROMAN[key * 5]
       when 5, 6, 7, 8
-        base += ROMAN[key*5]
-        base += ROMAN[key]*a-5
+        base += ROMAN[key * 5]
+        base += ROMAN[key] * a - 5
       when 9
-        base += ROMAN[key*10]
+        base += ROMAN[key * 10]
         base += ROMAN[key]
       end
       value -= a * key

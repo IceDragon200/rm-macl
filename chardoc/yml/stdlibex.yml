@@ -9,49 +9,49 @@ Object:
       -
         params: 
         return: Boolean
-        des: "Converts <c:core>self</c> to a <c:cls>Boolean</c> using <c:op>!!</c>" 
+        des: "Convert self to a Boolean using !!" 
     deep_clone:
       -
         params: 
         return: Object
-        des: "Makes a full clone of <c:core>self</c> using <c:mod>Marshal</c>"
+        des: "Makes a full clone of self using Marshal"
     if_eql?:
       -
         params: 
           - obj: Object
           - swap: Object
         return: Object
-        des: "Compares <c:core>self</c> with <c:arg>obj</c>, if evaluated to <c:bool>true</c>, then <c:arg>swap</c> is returned"
+        des: "Compares self with obj, if evaluated to true, then swap is return"
       -
         params: 
           - obj: Object
         block: swap  
         return: Object
-        des: "Compares <c:core>self</c> with <c:arg>obj</c>, if evaluated to <c:bool>true</c>, then the block is executed and returns the result"      
+        des: "Compares self with obj, if evaluated to true, then the block is executed and return the result"      
     if_neql?:
       -
         params: 
           - obj: Object
           - swap: Object
         return: Object
-        des: "Compares <c:core>self</c> with <c:arg>ob</c>j, if evaluated to <c:bool>false</c>, then <c:arg>swap</c> is returned"
+        des: "Compares self with obj, if evaluated to false, then return swap"
       -
         params: 
           - obj: Object
         block: swap  
         return: Object
-        des: "Compares <c:core>self</c> with <c:arg>obj</c>, if evaluated to <c:bool>false</c>, then the block is executed and returns the result"      
+        des: "Compares self with obj, if evaluated to false, then the block is executed and return the result"      
     if_nil?:
       -
         params: 
           - swap: Object
         return: Object
-        des: "Calls <c:func>.nil?</c> on <c:core>self</c>, if evaluated to <c:bool>true</c>, then <c:arg>swap</c> is returned"
+        des: "Calls #nil? on self, if evaluated to true, then return swap"
       -
         params: 
         block: swap  
         return: Object
-        des: "Calls <c:func>.nil?</c> on <c:core>self</c>, if evaluated to <c:bool>true</c>, then the block is executed and returns the result" 
+        des: "Calls #nil? on self, if evaluated to true, then the block is executed and return the result" 
 Module:
   type: class
   source: Module_Ex.rb
@@ -64,20 +64,69 @@ Module:
         params: 
           - "*syms": "Symbol[]"
         return: Boolean
-        des: "<c:core>alias</c>es the method from <c:arg>sym</c> as <c:func>pre_memoize_*</c>, when the method is called its value is stored in <c:var>@memoized_*</c>, if the variable is already set, then its value is returned"
+        des: "alias the method from sym as pre_memoize_*, when the method is called its value is stored in @memoized_*, if the variable is already set, then its value is return"
     memoize_as:
       - 
         params: 
-          - hash: "Hash<Symbol, Object>"
+          - hash: "Hash[Symbol, Object]"
         return: Boolean
-        des: "Iterates using <c:func>each_pair</c>, <c:core>define_method</c> from <c:cls>Symbol</c>, that will return the <c:arg>value</c> from the key pair"
+        des: "Iterates using each_pair, define_method from Symbol, that will return the value from the key pair"
 Numeric:
   type: class
   source: Numeric_Ex.rb
   consts: 
+    ROMAN: 
+      type: "Hash[Integer, String]"
+      des: Contains strings for converting to Roman Numerals 
   iattrs:
   cfuncs:
   ifuncs:
+    count:
+      - 
+        params: 
+          - n: Integer
+        block: "|n| do_with_n"
+        return: Integer
+        des: "Add n to self each iteration, and executes the block with the value as the arg. Terminate the block using break, the value return is the last one produced"
+    positive?:
+      - 
+        return: Boolean
+        des: "return true if self is greater than 0, return false otherwise"
+    negative?:
+      - 
+        return: Boolean
+        des: "return true if self is less than 0, return false otherwise"
+    to_roman:
+      - 
+        return: "String"
+        des: "Converts self to Roman Numeral String"
+    unary:
+      - 
+        return: "Integer(-1, 0, 1)"
+        des: "Compares self using <=>"
+    unary_inv:
+      - 
+        return: "Integer(-1, 0, 1)"
+        des: "Compares self using <=> and return the inverse of the result"
+    clamp:
+      - 
+        params: 
+          - min: Numeric 
+          - max: Numeric 
+        return: Numeric
+        des: "if self is greater than max, return max, if self is less than min, return min, else return self"    
+    max:
+      - 
+        params: 
+          - n: Numeric 
+        return: Numeric
+        des: "return the larger value of self and n"
+    min:
+      - 
+        params: 
+          - n: Numeric 
+        return: Numeric
+        des: "return the smaller value of self and n"
 String:
   type: class
   source: String_Ex.rb
@@ -85,6 +134,47 @@ String:
   iattrs:
   cfuncs:
   ifuncs:
+    as_bool:
+      - 
+        return: Boolean
+        des: "Reads self as a word, converts to a Boolean based of word, require MACL::Parsers"
+    indent:
+      - 
+        params: 
+          - n: Integer
+          - spacer: String
+        return: String
+        des: "Refer to indent!"
+    indent!:
+      - 
+        params: 
+          - n: Integer
+      - 
+        params: 
+          - n: Integer
+          - spacer: String
+        return: String
+        des: "Places the spacer n times in front of the string, default spacer is 1 whitespace"
+    word_wrap:
+      -
+      - 
+        params: 
+          - line_width: Integer
+        return: String
+        des: "Refer to word_wrap!"
+    word_wrap!:   
+      -    
+      - 
+        params: 
+          - line_width: Integer
+        return: String
+        des: "Splits the string by words, and rewraps them to fit into a line_width column, new lines will be automatically created to hold the words, line_width is 80 by default"
+    character_wrap:
+      - 
+        params: 
+          - characters: Integer
+        return: String
+        des: "" 
 Array:
   type: class
   source: Array_Ex.rb
@@ -92,6 +182,16 @@ Array:
   iattrs:
   cfuncs:
   ifuncs:
+    offset:
+      -
+        params:
+          - obj: Object
+      -
+        params:
+          - obj: Object
+          - reverse: Boolean
+        returns: self
+        des:
 Hash:
   type: class
   source: Hash_Ex.rb
