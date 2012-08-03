@@ -1,4 +1,6 @@
 # // Chardoc by IceDragon
+require 'yaml'
+
 module Chardoc
 
   def prepare
@@ -9,5 +11,5 @@ module Chardoc
 
   def generate
   end
-
+  
 end

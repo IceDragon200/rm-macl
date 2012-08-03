@@ -6,7 +6,8 @@ class Object
   end
 
   def if_eql? obj, swap=nil
-    return self.eql?(obj) ? (block_given? ? yield : swap) : self
+    return self unless self == obj
+    return block_given? ? yield : swap
   end unless method_defined? :if_eql? 
 
   def if_neql? obj, swap=nil

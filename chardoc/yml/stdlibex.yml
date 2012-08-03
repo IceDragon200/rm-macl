@@ -1,0 +1,84 @@
+Object:
+  type: class
+  cfuncs:
+  ifuncs:
+    to_bool:
+      -
+        params: 
+        return: Boolean
+        des: "Converts the object to a <c:cls>Boolean</c> using <c:op>!!</c>" 
+    deep_clone:
+      -
+        params: 
+        return: Object
+        des: "Makes a full clone of the object using <c:mod>Marshal</c>"
+    if_eql?:
+      -
+        params: 
+          - obj: Object
+          - swap: Object
+        return: Object
+        des: "Compares the Object with obj, if evaluated to <c:bool>true</c>, then swap is returned"
+      -
+        params: 
+          - obj: Object
+        block: swap  
+        return: Object
+        des: "Compares the Object with obj, if evaluated to <c:bool>true</c>, then the block is executed and returns the result"      
+    if_neql?:
+      -
+        params: 
+          - obj: Object
+          - swap: Object
+        return: Object
+        des: "Compares the Object with obj, if evaluated to <c:bool>false</c>, then swap is returned"
+      -
+        params: 
+          - obj: Object
+        block: swap  
+        return: Object
+        des: "Compares the Object with obj, if evaluated to <c:bool>false</c>, then the block is executed and returns the result"      
+    if_nil?:
+      -
+        params: 
+          - swap: Object
+        return: Object
+        des: "Calls <c:func>.nil?</c> on the object, if evaluated to <c:bool>true</c>, then swap is returned"
+      -
+        params: 
+        block: swap  
+        return: Object
+        des: "Calls .nil? on the object, if evaluated to <c:bool>true</c>, then the block is executed and returns the result" 
+Module:
+  type: class
+  cfuncs:
+  ifuncs:
+Numeric:
+  type: class
+  cfuncs:
+  ifuncs:
+String:
+  type: class
+  cfuncs:
+  ifuncs:
+Array:
+  type: class
+  cfuncs:
+  ifuncs:
+Hash:
+  type: class
+  cfuncs:
+  ifuncs:
+MatchData:
+  type: class
+  cfuncs:
+  ifuncs:
+Kernel:
+  type: module
+  cfuncs:
+  ifuncs:
+Enumerable:
+  type: module
+  cfuncs:
+  ifuncs:
+# Footer
