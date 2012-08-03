@@ -1,14 +1,19 @@
 ﻿#-inject gen_class_header 'Array'
 class Array
 
-  def offset obj
-    res = self.shift
-    self.push obj
+  def offset obj, reverse=false
+    if reverse
+      res = self.pop
+      self.unshift obj
+    else
+      res = self.shift
+      self.push obj
+    end
     res
   end
 
   def pick!
-    self.delete n = pick;n
+    self.delete n = pick; n
   end unless method_defined? :pick! 
 
   def pad *args,&block
@@ -50,10 +55,10 @@ class Array
   def rotate! n=1
     return self if empty?
     n %= size
-    concat(slice!(0,n))
+    concat(slice!(0, n))
   end unless method_defined? :rotate!
 
-  def remove_this obj,n=1
+  def remove_nth obj, n=1
     i = 0
     n.times { (i = self.index(obj)) ? self.delete_at(i) : break }; self
   end
