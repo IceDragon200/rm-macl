@@ -1,5 +1,6 @@
 Object:
   type: class
+  des: "Parent class for every Object"
   source: Object_Ex.rb
   consts: 
   iattrs:
@@ -54,6 +55,7 @@ Object:
         des: "Calls #nil? on self, if evaluated to true, then the block is executed and return the result" 
 Module:
   type: class
+  des: ""
   source: Module_Ex.rb
   consts: 
   iattrs:
@@ -144,7 +146,7 @@ String:
           - n: Integer
           - spacer: String
         return: String
-        des: "Refer to indent!"
+        des: "refer to #indent!"
     indent!:
       - 
         params: 
@@ -161,7 +163,7 @@ String:
         params: 
           - line_width: Integer
         return: String
-        des: "Refer to word_wrap!"
+        des: "refer to #word_wrap!"
     word_wrap!:   
       -    
       - 
@@ -190,8 +192,76 @@ Array:
         params:
           - obj: Object
           - reverse: Boolean
-        returns: self
-        des:
+        return: self
+        des: "Adds the obj to the end of self, pull and return the first element, if reverse, adds the element to the start of self, pull and return the last element"
+    pick!:    
+      -
+        return: Object
+        des: "Randomly chooses an element in self, deletes and return, require Enumerable_Ex"
+    pad:
+      - 
+        params:
+          - newsize: Integer    
+      - 
+        params:    
+          - newsize: Integer   
+        block: obj  
+      - 
+        params:    
+          - newsize: Integer   
+          - obj: Object  
+        return: Array  
+        des: "refer to #pad!"
+    pad!:    
+      - 
+        params:
+          - newsize: Integer    
+      - 
+        params:    
+          - newsize: Integer   
+        block: obj  
+      - 
+        params:    
+          - newsize: Integer   
+          - obj: Object  
+        return: self  
+        des: "Resizes self to newsize, if the size is less than newsize then obj is pushed until the size is equal to newsize, else if the size is greater than newsize, objects are popped from self until the size is equal, by default obj is nil"
+    uniq_arrays:    
+      -
+        params:
+          - groups: "Array[Array]"
+        return: "Array[Array]"
+        des: "refer to uniq_arrays!"
+    uniq_arrays!:    
+      -
+        params:
+          - groups: "Array[Array]"
+        return: self 
+        des: "Creates uniq arrays from groups, the result are arrays that have uniq elements, no other array in the result will have the same elements"
+    rotate:
+      -
+      - 
+        params:
+          - n: Integer
+        return: Array  
+        des: "refer to rotate!"      
+    rotate!:
+      -
+      - 
+        params:
+          - n: Integer
+        return: self  
+        des: "offsets the array by n, wrapping it around, by default n is 1"          
+    remove_n:    
+      -
+        params:
+          - obj: Object
+      -
+        params:
+          - obj: Object
+          - n: Integer 
+        return: self
+        des: "Removes obj from self n times, by default n is 1"    
 Hash:
   type: class
   source: Hash_Ex.rb
@@ -199,6 +269,47 @@ Hash:
   iattrs:
   cfuncs:
   ifuncs:
+    replace_key:
+      - 
+        params: 
+          - hash: Hash
+      - 
+        block: "|key| new_key"
+        return: Hash
+        des: "refer to #replace_key!"  
+    replace_key!:
+      - 
+        params: 
+          - hash: Hash
+      - 
+        block: "|key| new_key"
+        return: self  
+        des: "Replace all matching keys in self from <c:arg>hash</c>"
+    remap:
+      - 
+        block: "|key, value| [new_key, new_value]"
+        return: self  
+        des: "refer to #remap!"
+        
+    remap!:
+      - 
+        block: "|key, value| [new_key, new_value]"
+        return: self  
+        des: "Replace all <c:arg>keys</c> and <c:arg>values</c> in self"
+    get_values:
+      - 
+        params:
+          - keys: "Array[Object]"
+        return: "Array[Object]"
+        des: "return an Array of values from keys"   
+    enum2keys:
+      -
+        return: Hash
+        des: "refer to #enum2keys!" 
+    enum2keys!:
+      -
+        return: self
+        des: "flattens all Enumerable keys to single keys in self" 
 MatchData:
   type: class
   source: MatchData_Ex.rb
@@ -206,6 +317,10 @@ MatchData:
   iattrs:
   cfuncs:
   ifuncs:
+    to_hash:
+      - 
+        return: Hash[Symbol, String]
+        des: "Converts self to Hash"
 Kernel:
   type: module
   source: Kernel_Ex.rb
@@ -213,6 +328,33 @@ Kernel:
   iattrs:
   cfuncs:
   ifuncs:
+    Boolean:
+      -
+        params:
+          - obj: Object
+        return: Boolean
+        des: "Converts the object to a Boolean using !!" 
+    load_data:
+      -
+        params:
+          - filename: String
+        return: Object
+        des: "Marshal #load an Object from a file (filename) in binary mode"
+    load_data_cin:
+      -
+        params:
+          - filename: String
+        block: Object  
+        return: Object        
+        des: "cin: Create If nil, file (filename) will be created if it doesn't exist, uses save_data and load_data respectively"
+    save_data:
+      - 
+        params:
+          - obj: Object
+          - filename: String
+        return: self
+        des: "Marshal #dump an object to file (filename) in binary mode"
+    #skinj_eval:
 Enumerable:
   type: module
   source: Enumerable_Ex.rb
@@ -220,4 +362,17 @@ Enumerable:
   iattrs:
   cfuncs:
   ifuncs:
+    pick:
+      -
+        return: Object
+        des: "Randomly selects element in self"
+    reverse_index:
+      -
+        params:
+          - obj: Object
+      -
+        block: "|n| Boolean"
+        return: Integer
+        des: "Similar to index, but starts from the end of the array and iterates to the beginning, will return the index of a given obj, if a block is given, when it evaluates to true the index will return, if the obj cannot be found, nil will return"    
+
 # Footer

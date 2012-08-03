@@ -11,8 +11,30 @@
   <body>
     <!-- Class Name -->
     <div class="pageHeader">
+      <h2><a href="index.html">Home</a> <a href="index.html#cArray">Return</a></h2>
       <h1><img src="icons/icon_gear.png" align="center">Array</h1>
-    </div>         
+    </div>
+    <div class="pageBody">
+      <p></p>
+      <p> 
+      <a name="cArray"></a>
+      <div class="klassBody">
+        <p class="klassLink"><a href="cArray.html">Array</a></p>
+        <p class="klassStats">
+          Constants: 
+        </p>  
+        <p class="klassStats">  
+          Class Methods: 
+        </p>    
+        <p class="klassStats">  
+          Instance Methods: <a href="cArray.html#offset">#offset</a> <a href="cArray.html#pad">#pad</a> <a href="cArray.html#pad!">#pad!</a> <a href="cArray.html#pick!">#pick!</a> <a href="cArray.html#remove_n">#remove_n</a> <a href="cArray.html#rotate">#rotate</a> <a href="cArray.html#rotate!">#rotate!</a> <a href="cArray.html#uniq_arrays">#uniq_arrays</a> <a href="cArray.html#uniq_arrays!">#uniq_arrays!</a>
+        </p>  
+        <p class="klassStats">  
+          Source: Array_Ex.rb
+        </p>
+      </div>
+    <p>
+    </div>
 
     <!-- Instance Methods -->
     <div class="pageBody">
@@ -20,7 +42,7 @@
 
       <a name="offset"></a>
       <div class="methodBody">
-        <h3>offset</h3>
+        <h2>offset</h2>
 
         <p class="methodName">offset<span class="colorBrak">(<span class="methodArg">obj</span>)</span></p>
 
@@ -38,7 +60,7 @@
 
         <p class="methodName">offset<span class="colorBrak">(<span class="methodArg">obj, reverse</span>)</span></p>
 
-        <p></p>
+        <p>Adds the <span class="colorArg">obj</span> to the <span class="colorCore">end</span> of <span class="colorCore">self</span>, pull and <span class="colorCore">return</span> the first element, <span class="colorCore">if</span> <span class="colorArg">reverse</span>, adds the element to the start of <span class="colorCore">self</span>, pull and <span class="colorCore">return</span> the last element</p>
 
         <div class="methodParameters">
           <h6>
@@ -52,6 +74,276 @@
           </h6>
         </div>
 
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">self</span></h6>
+        </div>
+
+      </div>
+
+      <a name="pad"></a>
+      <div class="methodBody">
+        <h2>pad</h2>
+
+        <p class="methodName">pad<span class="colorBrak">(<span class="methodArg">newsize</span>)</span></p>
+
+        <p></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Integer <span class="methodArg">newsize</span></span>
+
+          </h6>
+        </div>
+
+        <p class="methodName">pad<span class="colorBrak">(<span class="methodArg">newsize</span>) { <span class="methodArg">obj</span> }</span></p>
+
+        <p></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Integer <span class="methodArg">newsize</span></span>
+
+          </h6>
+        </div>
+
+        <p class="methodName">pad<span class="colorBrak">(<span class="methodArg">newsize, obj</span>)</span></p>
+
+        <p>refer to <span class="colorNumeric"><span class="colorFunction">pad</span>!</span></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Integer <span class="methodArg">newsize</span></span>,
+
+            <span class="methodParamType">Object <span class="methodArg">obj</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Array</span></h6>
+        </div>
+
+      </div>
+
+      <a name="pad!"></a>
+      <div class="methodBody">
+        <h2>pad!</h2>
+
+        <p class="methodName">pad!<span class="colorBrak">(<span class="methodArg">newsize</span>)</span></p>
+
+        <p></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Integer <span class="methodArg">newsize</span></span>
+
+          </h6>
+        </div>
+
+        <p class="methodName">pad!<span class="colorBrak">(<span class="methodArg">newsize</span>) { <span class="methodArg">obj</span> }</span></p>
+
+        <p></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Integer <span class="methodArg">newsize</span></span>
+
+          </h6>
+        </div>
+
+        <p class="methodName">pad!<span class="colorBrak">(<span class="methodArg">newsize, obj</span>)</span></p>
+
+        <p>Resizes <span class="colorCore">self</span> to <span class="colorArg">newsize</span>, <span class="colorCore">if</span> the size is less than <span class="colorArg">newsize</span> <span class="colorCore">then</span> <span class="colorArg">obj</span> is pushed <span class="colorCore">until</span> the size is equal to <span class="colorArg">newsize</span>, else <span class="colorCore">if</span> the size is greater than <span class="colorArg">newsize</span>, objects are popped from <span class="colorCore">self</span> <span class="colorCore">until</span> the size is equal, by default <span class="colorArg">obj</span> is <span class="colorBoolean">nil</span></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Integer <span class="methodArg">newsize</span></span>,
+
+            <span class="methodParamType">Object <span class="methodArg">obj</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">self</span></h6>
+        </div>
+
+      </div>
+
+      <a name="pick!"></a>
+      <div class="methodBody">
+        <h2>pick!</h2>
+
+        <p class="methodName">pick!<span class="colorBrak">(<span class="methodArg"></span>)</span></p>
+
+        <p>Randomly chooses an element in <span class="colorCore">self</span>, deletes and <span class="colorCore">return</span>, <span class="colorCore">require</span> Enumerable_Ex</p>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Object</span></h6>
+        </div>
+
+      </div>
+
+      <a name="remove_n"></a>
+      <div class="methodBody">
+        <h2>remove_n</h2>
+
+        <p class="methodName">remove_n<span class="colorBrak">(<span class="methodArg">obj</span>)</span></p>
+
+        <p></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Object <span class="methodArg">obj</span></span>
+
+          </h6>
+        </div>
+
+        <p class="methodName">remove_n<span class="colorBrak">(<span class="methodArg">obj, n</span>)</span></p>
+
+        <p>Removes <span class="colorArg">obj</span> from <span class="colorCore">self</span> <span class="colorArg">n</span> times, by default <span class="colorArg">n</span> is <span class="colorNumeric">1</span></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Object <span class="methodArg">obj</span></span>,
+
+            <span class="methodParamType">Integer <span class="methodArg">n</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">self</span></h6>
+        </div>
+
+      </div>
+
+      <a name="rotate"></a>
+      <div class="methodBody">
+        <h2>rotate</h2>
+
+        <p class="methodName">rotate<span class="colorBrak">(<span class="methodArg"></span>)</span></p>
+
+        <p></p>
+
+        <p class="methodName">rotate<span class="colorBrak">(<span class="methodArg">n</span>)</span></p>
+
+        <p>refer to rotate!</p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Integer <span class="methodArg">n</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Array</span></h6>
+        </div>
+
+      </div>
+
+      <a name="rotate!"></a>
+      <div class="methodBody">
+        <h2>rotate!</h2>
+
+        <p class="methodName">rotate!<span class="colorBrak">(<span class="methodArg"></span>)</span></p>
+
+        <p></p>
+
+        <p class="methodName">rotate!<span class="colorBrak">(<span class="methodArg">n</span>)</span></p>
+
+        <p>offsets the array by <span class="colorArg">n</span>, wrapping it around, by default <span class="colorArg">n</span> is <span class="colorNumeric">1</span></p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Integer <span class="methodArg">n</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">self</span></h6>
+        </div>
+
+      </div>
+
+      <a name="uniq_arrays"></a>
+      <div class="methodBody">
+        <h2>uniq_arrays</h2>
+
+        <p class="methodName">uniq_arrays<span class="colorBrak">(<span class="methodArg">groups</span>)</span></p>
+
+        <p>refer to uniq_arrays!</p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Array[Array] <span class="methodArg">groups</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">Array[Array]</span></h6>
+        </div>
+
+      </div>
+
+      <a name="uniq_arrays!"></a>
+      <div class="methodBody">
+        <h2>uniq_arrays!</h2>
+
+        <p class="methodName">uniq_arrays!<span class="colorBrak">(<span class="methodArg">groups</span>)</span></p>
+
+        <p>Creates uniq arrays from <span class="colorArg">groups</span>, the result are arrays that have uniq elements, no other array in the result will have the same elements</p>
+
+        <div class="methodParameters">
+          <h6>
+            Parameters
+        
+
+            <span class="methodParamType">Array[Array] <span class="methodArg">groups</span></span>
+
+          </h6>
+        </div>
+
+        <div class="methodParameters">
+          <h6>Returns <span class="methodParamType">self</span></h6>
+        </div>
+
       </div>
 
     </div>
@@ -59,6 +351,7 @@
   </body>
   <foot>
     <div class="pageFooter">
+      <h2><a href="index.html">Home</a> <a href="index.html#cArray">Return</a></h2>
       <p>Generated by Chardoc, Written by IceDragon200</p>
     </div>
   </foot>  
