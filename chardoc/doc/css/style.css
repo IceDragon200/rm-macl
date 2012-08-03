@@ -54,6 +54,17 @@ a:hover   {color: #FD971F;}
 
 a:active  {color: #A6E22E;}
 
+
+.colorVariable
+{
+  color: #CFCFC2;
+}
+
+.colorCore
+{
+  color: #F92672;
+}
+
 .colorBrak
 {
   color: #CFCFC2;
@@ -89,15 +100,19 @@ a:active  {color: #A6E22E;}
   color: #AE81FF;
 }
 
+.colorArg
+{
+  color: #FD971F;
+}
+
 .pageHeader 
 {
   text-align: center;
   border: thin solid #3d3d3d;
   border-radius: 4px;
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-top: 2%;
-  margin-bottom: 2%;  
+  margin: 4px; 
+  margin-left: 0px;
+  margin-right: 0px;  
 }
 
 .pageFooter
@@ -105,7 +120,9 @@ a:active  {color: #A6E22E;}
   text-align: center;
   border: thin solid #3d3d3d;
   border-radius: 4px;
-  margin: 0.6%; 
+  margin: 4px; 
+  margin-left: 0px;
+  margin-right: 0px;
   /* margin-bottom: 0px; */
 }
 
@@ -113,10 +130,9 @@ a:active  {color: #A6E22E;}
 {
   border: thin solid #3d3d3d;
   border-radius: 4px;
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-top: 1%;
-  margin-bottom: 1%;
+  margin: 4px; 
+  margin-left: 24px;
+  margin-right: 24px;
   /*background-color: ;*/
 }
 
@@ -140,21 +156,29 @@ a:active  {color: #A6E22E;}
   background-color: #232323;
   /* border: thin solid #3D3D3D; */
   border-radius: 4px;
-  margin: 0.4%;
+  margin: 2px;
   padding: 2px;
+}
+
+.klassBody:hover
+{
+  background-color: #1E2E3A;
 }
 
 .klassLink
 {
-  margin: 0.6%;
-  width: 20%;
+  margin: 2px;
+  /*width: 20%;*/
   text-align: center;
-  font-size: 250%;
+  font-size: 200%;
   font-style: oblique;  
   background-color: #2C2C2C;
   /* border: thin solid #3D3D3D; */
   border-radius: 4px;
-  padding: 2px;
+  padding: 4px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  display: inline-block;
 }
 
 .methodBody 
@@ -162,8 +186,13 @@ a:active  {color: #A6E22E;}
   background-color: #232323;
   /*border: thin solid #3D3D3D; */
   border-radius: 4px;
-  margin: 0.6%;
+  margin: 2px;
   padding: 2px;
+}
+
+.methodBody:hover
+{
+  background-color: #1E2E3A;
 }
 
 .methodName
@@ -223,6 +252,6 @@ a:active  {color: #A6E22E;}
 .buttonViewSource:active 
 {
   position:relative;
-  top:1px;
+  top: 1px;
 }
 

@@ -18,12 +18,15 @@ require_relative '../src/build_tools/Chardoc.rb'
 
 def parze string
   str = string.dup
-  str.gsub!('<c:cls>', '<span class="colorKlass">')
-  str.gsub!('<c:mod>', '<span class="colorModule">')
-  str.gsub!('<c:op>', '<span class="colorOperator">')
+  str.gsub!('<c:cls>' , '<span class="colorKlass">')
+  str.gsub!('<c:mod>' , '<span class="colorModule">')
+  str.gsub!('<c:op>'  , '<span class="colorOperator">')
   str.gsub!('<c:func>', '<span class="colorFunction">')
-  str.gsub!('<c:num>', '<span class="colorNumeric">')
+  str.gsub!('<c:num>' , '<span class="colorNumeric">')
   str.gsub!('<c:bool>', '<span class="colorBoolean">')
+  str.gsub!('<c:arg>' , '<span class="colorArg">')
+  str.gsub!('<c:var>' , '<span class="colorVariable">')
+  str.gsub!('<c:core>', '<span class="colorCore">')
   str.gsub!('</c>', '</span>')
   str
 end
@@ -77,11 +80,13 @@ begin
   hash = YAML.load_file('yml/stdlibex.yml')
 hash.each_pair do |klass_name, objhsh|
   next unless objhsh
-  fn = case objhsh['type']
+  case objhsh['type']
   when "module"
-    ?m + klass_name
+    icon_name = 'icon_box'
+    fn = ?m + klass_name
   when "class"
-    ?c + klass_name
+    icon_name = 'icon_gear'
+    fn = ?c + klass_name
   else
     raise('Unknown class type', objhsh['type'])
   end
@@ -102,9 +107,49 @@ hash.each_pair do |klass_name, objhsh|
   <body>
     <!-- Class Name -->
     <div class="pageHeader">
-      <h1><img src="icons/icon_gear.png" align="center">#{klass_name}</h1>
+      <h1><img src="icons/#{icon_name}.png" align="center">#{klass_name}</h1>
     </div>         
 )) 
+# // Constants
+  if funcs = objhsh["consts"]
+    html.puts(%Q(
+    <!-- Constants -->
+    <div class="pageBody">
+      <h2><img src="icons/icon_book-brown.png" align="center">Constants</h2>))    
+    #
+    html.puts(%Q(
+    </div>))
+  end
+# // Class Variables
+  if funcs = objhsh["clsvars"]
+    html.puts(%Q(
+    <!-- Class Variables -->
+    <div class="pageBody">
+      <h2><img src="icons/icon_book-brown.png" align="center">Class Variables</h2>))    
+    #
+    html.puts(%Q(
+    </div>))
+  end
+# // Class Instance Variables
+  if funcs = objhsh["clsivars"]
+    html.puts(%Q(
+    <!-- Class Instance Variables -->
+    <div class="pageBody">
+      <h2><img src="icons/icon_book-brown.png" align="center">Class Instance Variables</h2>))    
+    #
+    html.puts(%Q(
+    </div>))
+  end
+# // Attributes
+  if funcs = objhsh["iattrs"]
+    html.puts(%Q(
+    <!-- Attributes -->
+    <div class="pageBody">
+      <h2><img src="icons/icon_disc.png" align="center">Instance Attributes</h2>))    
+    #
+    html.puts(%Q(
+    </div>))
+  end  
 # // Class Methods
   if funcs = objhsh["cfuncs"]
     html.puts(%Q(

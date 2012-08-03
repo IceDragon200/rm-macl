@@ -10,6 +10,7 @@ module Chardoc
   end
 
   def generate
+    
   end
   
 end

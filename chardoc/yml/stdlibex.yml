@@ -1,84 +1,123 @@
 Object:
   type: class
+  source: Object_Ex.rb
+  consts: 
+  iattrs:
   cfuncs:
   ifuncs:
     to_bool:
       -
         params: 
         return: Boolean
-        des: "Converts the object to a <c:cls>Boolean</c> using <c:op>!!</c>" 
+        des: "Converts <c:core>self</c> to a <c:cls>Boolean</c> using <c:op>!!</c>" 
     deep_clone:
       -
         params: 
         return: Object
-        des: "Makes a full clone of the object using <c:mod>Marshal</c>"
+        des: "Makes a full clone of <c:core>self</c> using <c:mod>Marshal</c>"
     if_eql?:
       -
         params: 
           - obj: Object
           - swap: Object
         return: Object
-        des: "Compares the Object with obj, if evaluated to <c:bool>true</c>, then swap is returned"
+        des: "Compares <c:core>self</c> with <c:arg>obj</c>, if evaluated to <c:bool>true</c>, then <c:arg>swap</c> is returned"
       -
         params: 
           - obj: Object
         block: swap  
         return: Object
-        des: "Compares the Object with obj, if evaluated to <c:bool>true</c>, then the block is executed and returns the result"      
+        des: "Compares <c:core>self</c> with <c:arg>obj</c>, if evaluated to <c:bool>true</c>, then the block is executed and returns the result"      
     if_neql?:
       -
         params: 
           - obj: Object
           - swap: Object
         return: Object
-        des: "Compares the Object with obj, if evaluated to <c:bool>false</c>, then swap is returned"
+        des: "Compares <c:core>self</c> with <c:arg>ob</c>j, if evaluated to <c:bool>false</c>, then <c:arg>swap</c> is returned"
       -
         params: 
           - obj: Object
         block: swap  
         return: Object
-        des: "Compares the Object with obj, if evaluated to <c:bool>false</c>, then the block is executed and returns the result"      
+        des: "Compares <c:core>self</c> with <c:arg>obj</c>, if evaluated to <c:bool>false</c>, then the block is executed and returns the result"      
     if_nil?:
       -
         params: 
           - swap: Object
         return: Object
-        des: "Calls <c:func>.nil?</c> on the object, if evaluated to <c:bool>true</c>, then swap is returned"
+        des: "Calls <c:func>.nil?</c> on <c:core>self</c>, if evaluated to <c:bool>true</c>, then <c:arg>swap</c> is returned"
       -
         params: 
         block: swap  
         return: Object
-        des: "Calls .nil? on the object, if evaluated to <c:bool>true</c>, then the block is executed and returns the result" 
+        des: "Calls <c:func>.nil?</c> on <c:core>self</c>, if evaluated to <c:bool>true</c>, then the block is executed and returns the result" 
 Module:
   type: class
+  source: Module_Ex.rb
+  consts: 
+  iattrs:
   cfuncs:
   ifuncs:
+    memoize:
+      - 
+        params: 
+          - "*syms": "Symbol[]"
+        return: Boolean
+        des: "<c:core>alias</c>es the method from <c:arg>sym</c> as <c:func>pre_memoize_*</c>, when the method is called its value is stored in <c:var>@memoized_*</c>, if the variable is already set, then its value is returned"
+    memoize_as:
+      - 
+        params: 
+          - hash: "Hash<Symbol, Object>"
+        return: Boolean
+        des: "Iterates using <c:func>each_pair</c>, <c:core>define_method</c> from <c:cls>Symbol</c>, that will return the <c:arg>value</c> from the key pair"
 Numeric:
   type: class
+  source: Numeric_Ex.rb
+  consts: 
+  iattrs:
   cfuncs:
   ifuncs:
 String:
   type: class
+  source: String_Ex.rb
+  consts: 
+  iattrs:
   cfuncs:
   ifuncs:
 Array:
   type: class
+  source: Array_Ex.rb
+  consts: 
+  iattrs:
   cfuncs:
   ifuncs:
 Hash:
   type: class
+  source: Hash_Ex.rb
+  consts: 
+  iattrs:
   cfuncs:
   ifuncs:
 MatchData:
   type: class
+  source: MatchData_Ex.rb
+  consts: 
+  iattrs:
   cfuncs:
   ifuncs:
 Kernel:
   type: module
+  source: Kernel_Ex.rb
+  consts: 
+  iattrs:
   cfuncs:
   ifuncs:
 Enumerable:
   type: module
+  source: Enumerable_Ex.rb
+  consts: 
+  iattrs:
   cfuncs:
   ifuncs:
 # Footer

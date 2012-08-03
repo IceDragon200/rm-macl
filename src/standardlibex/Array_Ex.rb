@@ -31,7 +31,7 @@ class Array
   end
 
   def uniq_arrays! groups 
-    all_objs,uniquesets = self, []
+    all_objs, uniquesets = self, []
     set, lastset, i, group = nil, nil, nil, nil
     while(all_objs.size > 0)
       set = all_objs.clone
@@ -39,12 +39,12 @@ class Array
         group = groups[i]
         lastset = set
         set = set & group
-        set = lastset if(set.empty?())
+        set = lastset if set.empty?
       end
       uniquesets << set
       all_objs -= set
     end
-    self.replace(uniquesets)
+    self.replace uniquesets
     self
   end
 
@@ -55,10 +55,10 @@ class Array
   def rotate! n=1
     return self if empty?
     n %= size
-    concat(slice!(0, n))
+    concat slice!(0, n) 
   end unless method_defined? :rotate!
 
-  def remove_nth obj, n=1
+  def remove_n obj, n=1
     i = 0
     n.times { (i = self.index(obj)) ? self.delete_at(i) : break }; self
   end
