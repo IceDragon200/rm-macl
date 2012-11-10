@@ -19,15 +19,13 @@ rescue LoadError
     end
   end  
 end  
+
 require 'zlib'
 require 'dl'
 require 'gosu'
 require 'texplay'
 
 $rgx3_gosu = Object.const_defined? :Gosu
-
-src = File.join(File.dirname(__FILE__), 'src/*.rb')
-ext = File.join(File.dirname(__FILE__), 'ext/*.rb')
 
 module Disposable
 
@@ -40,6 +38,9 @@ module Disposable
   end
 
 end
+
+src = File.join(File.dirname(__FILE__), 'src/*.rb')
+ext = File.join(File.dirname(__FILE__), 'ext/*.rb')
 
 # // Grab the shiz
 (Dir[src]+Dir[ext]).each do |s|

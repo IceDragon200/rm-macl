@@ -1,10 +1,59 @@
-path = File.dirname(__FILE__)+'/src/**/_local_require.rb'
-$macl_load_requests ||= ['std', 'macl', 'core', 'xpan', 'vxa-mod', 'vxa-cls', 'rpg', 'rgssx2']
-Dir[path].sort.each do |s|
-  require_relative '%s' % s
-  puts "Loaded: %s" % s
+=begin
+
+  macl_local.rb
+
+=end
+require 'colorize'
+
+module MACL
+
+  def self.local_path(filename)
+    File.dirname(filename)
+  end
+
+  def self.linara_add(filename, array)
+    puts ">!!".colorize(:light_yellow)  + " parameter(#{'array'.colorize(:light_yellow)}) is ignored all files will be loaded instead"
+    array = Dir.glob(File.join(File.dirname(filename), '*.rb')) 
+    array = array.collect(&File.method(:basename)) - ['_build_order.rb', '_local_require.rb']
+    array.sort!
+    array.collect! do |s| [s, 0] end
+    $alinara += array.collect do |(s, p)| 
+      [File.join(File.expand_path(File.dirname(filename)), s), p] 
+    end
+  end
+
 end
-#require_relative 'src/standardlibex/_local_require'
-#require_relative 'src/macl/_local_require'
-#require_relative 'src/xpanlib/_local_require'
-#require_relative 'src/rgssex/_local_require'
+
+def local_require_with_rescue(filename)
+  require_relative filename
+  pstr = ">>$ ".colorize(:light_green) + "Loaded: " + filename.colorize(:light_blue)
+  result = "$ #{filename}"
+rescue(Exception) => ex  
+  pstr = ">!! ".colorize(:light_red) + "Failed: " + filename.colorize(:light_blue)
+  pstr += "\n#{ex.inspect}" 
+  result = "! #{filename}\n#{ex.inspect}"
+ensure
+  puts pstr
+  return result
+end
+
+file_path = File.dirname(__FILE__) 
+path = file_path + '/src/**/_local_require.rb'
+
+last_load = File.open(File.join(file_path, 'last_load.log'), 'w+')
+last_load.sync = true
+last_load.write(Time.now.strftime('%m %d, %y - %H:%M:%S') + "\n")
+
+$alinara = [] # [filename, priority]
+
+puts '>>$ Preparing'
+Dir[path].sort.each do |s|
+  last_load.write(local_require_with_rescue(s) + "\n")
+end
+
+puts '>>$ Linara style load'
+
+$alinara = $alinara.sort_by do |(filename, priority)| priority end
+$alinara.each do |(filename, priority)|
+  last_load.write(local_require_with_rescue(filename) + "\n")
+end  

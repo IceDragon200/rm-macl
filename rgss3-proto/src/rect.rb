@@ -2,11 +2,11 @@ class Rect
 
   attr_accessor :x, :y, :width, :height
 
-  def initialize(x=nil,y=nil,w=nil,h=nil)
+  def initialize(x=nil, y=nil, w=nil, h=nil)
     set x,y,w,h
   end
 
-  def set(x=nil,y=nil,w=nil,h=nil)
+  def set(x=nil, y=nil, w=nil, h=nil)
     if x.is_a?(Array)
       x,y,w,h = *x 
     elsif x.is_a?(Rect) 

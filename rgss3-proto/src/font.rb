@@ -34,4 +34,10 @@ class Font
     @out_color = Color.new 0, 0, 0, 48 
   end
 
+  class << self
+
+    undef attr_caccessor
+    
+  end
+
 end
