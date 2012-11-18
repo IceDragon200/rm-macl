@@ -10,7 +10,7 @@
   #-include _XPANLBEX/morph.rb
   #-//include _XPANLBEX/interpolate.rb
   #-include _XPANLBEX/grid.rb
-  #-include _XPANLBEX/sequencer.rb 
+  #-include _XPANLBEX/sequen.rb
   #-include _XPANLBEX/tween.rb
   #-include _XPANLBEX/tween-easers.rb
   #-include _XPANLBEX/task.rb

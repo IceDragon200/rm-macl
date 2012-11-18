@@ -1,3 +1,3 @@
 #-// Game Modules
-#-include _GMMODPTH/SceneManager.rb
-#-include _GMMODPTH/MapManager.rb
+#-include _GMMODPTH/scene-manager.rb
+#-include _GMMODPTH/map-manager.rb

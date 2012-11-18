@@ -37,6 +37,8 @@ ensure
   return result
 end
 
+local_require_with_rescue('src/rgss3-proto/rgss3-proto.rb') unless defined?(Graphics)
+
 file_path = File.dirname(__FILE__) 
 path = file_path + '/src/**/_local_require.rb'
 

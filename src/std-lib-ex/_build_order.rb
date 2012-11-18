@@ -1,10 +1,10 @@
 # // Standard Library
-#-include _STDLBEX/Object_Ex.rb
-#-include _STDLBEX/Module_Ex.rb
-#-include _STDLBEX/Kernel_Ex.rb
-#-include _STDLBEX/Numeric_Ex.rb
-#-include _STDLBEX/String_Ex.rb
-#-include _STDLBEX/Enumerable_Ex.rb
-#-include _STDLBEX/Array_Ex.rb
-#-include _STDLBEX/Hash_Ex.rb
-#-include _STDLBEX/MatchData_Ex.rb
+#-include _STDLBEX/object.rb
+#-include _STDLBEX/module.rb
+#-include _STDLBEX/kernel.rb
+#-include _STDLBEX/numeric.rb
+#-include _STDLBEX/string.rb
+#-include _STDLBEX/enumerable.rb
+#-include _STDLBEX/array.rb
+#-include _STDLBEX/hash.rb
+#-include _STDLBEX/matchdata.rb

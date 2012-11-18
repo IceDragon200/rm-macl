@@ -1,1 +1,0 @@
-require_relative '../rgss3-proto/rgss3-proto.rb'

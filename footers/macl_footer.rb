@@ -1,1 +1,0 @@
-﻿#-inject gen_script_footer

@@ -1,4 +1,4 @@
-def morse_to_eng morse
+def morse_to_eng(morse)
   morse_letters = {
     ' '    => ' ',
     '.-'   => 'A',
