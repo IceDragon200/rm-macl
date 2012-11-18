@@ -50,8 +50,7 @@ Depending on your platform, you'll need to use either the _win_ or _linux_ build
 ```
 1 . Test all scripts, and ensure that they can work standalone (if possible).
 2 . Actually write some form of documentation.
-3 . Add proper file tracking to Skinj for debugging purposes.
-4 . Finish the _path-win_ commands.
+3 . Finish the _path-win_ commands.
 ```
 
 ## CHANGES

@@ -6,8 +6,8 @@
 #-define xMACLBUILD:
 #-define DIRGTWD#=__THISDIR__/..
 #-define SRCPATH#=DIRGTWD/src
-#-define _HEADER#=DIRGTWD/header.rb
-#-define _FOOTER#=DIRGTWD/footer.rb
+#-define _HEADER#=__THISDIR__/header.rb
+#-define _FOOTER#=__THISDIR__/footer.rb
 #-define _STDLBEX#=SRCPATH/std-lib-ex
 #-define _MACLPATH#=SRCPATH/macl
 #-define _RGSSExPTH#=SRCPATH/rgss-ex
