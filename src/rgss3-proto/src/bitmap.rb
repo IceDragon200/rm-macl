@@ -18,6 +18,7 @@ class Bitmap
   end
 
   def initialize(*args)
+    return 
     return warn 'Cannot create bitmaps' unless $rgx3_gosu
     return warn 'Cannot create bitmaps without window' unless Main.window
     case n = args.size
@@ -54,16 +55,16 @@ class Bitmap
 
   attr_reader :data
 
-  def blt x, y, bmp, rect, opacity=255
+  def blt(x, y, bmp, rect, opacity=255)
     @data.splice(bmp.data, x, y, alpha_blend: true, crop: rect.to_a)
     self
   end
 
   def clear 
-    @data.fill 0, 0, @width, @height, color: Color.new(0, 0, 0, 0).to_gosu
+    @data.fill(0, 0, @width, @height, color: Color.new(0, 0, 0, 0).to_gosu)
   end
 
-  def draw_text *args
+  def draw_text(*args)
     #warn 'Unsupported function %s' % __method__.to_s
     case args.size
     # // rect, text[, align]
@@ -75,6 +76,20 @@ class Bitmap
     else
       raise(ArgumentError, '2..3 or 5..6')
     end
+  end
+
+  ## 
+  # get_pixel
+  #
+  def get_pixel(x, y)
+    return Color.new # // Temp
+  end
+
+  ##
+  # set_pixel
+  #
+  def set_pixel(x, y, color)
+    # // Temp
   end
 
 end

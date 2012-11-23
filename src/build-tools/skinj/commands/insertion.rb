@@ -14,7 +14,7 @@ class Skinj
       end
       #sleep 2.0
     else
-      debug_puts "Including %s" % filename
+      debug_puts "INCLUDE: %s" % filename
 
       str = File.read(filename)
 
@@ -24,8 +24,9 @@ class Skinj
 
       str   = Skinj.parse(str, new_settings).assemble
       strs  = str.split(/[\r\n]+/)
-      strs.collect{|s|(" "*indent)+s}.each {|s| add_line(s) }
-      debug_puts "File %s included sucessfully" % File.basename(filename)
+      strs.collect { |s| s.indent(indent) }.each {|s| add_line(s) }#(" " * indent) + s}.each {|s| add_line(s) }
+      debug_puts "/INCLUDE: #{File.basename(filename)}"
+      #debug_puts "File %s included sucessfully" % File.basename(filename)
     end
 
     true
@@ -35,13 +36,13 @@ class Skinj
   add_command :inject, REGEXP_INJECT do
     begin
       eval_string, = *sub_args(params[1])
-      debug_puts "Injecting %s" % eval_string
+      debug_puts "INJECT: %s" % eval_string
       str = eval eval_string
       lines = str.split(/[\r\n]+/)
       lines.collect{|s|(" "*indent)+s}.each {|s| add_line(s) }
       true
     rescue(Exception) => ex
-      debug_puts "Inject failed: %s" % eval_string
+      debug_puts "INJECT: Failed >> %s" % eval_string
       p ex
       true
     end
@@ -49,18 +50,20 @@ class Skinj
 
   # // load the contents of a defined const into the current Skinj
   add_command :insert, REGEXP_INSERT do
-    begin
-      key, = sub_args *params[1]
-      debug_puts "Inserting %s" % key
-      str = @definitions[key]
-      lines = str.split(/[\r\n]+/)
-      lines.collect{|s|(" "*indent)+s}.each {|s| add_line(s) }
-      true
-    rescue(Exception) => ex
-      debug_puts "Insert failed: %s" % key
-      p ex
-      true
-    end
+    raise "include is depreceated, please remove the include command from your string"
+
+    #begin
+    #  key, = sub_args *params[1]
+    #  debug_puts "INSERT: %s" % key
+    #  str = @definitions[key]
+    #  lines = str.split(/[\r\n]+/)
+    #  lines.collect{|s|(" "*indent)+s}.each {|s| add_line(s) }
+    #  true
+    #rescue(Exception) => ex
+    #  debug_puts "Insert failed: %s" % key
+    #  p ex
+    #  true
+    #end
   end
 
 end  

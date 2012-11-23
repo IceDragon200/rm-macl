@@ -13,9 +13,11 @@
 #
 #==============================================================================#
 module DrawExt
+
   def self.calc_color_diff( color1, color2, rate=0.0 )
     return color1.transition_to( color2, rate )
   end 
+
   def self.bar_color_diff( set1, set2, rate=0.0 )
     result = {}
     (set1.keys | set2.keys).each { |key|
@@ -27,6 +29,7 @@ module DrawExt
     }
     return result
   end  
+  
   def self._bar_merge_info( info )
     bitmap        = info[:bitmap]
     width         = info[:width] || (bitmap ? bitmap.width : 128)

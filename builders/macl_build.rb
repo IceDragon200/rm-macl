@@ -1,21 +1,10 @@
 
-# // Standard Library
 # ╒╕ ♥                                                               Object ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Object
   def deep_clone
-    Marshal.load Marshal.dump(self) 
+    Marshal.load(Marshal.dump(self)) 
   end
-  def if_eql?(obj, swap=nil)
-    return self unless self == obj
-    return block_given? ? yield : swap
-  end unless method_defined? :if_eql? 
-  def if_neql?(obj, swap=nil)
-    return (!self.eql?(obj)) ? (block_given? ? yield : swap) : self
-  end unless method_defined? :if_neql? 
-  def if_nil?(swap=nil)
-    return self.nil? ? (block_given? ? yield : swap) : self
-  end unless method_defined? :if_nil?
   def to_bool
     !!self
   end unless method_defined? :to_bool
@@ -65,7 +54,7 @@ end
 # ╒╕ ♥                                                              Numeric ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 class Numeric
-  def count n=1
+  def count(n=1)
     i = self
     loop do
       yield i
@@ -79,13 +68,13 @@ class Numeric
   def positive?
     self > 0
   end
-  def min n
+  def min(n)
     n < self ? n : self
   end unless method_defined? :min
-  def max n
+  def max(n)
     n > self ? n : self
   end unless method_defined? :max
-  def clamp min, max
+  def clamp(min, max)
     self < min ? min : (self > max ? max : self)
   end unless method_defined? :clamp
   def unary
@@ -94,36 +83,6 @@ class Numeric
   def unary_inv
     -(self <=> 0)
   end unless method_defined? :unary_inv
-  # // ROMAN and to_roman by Zetu
-  ROMAN = {
-        1 => "I",    5 => "V",    10 => "X",
-       50 => "L",  100 => "C",   500 => "D",
-     1000 => "M", 5000 => "" , 10000 => ""
-  }
-  def to_roman
-    value = self
-    return '---' if value >= 4000
-    base = ""
-    for key in ROMAN.keys.sort.reverse
-      a = value / key
-      case a
-      when 0; next
-      when 1, 2, 3
-        base += ROMAN[key] * a
-      when 4
-        base += ROMAN[key]
-        base += ROMAN[key * 5]
-      when 5, 6, 7, 8
-        base += ROMAN[key * 5]
-        base += ROMAN[key] * a - 5
-      when 9
-        base += ROMAN[key * 10]
-        base += ROMAN[key]
-      end
-      value -= a * key
-    end
-    return base
-  end unless method_defined? :to_roman
   
 end
 # ╒╕ ♥                                                               String ╒╕
@@ -600,6 +559,7 @@ module MACL
         define_method str, &func
         define_method sym do |*args, &block| dup.__send__(str, *args, &block) end
       end
+      
     end
   end
 end
@@ -833,6 +793,7 @@ module MACL
       @data.clear()
       @xsize, @ysize, @zsize = 0, 0, 0
     end  
+    
   end
 end
 # ╒╕ ■                                                       Mixin::Surface ╒╕
@@ -2224,6 +2185,7 @@ module MACL
     def set_tag sym, regexp
       @tags << {sym: sym, regexp: regexp}
     end
+    
     def mk_tag str
       @tags.each do |hsh|
         sym,regexp = hsh.get_values :sym,:regexp
@@ -2232,16 +2194,20 @@ module MACL
       end
       return nil
     end
+    
     def mk_open_rgx str
       /<#{str}>/i
     end
+    
     def mk_close_rgx str
       /<\/#{str}>/i
     end
+    
     def mk_and_set_rgx str
       @open_rgx,@close_rgx = mk_open_rgx(str),mk_close_rgx(str)
       self
     end
+    
     def parse_str str
       raise "Regexp has not been set!" unless @open_rgx and @close_rgx
       lines  = str.split(/[\r\n]+/i)
@@ -2269,6 +2235,7 @@ module MACL
       arra.reject! do |a| a and a.empty? end
       arra
     end
+    
   end
 end
 # ╒╕ ♥                                                           MACL::Blaz ╒╕
@@ -2320,6 +2287,7 @@ module MACL
         return func.call mtch
       end
     end
+    
   end
 end
 # ╒╕ ■                                                         SceneManager ╒╕
@@ -2328,25 +2296,27 @@ module SceneManager
   def self.recall
     goto(@scene.class)
   end
+  
 end
 # ╒╕ ■                                                           MapManager ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
 module MapManager
   @@maps = {}
-  def self.load_map id
+  def self.load_map(id)
     get_map(id).deep_clone
   end 
-  def self.get_map id
+  def self.get_map(id)
     unless @@maps.has_key? id
       @@maps[id] = load_data("Data/Map%03d.rvdata2" % id)
       @@maps[id].do_note_scan
     end
     @@maps[id]
   end
+  
 end  
-# ╒╕ ♥                                                            Game::Map ╒╕
+# ╒╕ ♥                                                             Game_Map ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class Game::Map
+class Game_Map
   def pre_load_map
   end
   def post_load_map
@@ -2367,17 +2337,18 @@ class Game::Map
     setup_battleback
     @need_refresh = false
   end
+  
 end  
-# ╒╕ ♥                                                       Game::Switches ╒╕
+# ╒╕ ♥                                                        Game_Switches ╒╕
 # └┴────────────────────────────────────────────────────────────────────────┴┘
-class Game::Switches
-  def on? id 
+class Game_Switches
+  def on?(id) 
     !!self[id]
   end
-  def off? id
+  def off?(id)
     !self[id]
   end
-  def toggle id
+  def toggle(id)
     self[id] = !self[id]
   end
 end

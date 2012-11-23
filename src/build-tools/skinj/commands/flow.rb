@@ -43,7 +43,7 @@ class Skinj
     debug_puts '>Jumping to index %s<' % index unless silent
     n = (index-@index) <=> 0
     until @index == index
-      debug_puts " >>Skipping: %s" % current_line
+      debug_puts " >>SKIPPING: #{current_line}" 
       @index += n
     end
     true
@@ -98,10 +98,10 @@ class Skinj
   add_command :skip, REGEXP_SKIP do
     collapse_branch
     if n=params[1] and !n.empty?
-      debug_puts "Skip: %s lines" % n
+      debug_puts "SKIP: %s line(s)" % n
       jump_to_rindex n.to_i
     else
-      debug_puts "Skip: to next end"
+      debug_puts "SKIP: to next end"
       jump_to_next_end
     end
   end

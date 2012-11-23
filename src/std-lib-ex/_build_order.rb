@@ -1,4 +1,4 @@
-# // Standard Library
+#-// Standard Library
 #-include _STDLBEX/object.rb
 #-include _STDLBEX/module.rb
 #-include _STDLBEX/kernel.rb

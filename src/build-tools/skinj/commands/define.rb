@@ -1,41 +1,54 @@
 class Skinj
 
+  def skj_defined?(key)
+    bool = @definitions.has_key?(key)
+    warn("#{key} was already defined!") if bool
+    return bool
+  end
+
+  def puts_defined(key)
+    debug_puts "DEFINE: #{key.colorize(:yellow)} = #{@definitions[key].to_s.colorize(:light_magenta)}"
+  end
+
   # // undefine
   add_command :undefine, REGEXP_UNDEF do
     key = params[1]
     debug_puts "Undefining %s" % key
-    @definitions.delete key
+    @definitions.delete(key)
     true
   end
 
-  # // define with eval
-  add_command :define, REGEXP_DEFINE do
+  DefFunc = Struct.new(:key, :params, :value)
+
+  add_command(:define_func, REGEXP_DEFINE_FUNC) do
     key         = params[:key]
-    asgn_params = params[:param].to_s.split('')
-    value,      = sub_args(params[:value] || '')
+    paramz      = params[:param].split(/\s*,\s*/)
+    value,      = sub_args(params[:value])
+    skj_defined?(key)
+    @definitions[key] = DefFunc.new(key, paramz, value)
 
-    setting = {
-      asgn_or: asgn_params.count(?|),  # // 0 - no or, 1 - unary or, 2 - assign if or
-      asgn_and: asgn_params.count(?&), # // 0 - no and, 1 - unary or, 2 - assign if or
-      asgn_str: asgn_params.count(?#)  # // 0 - evaled, 1 - as string
-    }
+    puts_defined(key)
+    true
+  end
 
-    if setting[:asgn_and] > 0   ; setting[:asgn_or] = 0
-    elsif setting[:asgn_or] > 0 ; setting[:asgn_and] = 0
-    end
+  # define key value
+  add_command(:define_rpl, REGEXP_DEFINE_RPL) do
+    key         = params[:key]
+    value,      = sub_args(params[:value])
+    skj_defined?(key)
+    @definitions[key] = value
+    
+    puts_defined(key)
+    true
+  end
 
-    if setting[:asgn_str] ; res = value && !value.empty? ? value.to_s : ""
-    else                  ; res = value && !value.empty? ? eval(value.to_s) : "" rescue nil
-    end
-
-    if setting[:asgn_and]    == 2 ; @definitions[key] &&= res
-    elsif setting[:asgn_and] == 1 ; @definitions[key] &= res
-    elsif setting[:asgn_or]  == 2 ; @definitions[key] ||= res
-    elsif setting[:asgn_or]  == 1 ; @definitions[key] |= res
-    else                          ; @definitions[key] = res
-    end
-
-    debug_puts "Defined [%s] = %s" % [key, @definitions[key]]
+  # define key
+  add_command(:define, REGEXP_DEFINE) do
+    key         = params[:key]
+    skj_defined?(key)
+    @definitions[key] = ""
+    
+    puts_defined(key)
     true
   end
 

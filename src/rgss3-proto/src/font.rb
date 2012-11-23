@@ -1,9 +1,9 @@
 class Font
 
-  def self.attr_caccessor *syms
+  def self.attr_caccessor(*syms)
     syms.each do |sym| 
-      module_eval(%Q(def self.#{sym}; @@sym; end)) 
-      module_eval(%Q(def self.#{sym}=(arg); @@sym = arg; end)) 
+      module_eval(%Q(def self.#{sym}; @@#{sym}; end)) 
+      module_eval(%Q(def self.#{sym}=(arg); @@#{sym} = arg; end)) 
     end
   end
 

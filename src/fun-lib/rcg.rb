@@ -1,7 +1,10 @@
 # // RCG
-require_relative 'Mimi'
+require_relative 'mimi'
+
 module RCG
+
   include Mimi
+
   def self.write_bin struct
     # // Header
     w = num2hex_s struct.width
@@ -14,44 +17,59 @@ module RCG
     end
     struct
   end
+
   class FileStruct
+
     attr_accessor :colors
     attr_accessor :data
+
     def initialize v,b,w,h
       @header = {version: v,bit_depth: b,width: w,height: h}
       @colors = Array.new 1 do [0,0,0,0] end
       @data   = Array.new width*height,0
       @meta   = {}
     end
+
     attr_reader :meta
+
     def width
       @header[:width]
     end
+
     def height
       @header[:height]
     end
+
     def version
       @header[:version]
     end
+
     def bit_depth
       @header[:bit_depth]
     end
+
     def refresh
       @colors.collect!{|c|c.collect{|i|i.to_i}}
       @data.replace @data[0...(width*height)]
       self
     end
+
   end
+
   class Reader
+
     RGX_HEADER = /\[(.*)\]/i
+
     def self.line offset=0
       return @lines[@rindex+offset]
     end
+
     def self.str2namevalue_a str
       mtch = str.match /(.*)\=(.*)/i
       return nil unless(mtch)
       return mtch[1], mtch[2]
     end
+
     def self.collect_until_header index
       result = []
       for i in index...@lines.size
@@ -61,10 +79,12 @@ module RCG
       end
       return result
     end
+
     def self.header?
       raise "Header does not exist" unless !!@rcg
       true
     end
+
     def self.read_rcgt string
       @lines   = string.split /[\r\n]+/i
       @rindex  = 0
@@ -118,5 +138,6 @@ module RCG
       end
       @rcg.refresh
     end
+    
   end
 end

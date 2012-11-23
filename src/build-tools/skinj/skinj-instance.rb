@@ -96,19 +96,16 @@ class Skinj
 
   def parse_lines
     while(@index < line_count)
-
       str, match = parse_line(:current)
-
       #puts match[2] 
-
       @index += 1  
 
       if match
-        nindent, comstr = match[1].to_i, match[2]
-
+        # Command indentation has been removed since V1.5
+        #nindent, comstr = match[1].to_i, match[2]
+        comstr, = match[1]
         #puts comstr 
-
-        command = execute_command(nindent, comstr)
+        command = execute_command(0, comstr)
         #sleep 0.1
 
         next if command        
@@ -132,7 +129,7 @@ class Skinj
   def command_line?(rgx, index=@index, lines=@lines)
     mtch = kind_of_command?(index, lines)
     return nil unless mtch
-    return mtch[2].match(rgx)
+    return mtch[1].match(rgx)
   end
 
   # // Assembler Commands
@@ -165,8 +162,23 @@ class Skinj
 
   def sub_arg(str)
     estr = str.clone
+
     @definitions.each_pair { |key, value| 
-      estr = estr.gsub(key, value.to_s) 
+      if value.is_a?(DefFunc)
+        rgx = /#{key}\(\s*(\w+(?:\s*,\s*\w+)*)\s*\)/
+        next unless str =~ rgx
+        estr = estr.gsub(rgx) {
+          args = $1.split(/\s*,\s*/)
+          rstr = value.value.clone
+          args.each_with_index { |s, i|
+            rstr.gsub!(value.params[i], args[i])
+          }
+          rstr
+        }
+        estr = sub_arg(estr)
+      else
+        estr = estr.gsub(key, value.to_s) 
+      end  
     }
     estr
   end
@@ -175,9 +187,10 @@ class Skinj
     strs.collect(&method(:sub_arg))
   end
 
-  # // Output
+  # As of V1.5 and above, incur mode is always enabled.
   def incur_mode?
-    !!@switches["INCUR"]
+    #!!@switches["INCUR"]
+    true 
   end
 
   def setup_imported 

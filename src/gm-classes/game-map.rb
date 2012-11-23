@@ -1,9 +1,12 @@
 #-inject gen_class_header 'Game_Map'
 class Game_Map
+
   def pre_load_map
   end
+
   def post_load_map
   end
+
   # // Overwrite
   def setup map_id 
     @map_id = map_id
@@ -20,4 +23,5 @@ class Game_Map
     setup_battleback
     @need_refresh = false
   end
+  
 end  

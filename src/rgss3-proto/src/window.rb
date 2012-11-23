@@ -19,4 +19,11 @@ class Window
     end  
   end
 
+  def dispose
+    super
+  end
+
+  def update
+  end
+  
 end

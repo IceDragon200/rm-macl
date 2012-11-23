@@ -5,7 +5,7 @@
  ──────────────────────────────────────────────────────────────────────────────
   Date Created  : 05/12/2012
   Date Modified : 14/10/2012
-  Version       : 0x14001
+  Version       : 0x15000
   Created By    : IceDragon
  ──────────────────────────────────────────────────────────────────────────────
 =end
@@ -51,7 +51,7 @@ def console
 end
 
 require_relative 'skinj-commands'
-require_relative 'skinj-13'
+#require_relative 'skinj-13' No longer supporting V1.3 functions
 require_relative 'skinj-14'
 require_relative 'skinj-instance'
 require_relative 'skinj-static'

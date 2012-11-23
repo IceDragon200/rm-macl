@@ -19,7 +19,8 @@ module GameManager
   # ♦ Constant(s)
   #--------------------------------------------------------------------------#  
   VERSION = "1.0a"
-  MAIN_SAVE_LOCATION = ENV["USERPROFILE"].gsub(/\\/i, "/") + MAIN_FOLDER_NAME
+  #MAIN_SAVE_LOCATION = ENV["USERPROFILE"].gsub(/\\/i, "/") + MAIN_FOLDER_NAME
+  MAIN_SAVE_LOCATION = "/home/icy/_temp_/"
   GAME_SAVE_LOCATION = MAIN_SAVE_LOCATION + "#{GAME_NAME}/"
   ACMT_SAVE_LOCATION = MAIN_SAVE_LOCATION 
   GMID_SAVE_LOCATION = MAIN_SAVE_LOCATION 

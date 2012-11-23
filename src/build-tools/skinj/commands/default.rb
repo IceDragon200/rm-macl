@@ -6,12 +6,12 @@ class Skinj
 
   # // comment
   add_command :comment, REGEXP_COMMENT do
-    debug_puts "Comment: %s" % params[1].to_s
+    debug_puts "COMMENT: %s" % params[1].to_s
     true
   end
 
   add_command :indent, REGEXP_INDENT do
-    debug_puts "Setting indent to %s%s" % params[1,2]
+    debug_puts "INDENT: %s%s" % params[1, 2]
     param, value = params[1],params[2].to_i
     case params[1]
     when nil ; @indent  = value
@@ -27,7 +27,7 @@ class Skinj
 
   # // eval
   add_command :eval, REGEXP_EVAL do
-    debug_puts "Eval: %s" % params[1]
+    debug_puts "EVAL: %s" % params[1]
     begin
       eval(params[1])
     rescue Exception => ex
@@ -38,24 +38,9 @@ class Skinj
 
   # // log
   add_command :log, REGEXP_LOG do
-    debug_puts 'Enable Log Mode'
+    debug_puts 'LOG: ON'
     $stdout = File.open("Skinj#{Time.now.strftime("(%m-%d-%y)(%H-%M-%S-%L-%N)")}.log","w")
     $stdout.sync = true
-  end
-
-  # // Switches
-  add_command :switch, REGEXP_SWITCH do
-    key,value = *sub_args(params[1], params[2])
-    case value.upcase
-    when "ON", "TRUE"
-      @switches[key] = true
-    when "OFF", "FALSE"
-      @switches[key] = false
-    when "TOGGLE", "FLIP"
-      @switches[key] = !@switches[key]
-    end
-    debug_puts "Switch [%s] = %s" % [key,@switches[key]]
-    true
   end
 
   # // Assembly Show
@@ -73,7 +58,7 @@ class Skinj
 
   add_command :wait, REGEXP_WAIT do
     time, = sub_args(params[1])
-    debug_puts 'Sleeping %s' % time
+    debug_puts 'SLEEP: %s' % time
     sleep time.to_f
     true
   end
@@ -88,15 +73,16 @@ class Skinj
   end
 
   add_command :label, REGEXP_LABEL do
-    debug_puts 'Label: %s' % params[1]
+    debug_puts 'LABEL: %s' % params[1]
     true
   end
 
   add_command :build, REGEXP_TO_FILE do
-    filename = params[:filename]
-    File.open filename, 'w:UTF-8' do |f|
-      f.write self.assemble
-    end
+    warn "Build has been removed since V1.50"
+    #filename = params[:filename]
+    #File.open filename, 'w:UTF-8' do |f|
+    #  f.write self.assemble
+    #end
   end
 
 end

@@ -2,7 +2,7 @@
 #encoding:UTF-8
 =begin
 
-  src/build_tools/cmd-skinj.rb
+  build_tools/cmd-skinj.rb
   by IceDragon
   dc 12/10/2012
   dm 12/10/2012
@@ -14,7 +14,8 @@
 
 =end
 
-require_relative "skinj/header-gen"
+require_relative 'skinj/header-gen'
+require_relative 'skinj/skinj-version'
 
 ##
 # Class Skinj 
@@ -27,7 +28,7 @@ class Skinj
 
   module CommandLine
 
-    SKINJ_VERSION = "0x14001"
+    CMD_SKINJ_VERSION = "0x10004"
 
     require_relative "skinj/skinj-locale"
     
@@ -61,7 +62,8 @@ class Skinj
 
     def self.skinj_file(src, dest, settings)
       File.open(dest, 'w+') do |f|
-        puts "=> Making #{dest}"
+        puts ""
+        Skinj.debug_puts "Parsing #{dest}"
         str         = File.read(src)
         indent      = settings[:def_indent]
         definitions = settings[:def_default].clone
@@ -76,6 +78,7 @@ class Skinj
 
         result = Skinj.parse(str, new_settings).assemble
         f.write(result)
+        Skinj.debug_puts "#{src} parsed to #{dest}"
       end
       return true
     #rescue Exception => ex
@@ -98,7 +101,8 @@ class Skinj
       puts %Q(
 /*
   Skinj - Command Line 
-  Version #{SKINJ_VERSION}     
+  CMD Version #{CMD_SKINJ_VERSION}     
+  SKJ Version #{::Skinj::SKINJ_VERSION}
   */
 
 Running with following parameters:

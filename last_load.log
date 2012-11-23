@@ -1,8 +1,9 @@
-11 10, 12 - 23:03:17
+11 17, 12 - 23:52:17
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/gm-classes/_local_require.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/gm-modules/_local_require.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/macl/_local_require.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/_local_require.rb
+$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-ex/_local_require.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rpg-ex/_local_require.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/std-lib-ex/_local_require.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/_local_require.rb
@@ -32,6 +33,9 @@ $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-sprite.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-table.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-tone.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-window.rb
+! /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-ex/drawext-constants.rb
+#<NoMethodError: undefined method `darken' for #<Color:0x0000000246fc60>>
+$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-ex/drawext.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rpg-ex/rpg-baseitem.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rpg-ex/rpg-event-page.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rpg-ex/rpg-map.rb
@@ -64,7 +68,7 @@ $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/orchestra.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/pallete.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/point.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/pos.rb
-$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/sequencer.rb
+$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/sequen.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/surface.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/switchboard.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/table-ex.rb

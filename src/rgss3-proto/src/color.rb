@@ -1,5 +1,10 @@
 class Color
 
+  def initialize(r=0, g=0, b=0, a=255)
+    self.red, self.green, self.blue, self.alpha = 0, 0, 0, 255
+    _set(r, g, b, a)
+  end
+
   attr_reader :red, :green, :blue, :alpha
 
   def red=(n)
@@ -18,20 +23,28 @@ class Color
     @alpha = n < 0 ? 0 : n > 255 ? 255 : n
   end
 
-  def initialize(r=0, g=0, b=0, a=255)
-    self.red, self.green, self.blue, self.alpha = 0, 0, 0, 255
-    _set(r,g,b,a)
-  end
-
-  def set(r=0, g=0, b=0, a=255)
-    r,g,b,a = r.red,r.green,r.blue,r.alpha if r.is_a?(Color)
-    self.red, self.green, self.blue, self.alpha = r||@red, g||@green, b||@blue, a||@alpha
+  def set(*ints)
+    case ints.size
+    when 1 # Color
+      r = ints[0]
+      r, g, b, a = r.red, r.green, r.blue, r.alpha 
+    when 3 # RGB
+      r, g, b = *ints
+      a = @alpha || 255
+    when 4 # RGBA  
+      r, g, b, a = *ints
+    end  
+    self.red, self.green, self.blue, self.alpha = r, g, b, a
   end
 
   alias :_set :set
 
-  def to_gosu
-    Gosu::Color.rgba(red, green, blue, alpha)#(alpha + (blue << 4) + (green << 8) + (red << 12))
+  def _dump(d = 0)
+    [@red, @green, @blue, @alpha].pack('d4')
+  end
+   
+  def self._load(s)
+    Color.new(*s.unpack('d4'))
   end
 
 end

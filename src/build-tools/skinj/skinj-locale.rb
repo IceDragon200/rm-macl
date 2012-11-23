@@ -14,7 +14,8 @@ class Skinj
     CMD_HELP = %Q(
 /*        
   Skinj - Command Line 
-  Version #{Skinj::CommandLine::SKINJ_VERSION}
+  CMD Version #{Skinj::CommandLine::CMD_SKINJ_VERSION}
+  SKJ Version #{Skinj::SKINJ_VERSION}
   */
 
 HELP

@@ -1,6 +1,8 @@
 class Array
+
   def reverse_index obj=nil
     if block_given?
+      i = 0
       size.downto(0) do |i| return i if yield(self[i]) end
     else
       i = 0
@@ -8,14 +10,18 @@ class Array
     end
     -1
   end
+
   def reverse_index_old obj=nil
     if block_given? ; size.downto(0) do |i| return i if yield(self[i]) end
     else            ; size.downto(0) do |i| return i if self[i] == obj end
     end
     -1
   end
+
 end
+
 require 'benchmark'
+
 begin
   array = Array.new 256**2,0
   array[0] = 1

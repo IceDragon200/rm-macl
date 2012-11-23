@@ -6,28 +6,42 @@
 #-inject gen_module_header 'MACL::Chitat'
 module MACL
   class Chitat
+
     class Stack < Array
+
       attr_reader :match_data
+
       def initialize match_data,*args,&block
         @match_data = match_data
         super *args,&block
       end
+
       alias arra_inspect inspect
+
       def inspect
         "<#{self.class.name} %s: %s>" % [@match_data.to_s, arra_inspect]
       end
+
     end
+
     class Tag
+
       attr_reader :sym,:params
+
       def initialize sym,match_data
         @sym,@params = sym,match_data.to_a
       end
+
       def param i
         @params[i]
       end
+
     end
+
     attr_accessor :open_rgx,:close_rgx
+
     attr_reader :tags
+
     def initialize open_tag=nil,close_tag=nil
       @tags = []
       if open_tag.is_a?(String) and close_tag.is_a?(String)
@@ -41,10 +55,12 @@ module MACL
       end
       yield self if block_given?
     end
+
     # //
     def set_tag sym, regexp
       @tags << {sym: sym, regexp: regexp}
     end
+    
     def mk_tag str
       @tags.each do |hsh|
         sym,regexp = hsh.get_values :sym,:regexp
@@ -53,16 +69,20 @@ module MACL
       end
       return nil
     end
+    
     def mk_open_rgx str
       /<#{str}>/i
     end
+    
     def mk_close_rgx str
       /<\/#{str}>/i
     end
+    
     def mk_and_set_rgx str
       @open_rgx,@close_rgx = mk_open_rgx(str),mk_close_rgx(str)
       self
     end
+    
     def parse_str str
       raise "Regexp has not been set!" unless @open_rgx and @close_rgx
       lines  = str.split(/[\r\n]+/i)
@@ -84,11 +104,13 @@ module MACL
       end
       arra
     end
+
     def parse_str4tags str
       arra = parse_str str
       arra.each do |a| a.collect! { |s| mk_tag s }; a.compact! end
       arra.reject! do |a| a and a.empty? end
       arra
     end
+    
   end
 end

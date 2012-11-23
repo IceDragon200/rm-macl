@@ -43,10 +43,10 @@ module Disposable
 
 end
 
-src = File.join(File.dirname(__FILE__), 'src/*.rb')
-ext = File.join(File.dirname(__FILE__), 'ext/*.rb')
-vxac= File.join(File.dirname(__FILE__), 'vxa-closed/*.rb')
-vxao= File.join(File.dirname(__FILE__), 'vxa-open/*.rb')
+src  = File.join(File.dirname(__FILE__), 'src/*.rb')
+ext  = File.join(File.dirname(__FILE__), 'ext/*.rb')
+vxac = File.join(File.dirname(__FILE__), 'vxa-closed/*.rb')
+vxao = File.join(File.dirname(__FILE__), 'vxa-open/*.rb')
 
 # // Grab the shiz
 (Dir[src] + Dir[ext] + Dir[vxac] + Dir[vxao]).each do |s|

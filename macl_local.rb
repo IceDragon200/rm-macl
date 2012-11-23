@@ -1,8 +1,6 @@
-=begin
-
-  macl_local.rb
-
-=end
+#
+# macl_local.rb
+#
 require 'colorize'
 
 module MACL

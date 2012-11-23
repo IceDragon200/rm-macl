@@ -13,7 +13,7 @@
 class Skinj
   module Constants
     # // Base
-    REGEXP_ASMB_COM   = /\#\-(\d+)?(.+)/i
+    REGEXP_ASMB_COM   = /\#\-(.+)/i
     # // Commands
     REGEXP_COMMENT    = /\A\/\/(.*)/i
     REGEXP_INDENT     = /\Aindent\s([+-])?(\d+)/i
@@ -22,9 +22,11 @@ class Skinj
     REGEXP_INCLUDE    = /\Ainclude\s(.+)/i
     REGEXP_INJECT     = /\Ainject\s(.+)/i
     REGEXP_INSERT     = /\Ainsert\s(.+)/i
-    REGEXP_SWITCH     = /\Aswitch\s(\w+):(ON|TRUE|OFF|FALSE|TOGGLE|FLIP)/i
+    REGEXP_SWITCH     = /\Aswitch\s(\w+)\s(ON|TRUE|OFF|FALSE|TOGGLE|FLIP)/i
     REGEXP_UNDEF      = /\A(?:undefine|undef)\s(\w+)/i
-    REGEXP_DEFINE     = /\Adefine\s(?<key>\w+)(?:\s*(?<param>[\#\&\|]{0,3})\=\s*(?<value>.+)|:?)/i
+    REGEXP_DEFINE     = /\Adefine\s(?<key>\w+)/i
+    REGEXP_DEFINE_RPL = /\Adefine\s(?<key>\w+)\s(?<value>.+)/i
+    REGEXP_DEFINE_FUNC= /\Adefine\s(?<key>\w+)\(\s*(?<param>\w+(?:\s*,\s*\w+)*)\s*\)\s(?<value>.+)/i
     REGEXP_IF         = /\A(?<cond>(?:if|unless))(?<mod>(?:not|n))?(?<def>def)?\s(?<value>.+)/i
     REGEXP_ELSE       = /\Aelse\:/i
     REGEXP_END        = /\Aend(?:if|unless|\:)/i
@@ -41,6 +43,11 @@ class Skinj
     REGEXP_MACRO_CLEAR= /\A(?:clear|clr)(?:macro|mcr)\s(\w+)/i
     REGEXP_TO_FILE    = /\A(?:build|save|assemble)\sto\s(?<filename>.+)/i
     FOLD_OPN = [REGEXP_IF, REGEXP_SKIPX, REGEXP_MACRO_REC]
+
+    # Depreciated!
+    REGEXP_ASMB_COM_13= /\#\-(\d+)?(.+)/i
+    REGEXP_DEFINE_13  = /\Adefine\s(?<key>\w+)(?:\s*(?<param>[\#\&\|]{0,3})\=\s*(?<value>.+)|:?)/i
+    REGEXP_SWITCH_13  = /\Aswitch\s(\w+):(ON|TRUE|OFF|FALSE|TOGGLE|FLIP)/i
     #/\A(?:(?:if|unless)(?:not|n)?def|skip|(?:rec|apnd|record|append)(?:macro|mcr))/i
   end
 end

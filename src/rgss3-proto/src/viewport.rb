@@ -24,4 +24,7 @@ class Viewport
   def update
   end
 
+  def flash()
+  end
+    
 end

@@ -1,7 +1,7 @@
 #enconding:UTF-8
 =begin
 
-  build_tools/cmd_scripts_extract.rb
+  build_tools/cmd-scripts_extract.rb
   by IceDragon
   dc 05/01/2012
   dm 26/10/2012
@@ -82,14 +82,14 @@ def main(argsv)
 
   while(arg = argsv.shift)
     case arg
-    when '--d'
+    when '-d'
       set_default_settings(settings)
       puts 'Running with default settings'
     # Set filepath source
-    when '-src'
+    when '--src'
       settings[:src] = argsv.shift
     # Set the destination/target directory/file  
-    when '-dest'
+    when '--dest'
       settings[:dest] = argsv.shift
     else
       raise(ArgumentError, "Invalid Command: #{arg}")
