@@ -28,14 +28,12 @@ def local_require_with_rescue(filename)
   result = "$ #{filename}"
 rescue(Exception) => ex  
   pstr = ">!! ".colorize(:light_red) + "Failed: " + filename.colorize(:light_blue)
-  pstr += "\n#{ex.inspect}" 
+  pstr += "\n#{ex.inspect}\n#{ex.backtrace[0]}" 
   result = "! #{filename}\n#{ex.inspect}"
 ensure
   puts pstr
   return result
 end
-
-local_require_with_rescue('src/rgss3-proto/rgss3-proto.rb') unless defined?(Graphics)
 
 file_path = File.dirname(__FILE__) 
 path = file_path + '/src/**/_local_require.rb'

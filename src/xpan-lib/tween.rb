@@ -70,10 +70,7 @@ class Tween
     end
 
   end
-
-#-skip:
-  init
-#-end:  
+  
   def initialize *args,&block
     set_and_reset *args,&block
   end
@@ -282,9 +279,9 @@ end
 #-inject gen_class_header 'Tween::Osc'
 class Tween::Osc < Tween::Sequencer
 
-  def initialize *args,&block
+  def initialize(*args, &block)
     super()
-    set *args,&block
+    set(*args, &block)
     @cycles = -1
     reset!
   end
@@ -294,7 +291,7 @@ class Tween::Osc < Tween::Sequencer
     reverse!
   end
 
-  def set svs, evs, easers=[:linear, :linear], maxtimes=[1.0,1.0]
+  def set(svs, evs, easers=[:linear, :linear], maxtimes=[1.0,1.0])
     for i in 0...easers.size
       args = (i % 2 == 0 ? [svs, evs] : [evs, svs]) + [easers[i], maxtimes[i%maxtimes.size]]
       @list[i] = Tween.new *args
@@ -303,8 +300,5 @@ class Tween::Osc < Tween::Sequencer
   end
 
 end
-#-inject gen_function_des 'MACL.add_init'
-MACL.add_init :tween, &Tween.method(:init)
 
-#-skip 1
-require_relative 'tween-easers'
+MACL.add_init(:tween, &Tween.method(:init))
