@@ -5,6 +5,7 @@
 #-end:
 #-inject gen_class_header 'Font'
 class Font
+
   def to_hsh
     {
       :color       => font.color.to_color,
@@ -17,13 +18,16 @@ class Font
       :shadow       => self.shadow.to_bool,
       :outline      => self.outline.to_bool
     }
-  end  
+  end
+
   def marshal_dump
     to_hsh
   end
+
   def marshal_load hsh
     hsh.each_pair do |key,value|
       send(key.to_s+?=,value)
     end
   end
+
 end

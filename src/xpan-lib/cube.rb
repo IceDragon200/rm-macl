@@ -1,53 +1,76 @@
-#-apndmacro _imported_
-#-inject gen_scr_imported 'MACL::Cube', '0x10002'
-#-end:
-#-inject gen_class_header 'MACL::Cube'
+#
+# src/xpan-lib/cube.rb
+# vr 1.20
+#
 module MACL
   class Cube
 
-    SYM_ARGS = [:x,:y,:z,:width,:height,:length]
+    SYM_KEYS = [:x, :y, :z, :width, :height, :length]
 
-    attr_accessor *SYM_ARGS
+    attr_accessor *SYM_KEYS
 
-    def initialize *args
-      set *args
+    def initialize(*args)
+      _set(*args)
     end
 
     def hash
-      [@x,@y,@z,@width,@height,@length].hash
+      [@x, @y, @z, @width, @height, @length].hash
     end
 
-    def translate x,y,z
+    def translate(x, y, z)
       @x, @y, @z = x, y, z
     end
 
-    def set x=0,y=0,z=0,w=0,h=0,l=0
+    def resize(width, height, length)
+      @width, @height, @length = width, height, length
+    end
+
+    def set(x=0, y=0, z=0, w=0, h=0, l=0)
       @x, @y, @z = x, y, z
       @width, @height, @length = w, h, l
     end
 
-    def xset x=nil,y=nil,z=nil,w=nil,h=nil,l=nil
-      x,y,z,w,h,l = *x if x.is_a? Array
-      x,y,z,w,h,l = x.get_values *SYM_ARGS  if x.is_a? Hash
-      set x||@x,y||@y,z||@z,w||@width,h||@height,l||@length
-      self
+    alias :_set :set
+    private :_set
+
+    def hset(hash)
+      valid_keys = hash.keys & SYM_KEYS
+      valid_keys.each do |key|
+        value = hash[key]
+        instance_variable_set("@#{key.to_s}", value)
+      end
+      return self
     end
 
-    # // pass symbols and recive values
-    def xto_a *args
-      return (args&SYM_ARGS).collect{ |sym| self.send sym }
+    def ary_from_keys(*keys)
+      hsh = as_hash()
+      return (keys & SYM_KEYS).collect { |sym| hsh[sym] }
     end
 
-    def to_a
+    alias xto_a ary_from_keys
+
+    #def xto_a(keys)
+    #  warn("Depreceated function call by #{caller[0..1]}")
+    #  ary_from_keys(keys)
+    #end
+
+    def as_pos
+      return MACL::Vector3.new(@x, @y, @z)
+    end
+
+    def as_ary
       return @x, @y, @z, @width, @height, @length
     end
 
-    def to_rect
+    def as_rect
       Rect.new @x, @y, @width, @height
     end
 
-    def to_hash
-      return {x: @x,y: @y,z: @z,width: @width,height: @height,length: @length}
+    def as_hash
+      return {
+        x: @x, y: @y, z: @z,
+        width: @width, height: @height, length: @length
+      }
     end
 
     def to_s
@@ -55,24 +78,25 @@ module MACL
     end
 
     def empty
-      set
-      self
+      @x, @y, @z = 0, 0, 0
+      @width, @height, @length = 0, 0, 0
+      return self
     end
 
-    def area1
-      @width*@height
-    end
+    #def area_wh
+    #  @width * @height
+    #end
 
-    def area2
-      @width*@length
-    end
+    #def area_wl
+    #  @width * @length
+    #end
 
-    def area3
-      @height*@length
-    end
+    #def area_hl
+    #  @height * @length
+    #end
 
     def volume
-      @width*@height*@length
+      @width * @height * @length
     end
 
   end

@@ -18,5 +18,18 @@ class Module
     end
     true
   end unless method_defined? :memoize_as
-  
+
+  ##
+  # type_check(Object obj)
+  #
+  # checks an object's class against self
+  #
+  def type_check(obj)
+    unless obj.kind_of?(self)
+      raise(TypeError, "expected kind of #{self} but recieved #{obj.class}")
+    else
+      return true
+    end
+  end
+
 end

@@ -1,52 +1,41 @@
-#-// 12/??/2011
-#-// 06/06/2012
-#-// Version : 1.0
-#-apndmacro _imported_
-#-inject gen_scr_imported 'Pallete', '0x10001'
-#-end:
-#-inject gen_module_header 'Pallete'
+#
+# src/xpan-lib/pallete.rb
+#
+# vr 1.10
 module Pallete
+
   @sym_colors = {}
   @ext_colors = {}
-  #--------------------------------------------------------------------------#
-  # ● module-method :pallete
-  #/------------------------------------------------------------------------\#
-  # ● Return
-  #     Bitmap
-  #\------------------------------------------------------------------------/#
+
+  def self.pallete?
+    return !(@pallete.nil? || @pallete.disposed?)
+  end
+
+  def self.reload_pallete
+    @pallete.dispose unless @pallete.nil? || @pallete.disposed?
+    load_pallete
+  end
+
+  def self.load_pallete
+    @pallete = Cache.system("pallete.png")
+  end
+
   def self.pallete
-    @pallete = Cache.system "Pallete" if @pallete.nil? || @pallete.disposed?
+    load_pallete unless @pallete || @pallete
     return @pallete
   end
-  #--------------------------------------------------------------------------#
-  # ● module-method :get_color
-  #/------------------------------------------------------------------------\#
-  # ● Parameter
-  #     index (Integer)
-  # ● Return
-  #     Color
-  #\------------------------------------------------------------------------/#
-  def self.get_color index
+
+  def self.get_color(index)
     pallete.get_pixel (index % 16) * 8, (index / 16) * 8
   end
-  #--------------------------------------------------------------------------#
-  # ● module-method :sym_color
-  #/------------------------------------------------------------------------\#
-  # ● Parameter
-  #     symbol (Symbol)
-  # ● Return
-  #     Color
-  #\------------------------------------------------------------------------/#
-  def self.sym_color symbol
+
+  def self.sym_color(symbol)
     @ext_colors[symbol] || get_color(@sym_colors[symbol] || 0)
   end
-  #--------------------------------------------------------------------------#
-  # ● module-method :[]
-  #/------------------------------------------------------------------------\#
-  # ● Refer to
-  #     get_color
-  #\------------------------------------------------------------------------/#
-  def self.[] n
+
+  def self.[](n)
+    n = n.to_s if n.is_a?(Symbol)
     n.is_a?(String) ? sym_color(n) : get_color(n)
   end
+
 end

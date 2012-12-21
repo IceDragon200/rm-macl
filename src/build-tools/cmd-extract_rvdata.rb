@@ -9,7 +9,7 @@
 
 =end
 
-Encoding.default_external = Encoding.default_internal = "UTF-8"
+#Encoding.default_external = Encoding.default_internal = "UTF-8"
 
 ##
 # module Kernel
@@ -40,7 +40,7 @@ HELP_STR = %Q(
   Script Extractor V#{VERSION}
   by IceDragon
  */
- 
+
   -src <filename>
     Sets the file source
 
@@ -82,14 +82,14 @@ def main(argsv)
 
   while(arg = argsv.shift)
     case arg
-    when '-d'
+    when '-n'
       set_default_settings(settings)
       puts 'Running with default settings'
     # Set filepath source
-    when '--src'
+    when '--src', '-s'
       settings[:src] = argsv.shift
-    # Set the destination/target directory/file  
-    when '--dest'
+    # Set the destination/target directory/file
+    when '--dest', '-d'
       settings[:dest] = argsv.shift
     else
       raise(ArgumentError, "Invalid Command: #{arg}")
@@ -106,15 +106,15 @@ def main(argsv)
   scripts = load_data(src)
 
   i = 0
-  for (checksum, name, zstr) in scripts 
-    puts "Processing [#{"%04d" % i}]#{name}"  
+  for (checksum, name, zstr) in scripts
+    puts "Processing [#{"%04d" % i}]#{name}"
     fn = ("[%04d]%s.%s" % [i, File.sanitize_filename(name), "rb"])
     fn = File.join(dest, fn)
     File.open(fn, "w+") do |f|
       str = Zlib.inflate(zstr)
       str.gsub!(/[\r\n]/i, CHAR_NEWLINE) # Replace /r/n with /n
       str.gsub!(/(\n\n)/i, CHAR_NEWLINE) # Fixes a weird doubleline error when inflating strings
-      f.write("# #{name}\n" + str.force_encoding("UTF-8"))
+      f.write("#encoding:UTF-8\n# #{name}\n" + str)#.force_encoding("UTF-8"))
     end
     i += 1
   end

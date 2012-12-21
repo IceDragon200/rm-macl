@@ -1,9 +1,8 @@
-class Tween
-#-inject gen_function_des 'MACL.add_init'
-MACL.add_init 'tween:ease:ex' do 
-  #-// 01/26/2012
-  #-// 01/26/2012   
-  #-// Bee
+#
+# src/xpan-lib/tween/easers-ex.rb
+#
+MACL.add_init 'tween:ease:ex' do
+class MACL::Tween
   add_easer 'Bee::In' do |t, st, ch, d, b=4.0|
     (ch * t / d + st) + (-ch * Math.sin(Math.cos((b * t / d)*Math::PI)*Math::PI) / b)
   end
@@ -31,6 +30,6 @@ MACL.add_init 'tween:ease:ex' do
       In.ease(t*2.0, 0, ch, d) * 0.5 + st :
       Out.ease(t*2.0 - d, 0, ch, d) * 0.5 + ch * 0.5 + st
   end
+
 end
-  
 end

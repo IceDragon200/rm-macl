@@ -36,6 +36,7 @@ class Color
   end
 
   alias to_a_ng to_a_na
+  
   def to_hex
     to_a_na.collect{|i|"%02x"%i}.join ''
   end

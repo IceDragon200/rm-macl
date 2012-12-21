@@ -1,5 +1,5 @@
 #-inject gen_class_header 'Tween::Easer'
-class Tween
+class MACL::Tween
   class Easer
 
     attr_accessor :name, :symbol
@@ -29,7 +29,7 @@ class Tween
     modu = self
     if mod
       module_eval %Q(module #{mod} ; end) # // Initialize module
-      modu = const_get(mod) 
+      modu = const_get(mod)
     end
     easer = modu.__send__(:const_set,name,Easer.new(str,&func))
     sym   = easer.name.gsub('::',?_).downcase.to_sym
@@ -42,7 +42,7 @@ class Tween
   #-// 01/26/2012
   #-// 01/26/2012
   #-// Null
-  add_easer 'Null::In' do |t, st, ch, d| 
+  add_easer 'Null::In' do |t, st, ch, d|
     st
   end
 
@@ -51,8 +51,8 @@ class Tween
   end
 
   #-// Linear
-  add_easer "Linear"  do |t, st, ch, d| 
-    ch * t / d + st 
+  add_easer "Linear"  do |t, st, ch, d|
+    ch * t / d + st
   end
 
   #-// Sine
@@ -114,8 +114,8 @@ class Tween
   end
 
   #-// Cubic
-  add_easer "Cubic::In" do |t, st, ch, d| 
-    ch * (t /= d) * t * t + st 
+  add_easer "Cubic::In" do |t, st, ch, d|
+    ch * (t /= d) * t * t + st
   end
   add_easer "Cubic::Out" do |t, st, ch, d|
     ch * ((t = t / d.to_f - 1) * t * t + 1) + st
@@ -215,5 +215,5 @@ class Tween
       a * (2 ** (-10 * t)) * Math.sin((t * d - s) * (2 * Math::PI) / p.to_f) + ch + st
     end
   end
-  
+
 end

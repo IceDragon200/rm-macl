@@ -4,14 +4,19 @@
 #-define xINSTALLED_PARSER_:
 #-inject gen_module_header 'MACL::Parser'
 module MACL
+
   module Parser
+
     @@data_types = {}
+
     def self.add_data_type *names, &func
       names.each do |n| @@data_types[n] = func end
     end
+
     def self.data_types
       @@data_types
     end
+
     add_data_type 'string' , 'str'  do |args|args.map!(&:to_s) end
     add_data_type 'integer', 'int'  do |args|args.map!(&:to_i) end
     add_data_type 'boolean', 'bool' do |args|args.collect!{|s|str2bool(s)} end
@@ -19,9 +24,11 @@ module MACL
     add_data_type 'rate'   , 'rt'   do |args|args|args.collect!{|s|str2rate(s)} end
     add_data_type 'float'  , 'flt'  do |args|args.map!(&:to_f) end
     add_data_type 'hex'             do |args|args.map!(&:hex) end  
+
     STRS_TRUE  = ["TRUE" ,"YES","ON" ,"T","Y"]
     STRS_FALSE = ["FALSE","NO" ,"OFF","F","N"]
     STRS_BOOL  = STRS_TRUE + STRS_FALSE
+
     module Regexp
       DTTYPES   = /(a-)?(#{MACL::Parser.data_types.keys.join(?|)}):(.*)/i
       KEYNVALUE = /(.+):\s*(.+)/i
@@ -30,13 +37,16 @@ module MACL
       FLT       = /\d+\.\d+/
       PRATE     = /\d+%/i
     end
-    def self.Singulize array
+
+    def self.Singulize(array)
       return array.size == 1 ? array[0] : array
     end
+
     # // Converters
     def self.obj2str *objs
       Singulize(objs.collect do |obj| String obj end)
     end
+
     def self.str2bool *strs
       Singulize(strs.collect do |str|
         case str.upcase
@@ -46,24 +56,31 @@ module MACL
         end
       end)
     end
+
     def self.str2int *strs
       Singulize(strs.collect do |str| Integer str end)
     end
+
     def self.str2flt *strs
       Singulize(strs.collect do |str| Float str end)
     end
+
     def self.str2prate *strs
       Singulize(strs.collect do |str| str.to_i/100.0 end)
     end
+
     def self.str2rate *strs
       Singulize(strs.collect do |str| str.to_i/1.0 end)
     end
+
     def self.str2int_a str
       str.scan(/\d+/).map! &:to_i
     end
+
     def self.str2array str,splitter=?,
       str.split splitter
     end
+
     def self.str2obj str,type=:nil
       case type
       when :int, :integer ; str2int str
@@ -84,6 +101,7 @@ module MACL
         end
       end
     end
+
     # // Get dtstr
     def self.obj_data_type obj
       case obj
@@ -94,6 +112,7 @@ module MACL
       else           ; nil
       end
     end
+
     # // 100 => int:100, "stuff"=>str:stuff
     def self.obj2dtstr obj
       if obj.is_a?(Array)
@@ -103,6 +122,7 @@ module MACL
         type ? "%s:%s" % [type,obj] : nil
       end
     end
+
     # // key: value
     def self.parse_knv_str tag,types=[:nil],has_array=false
       types = Array(types)
@@ -114,6 +134,7 @@ module MACL
       values.collect!{|(n,index)|value2obj(n,types[index]||:nil)}
       return key, values
     end
+
     # // Chitat Main
     # // str:Stuff, int:2, flt:0.2, bool:TRUE
     def self.parse_dtstr dtstr,return_type=:value
@@ -128,5 +149,6 @@ module MACL
       return value if return_type == :value
       return is_array, dt_type, value # // return_type == :all
     end
+    
   end
 end
