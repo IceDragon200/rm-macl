@@ -13,11 +13,14 @@
 # CaptainJet (For original script)
 # Modularize, rewrite, and new by IceDragon
 require_relative 'tween/tween.rb'
+require_relative 'tween/tweenerror.rb'
 require_relative 'tween/easers.rb'
 require_relative 'tween/easers-ex.rb'
 require_relative 'tween/multi.rb'
 require_relative 'tween/seqr.rb'
 require_relative 'tween/osc.rb'
+require_relative 'tween/tween_struct.rb'
+require_relative 'tween/tool.rb'
 require_relative 'tween/init.rb'
 
 Tween = MACL::Tween

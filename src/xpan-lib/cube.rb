@@ -1,40 +1,44 @@
 #
 # src/xpan-lib/cube.rb
-# vr 1.20
+# vr 1.29
 #
 module MACL
   class Cube
 
-    SYM_KEYS = [:x, :y, :z, :width, :height, :length]
+    sym_keys = [:x, :y, :z, :width, :height, :depth]
 
-    attr_accessor *SYM_KEYS
+    attr_reader *sym_keys
 
-    def initialize(*args)
-      _set(*args)
-    end
-
-    def hash
-      [@x, @y, @z, @width, @height, @length].hash
-    end
-
-    def translate(x, y, z)
-      @x, @y, @z = x, y, z
-    end
-
-    def resize(width, height, length)
-      @width, @height, @length = width, height, length
+    # all attributes should be forced to an integer :D
+    sym_keys.each do |key|
+      varname = "@#{key}"
+      define_method("#{key}=") do |n|
+        instance_variable_set(varname, n.to_i)
+      end
     end
 
     def set(x=0, y=0, z=0, w=0, h=0, l=0)
-      @x, @y, @z = x, y, z
-      @width, @height, @length = w, h, l
+      @x, @y, @z = x.to_i, y.to_i, z.to_i
+      @width, @height, @depth = w.to_i, h.to_i, l.to_i
     end
 
-    alias :_set :set
-    private :_set
+    # since initialize does the same thing as set :D
+    alias initialize set
+
+    def hash
+      [self.class, @x, @y, @z, @width, @height, @depth].hash
+    end
+
+    def translate(x, y, z)
+      @x, @y, @z = x.to_i, y.to_i, z.to_i
+    end
+
+    def resize(width, height, depth)
+      @width, @height, @depth = width.to_i, height.to_i, depth.to_i
+    end
 
     def hset(hash)
-      valid_keys = hash.keys & SYM_KEYS
+      valid_keys = hash.keys & [:x, :y, :z, :width, :height, :depth]
       valid_keys.each do |key|
         value = hash[key]
         instance_variable_set("@#{key.to_s}", value)
@@ -42,64 +46,34 @@ module MACL
       return self
     end
 
-    def ary_from_keys(*keys)
-      hsh = as_hash()
-      return (keys & SYM_KEYS).collect { |sym| hsh[sym] }
-    end
-
-    alias xto_a ary_from_keys
-
-    #def xto_a(keys)
-    #  warn("Depreceated function call by #{caller[0..1]}")
-    #  ary_from_keys(keys)
-    #end
-
-    def as_pos
-      return MACL::Vector3.new(@x, @y, @z)
-    end
-
     def as_ary
-      return @x, @y, @z, @width, @height, @length
+      return [@x, @y, @z, @width, @height, @depth]
     end
 
     def as_rect
-      Rect.new @x, @y, @width, @height
+      Rect.new(@x, @y, @width, @height)
     end
 
     def as_hash
       return {
         x: @x, y: @y, z: @z,
-        width: @width, height: @height, length: @length
+        width: @width, height: @height, depth: @depth
       }
     end
 
     def to_s
-      return "<#{self.class.name}: x%s y%s z%s w%s h%s l%s>" % to_a
+      return "<#{self.class.name}: x%<x>d y%<y>d z%<z>d w%<width>d h%<height>d d%<depth>d>" % as_hash
     end
 
     def empty
       @x, @y, @z = 0, 0, 0
-      @width, @height, @length = 0, 0, 0
+      @width, @height, @depth = 0, 0, 0
       return self
     end
 
-    #def area_wh
-    #  @width * @height
-    #end
-
-    #def area_wl
-    #  @width * @length
-    #end
-
-    #def area_hl
-    #  @height * @length
-    #end
-
-    def volume
-      @width * @height * @length
+    def empty?
+      return @width == 0 || @height == 0 || @depth == 0
     end
 
   end
 end
-
-Cube = MACL::Cube

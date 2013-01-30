@@ -18,11 +18,12 @@ require_relative 'skinj/header-gen'
 require_relative 'skinj/skinj-version'
 
 ##
-# Class Skinj 
+# Class Skinj
 #
 class Skinj
 
-  DEFAULT_SYNTAX_FILENAME = File.join(File.dirname(__FILE__), 'skinj/skinj-syntax.rb')
+  DEFAULT_SYNTAX_FILENAME = File.join(
+    File.dirname(__FILE__), 'skinj/skinj-syntax.rb')
 
   include Skinj_Gen
 
@@ -31,7 +32,7 @@ class Skinj
     CMD_SKINJ_VERSION = "0x10004"
 
     require_relative "skinj/skinj-locale"
-    
+
     MODE_FILE = 0
     MODE_DIR  = 1
 
@@ -56,7 +57,7 @@ class Skinj
         end
       end
     #rescue Exception => ex
-    #  Skinj.debug_puts 'Error ocurred while Skinj-ing directory' 
+    #  Skinj.debug_puts 'Error ocurred while Skinj-ing directory'
     #  p ex
     end
 
@@ -72,7 +73,7 @@ class Skinj
         new_settings = {
           indent: indent,
           definitions: definitions,
-          switches: switches,    
+          switches: switches,
           source: src
         }
 
@@ -100,21 +101,21 @@ class Skinj
                  end
       puts %Q(
 /*
-  Skinj - Command Line 
-  CMD Version #{CMD_SKINJ_VERSION}     
+  Skinj - Command Line
+  CMD Version #{CMD_SKINJ_VERSION}
   SKJ Version #{::Skinj::SKINJ_VERSION}
   */
 
 Running with following parameters:
   MODE : #{mode_str}
-  Source #{mode_str} : #{settings[:src]}        
+  Source #{mode_str} : #{settings[:src]}
   Destination #{mode_str} : #{settings[:dest]}
 
   Default Settings:
     Indent : #{settings[:def_indent]}
-    Definitions : 
+    Definitions :
       #{settings[:def_default]}
-    Switches : 
+    Switches :
       #{settings[:def_switches]}
 )
     end
@@ -157,13 +158,13 @@ def main(argsv)
     when '--help', '-h'
       puts Skinj::CommandLine.get_help_string
       return false
-    # // Enabled EDOS mode, replaces all Game_ with Game::  
+    # // Enabled EDOS mode, replaces all Game_ with Game::
     when '--edos', '-e'
       settings[:def_default]['Game_']   = 'Game::'
       settings[:def_default]['Sprite_'] = 'Sprite::'
       settings[:def_default]['Window_'] = 'Window::'
       settings[:def_default]['Scene_']  = 'Scene::'
-    # // Enable incur replacement mode  
+    # // Enable incur replacement mode
     when '--incur', '-i'
       settings[:def_switches]['INCUR'] = true
     # // Skinj Processing Modes
@@ -172,19 +173,19 @@ def main(argsv)
       # // Process directories
       when 'dir'
         settings[:mode] = MODE_DIR
-      # // Process single file  
+      # // Process single file
       when 'file'
         settings[:mode] = MODE_FILE
       else
         raise(ArgumentError, "Invalid Skinj mode: #{n}")
-      end  
-    # // Set the source directory/file  
+      end
+    # // Set the source directory/file
     when '/src', '--src', '-s'
       settings[:src] = argsv.shift
-    # // Set the destination/target directory/file  
+    # // Set the destination/target directory/file
     when '/dest', '--dest', '-d'
       settings[:dest] = argsv.shift
-    # // Change Syntax File :D  
+    # // Change Syntax File :D
     when '/syntax', '--syntax', '-x'
       syntax_filename = argsv.shift
     else

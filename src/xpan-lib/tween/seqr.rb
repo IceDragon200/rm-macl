@@ -20,7 +20,7 @@ module MACL
         current.values
       end
 
-      def value n=0
+      def value(n = 0)
         current.value n
       end
 

@@ -1,6 +1,7 @@
 MACL.linara_add __FILE__, [
   ['archijust.rb',  0],
   ['blaz.rb',       0],
+  ['cacheer.rb',    0],
   ['cube.rb',       0],
   ['fifo.rb',       0],
   ['geometry.rb',   0],

@@ -32,11 +32,8 @@ module MACL
 
     end
 
-    module TableExpansion 
-    end
-
     module Surface
     end
-    
+
   end
 end

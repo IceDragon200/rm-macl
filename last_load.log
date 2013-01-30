@@ -1,4 +1,4 @@
-12 18, 12 - 18:38:46
+01/29/13 - 13:44:21
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/gm-classes/_local_require.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/gm-modules/_local_require.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/macl/_local_require.rb
@@ -14,8 +14,6 @@ $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/gm-classes/game-variables.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/gm-modules/map-manager.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/gm-modules/scene-manager.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/macl/constants.rb
-$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/macl/handle.rb
-$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/macl/macl-tail.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/macl/macl.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/macl/mixins.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/macl/parsers.rb
@@ -25,7 +23,6 @@ $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-color.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-font.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-graphics.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-input.rb
-$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-metric.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-rect.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-sprite.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/rgss-core-ex/core-table.rb
@@ -45,6 +42,10 @@ $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/std-lib-ex/object.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/std-lib-ex/string.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/archijust.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/blaz.rb
+$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/box.rb
+$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/cacher.rb
+$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/colorf.rb
+$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/command-core.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/cube.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/fifo.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/geometry.rb
@@ -52,6 +53,7 @@ $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/grid.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/interpolate.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/morph.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/pallete.rb
+$ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/point.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/sequen.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/surface.rb
 $ /home/icy/Dropbox/code/Git/RGSS3-MACL/src/xpan-lib/task.rb

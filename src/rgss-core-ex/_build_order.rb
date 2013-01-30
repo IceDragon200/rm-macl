@@ -2,7 +2,6 @@
 #-ifdef xEDOSBUILD
 class Game ; end
 #-end:
-#-include _RGSSExPTH/core-metric.rb
 #-// Hidden Classes
 #-include _RGSSExPTH/core-graphics.rb
 #-include _RGSSExPTH/core-audio.rb

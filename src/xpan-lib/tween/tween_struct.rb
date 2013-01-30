@@ -1,6 +1,6 @@
 module MACL
   class Tween
-    class Tween_Struct
+    class TweenStruct
 
       attr_accessor :easer, :time
 

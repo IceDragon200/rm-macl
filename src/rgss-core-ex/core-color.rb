@@ -1,14 +1,11 @@
-#-//06/02/2012
-#-//06/02/2012
-#-apndmacro _imported_
-#-inject gen_scr_imported 'Core-Color', '0x10002'
-#-end:
-#-inject gen_class_header 'Color'
+#
+# src/rgss-core-ex/core-color.rb
+# vr 1.12
 class Color
 
   # // Gotta find a better way ;x
-  #-// red, green, blue = ('%06x' % int).split(/(\w{2})/).reject(&:empty?).map(&:hex)     
-  def self.hex(int) 
+  #-// red, green, blue = ('%06x' % int).split(/(\w{2})/).reject(&:empty?).map(&:hex)
+  def self.hex(int)
     raise(OutOfRange, int) if int < 0
     d1    = 256 ** 2
     red   = int / d1
@@ -20,7 +17,7 @@ class Color
   end
 
   def hash
-    [self.red,self.green,self.blue,self.alpha].hash
+    [self.red, self.green, self.blue, self.alpha].hash
   end
 
   def rgb_sym
@@ -36,21 +33,21 @@ class Color
   end
 
   alias to_a_ng to_a_na
-  
+
   def to_hex
-    to_a_na.collect{|i|"%02x"%i}.join ''
+    to_a_na.collect{ |i| "%02x" % i }.join('')
   end
 
   def to_flash
-    to_hex.hex
+    to_a_na.collect{ |i| "%x" % (i / 0xF) }.join('')
   end
 
   def to_color
-    Color.new *to_a
+    Color.new(*to_a)
   end
 
   def to_tone
-    Tone.new *to_a
+    Tone.new(*to_a_na)
   end
 
   def to_hash

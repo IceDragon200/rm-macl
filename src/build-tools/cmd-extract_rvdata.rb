@@ -40,6 +40,8 @@ HELP_STR = %Q(
   Script Extractor V#{VERSION}
   by IceDragon
  */
+  -n
+    Default
 
   -src <filename>
     Sets the file source

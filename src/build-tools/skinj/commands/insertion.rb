@@ -4,6 +4,7 @@ class Skinj
   add_command :include, REGEXP_INCLUDE do
 
     filename, = *sub_args(params[1])
+    filename.gsub!(/['"]/, '')
     filename = File.expand_path(filename)
 
     unless File.exist?(filename)
@@ -23,7 +24,7 @@ class Skinj
       new_settings[:index] = 0
 
       str   = Skinj.parse(str, new_settings).assemble
-      strs  = str.split(/[\r\n]+/)
+      strs  = str.split("\n")
       strs.collect { |s| s.indent(indent) }.each {|s| add_line(s) }#(" " * indent) + s}.each {|s| add_line(s) }
       debug_puts "/INCLUDE: #{File.basename(filename)}"
       #debug_puts "File %s included sucessfully" % File.basename(filename)
@@ -66,4 +67,4 @@ class Skinj
     #end
   end
 
-end  
+end

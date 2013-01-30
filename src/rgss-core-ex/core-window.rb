@@ -1,2 +1,2 @@
-#-apndmacro _imported_
-#-end:
+class Window
+end

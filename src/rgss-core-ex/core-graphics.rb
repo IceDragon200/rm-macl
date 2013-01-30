@@ -4,16 +4,20 @@
 #-inject gen_scr_imported 'Core-Graphics', '0x10001'
 #-end:
 #-inject gen_module_header 'Graphics'
-class << Graphics
+module Graphics
+class << self
+
   def rect
-    Rect.new(0,0,width,height)
-  end unless method_defined? :rect 
-  def frames_to_sec frames 
+    Rect.new(0, 0, width, height)
+  end unless method_defined? :rect
+
+  def frames_to_sec(frames)
     frames / frame_rate.to_f
-  end    
-  alias frm2sec frames_to_sec
-  def sec_to_frames sec
+  end
+
+  def sec_to_frames(sec)
     sec * frame_rate
   end
-  alias sec2frm sec_to_frames
-end  
+
+end
+end

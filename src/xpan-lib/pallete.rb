@@ -1,41 +1,87 @@
 #
 # src/xpan-lib/pallete.rb
 #
-# vr 1.10
-module Pallete
+# vr 2.10
+class MACL::Pallete
 
-  @sym_colors = {}
-  @ext_colors = {}
+  class PalleteError < StandardError
+  end
 
-  def self.pallete?
+  attr_accessor :pallete_name, :columns, :cell_size
+
+  def initialize(filename="graphics/system/pallete.png")
+    @pallete_name = filename
+    @sym_colors = {}
+    @ext_colors = {}
+    @columns = 16
+    @cell_size = 8
+  end
+
+  def add_sym(name, id)
+    @sym_colors[name] = id.to_i
+  end
+
+  def add_ext(name, *args)
+    case args.size
+    when 1
+      rgss_color, = args
+    when 3, 4
+      r, g, b, a = *args
+      a ||= 255
+      rgss_color = Color.new(r, g, b, a)
+    else
+      raise(ArgumentError)
+    end
+    @ext_colors[name] = rgss_color
+  end
+
+  alias set_color add_ext
+
+  def pallete?
     return !(@pallete.nil? || @pallete.disposed?)
   end
 
-  def self.reload_pallete
+  def reload_pallete
     @pallete.dispose unless @pallete.nil? || @pallete.disposed?
     load_pallete
   end
 
-  def self.load_pallete
-    @pallete = Cache.system("pallete.png")
+  def load_pallete
+    @pallete = Bitmap.new(@pallete_name)
   end
 
-  def self.pallete
-    load_pallete unless @pallete || @pallete
+  def pallete
+    load_pallete if @pallete.nil? || @pallete.disposed?
     return @pallete
   end
 
-  def self.get_color(index)
-    pallete.get_pixel (index % 16) * 8, (index / 16) * 8
+  def get_color(index)
+    pallete.get_pixel(
+      (index % @columns) * @cell_size, (index / @columns) * @cell_size)
   end
 
-  def self.sym_color(symbol)
-    @ext_colors[symbol] || get_color(@sym_colors[symbol] || 0)
+  def sym_color(sym)
+    if sym.is_a?(Symbol)
+      sym = sym.to_s
+      console.fwarn_warn(
+        "use of Symbol (:#{sym}) for #{self}.sym_color is depreceated")
+    end
+
+    unless @ext_colors.has_key?(sym) || @sym_colors.has_key?(sym)
+      raise(PalleteError, "no reference for color symbol #{sym} (#{sym.class})")
+    end
+
+    ex_color = @ext_colors[sym]
+    return ex_color ? ex_color.dup : get_color(@sym_colors[sym])
   end
 
-  def self.[](n)
-    n = n.to_s if n.is_a?(Symbol)
-    n.is_a?(String) ? sym_color(n) : get_color(n)
+  def [](n)
+    n.is_a?(Numeric) ? get_color(n) : sym_color(n)
+  end
+
+  def entries
+    return Hash[
+      @sym_colors.collect do |(k, v)| [k, get_color(v)] end].merge(@ext_colors)
   end
 
 end

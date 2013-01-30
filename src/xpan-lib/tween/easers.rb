@@ -24,18 +24,19 @@ class MACL::Tween
   EASER_BY_SYMBOL = {}
 
   def self.add_easer str,&func
-    mod,name = str.split("::")
+    mod, name = str.split("::")
     (name = mod; mod = nil) unless name
     modu = self
     if mod
       module_eval %Q(module #{mod} ; end) # // Initialize module
       modu = const_get(mod)
     end
-    easer = modu.__send__(:const_set,name,Easer.new(str,&func))
+    easer = modu.__send__(:const_set, name, Easer.new(str,&func))
     sym   = easer.name.gsub('::',?_).downcase.to_sym
     EASER_BY_SYMBOL[sym] = easer
     EASER_BY_SYMBOL[sym].symbol = sym
     EASERS.push(easer)
+    return easer
   end
 
   #-// IceDragon
@@ -57,13 +58,13 @@ class MACL::Tween
 
   #-// Sine
   add_easer "Sine::In"  do |t, st, ch, d|
-    -ch * Math.cos(t / d * (Math::PI / 2)) + ch + st
+    st + -ch * Math.cos(t / d * (Math::PI / 2)) + ch
   end
   add_easer "Sine::Out"  do |t, st, ch, d|
-    ch * Math.sin(t / d * (Math::PI / 2)) + st
+    st + ch * Math.sin(t / d * (Math::PI / 2))
   end
   add_easer "Sine::InOut" do |t, st, ch, d|
-    -ch / 2 * (Math.cos(Math::PI * t / d) - 1) + st
+    st + -ch / 2.0 * (Math.cos(Math::PI * t / d) - 1)
   end
 
   #-// Circ

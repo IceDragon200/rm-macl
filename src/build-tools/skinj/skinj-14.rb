@@ -12,7 +12,7 @@ class Skinj
   #   Integer :line
   #
   def self.parse(str, parameters)
-    lines = str.is_a?(Array) ? str.dup : str.split(/[\n\r]/)
+    lines = str.is_a?(Array) ? str.dup : str.split("\n")#(/[\n\r]+/)
     lines.collect! do |s| s.force_encoding('UTF-8') end
 
     # initialize Skinj instance
@@ -25,7 +25,7 @@ class Skinj
   rescue Exception => ex
     write_skinj_error_log(skinj, ex)
   ensure
-    return skinj  
+    return skinj
   end
 
   def self.write_skinj_error_log(skinj, ex)
@@ -40,7 +40,7 @@ class Skinj
       f.puts "Error in file #{skinj.source} on line: #{skinj.index}"
       f.puts ex.inspect
       f.puts ex.backtrace
-    end    
+    end
   end
 
 end

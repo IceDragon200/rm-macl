@@ -5,7 +5,6 @@ MACL.linara_add __FILE__, [
   ['core-font.rb',     0],
   ['core-graphics.rb', 0],
   ['core-input.rb',    0],
-  ['core-metric.rb',   0],
   ['core-rect.rb',     0],
   ['core-sprite.rb',   0],
   ['core-table.rb',    0],

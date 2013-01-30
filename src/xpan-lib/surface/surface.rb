@@ -5,55 +5,48 @@
 ##
 # Surface
 #
-class Surface
+class MACL::Surface
 
   include MACL::Mixin::Surface
 
-  def self.rect_to_v4a(rect)
-    return rect.as_v4a
+  attr_reader :x, :y, :x2, :y2
+  # when you change x, y, x2, y2
+  # if freeform is enabled it affects width, height
+  # otherwise, the width, height will be locked, and the opposite value
+  # will be adjusted to denote the the change
+  #   default: false
+
+  def initialize(*args)
+    set(*args)
+    @freeform = false
   end
 
-  def self.v4a_to_rect(v4a)
-    x, y, x2, y2 = *v4a
-
-    w = x2 - x
-    h = y2 - y
-
-    return Rect.new(x, y, w, h)
-  end
-
-  def self.center(r1, r2)
-    return Rect.new(
-      r1.x + (r1.width - r2.width) / 2,
-      r1.y + (r1.height - r2.height) / 2,
-      r2.width, r2.height
-    )
-  end
-
-  def self.area_rect(*objs)
-    mx = objs.min_by(&:x)
-    my = objs.min_by(&:y)
-    mw = objs.max_by(&:x2)
-    mh = objs.max_by(&:y2)
-    return Vector4.v4a_to_rect( [mx.x, my.y, mw.x2, mh.y2] )
-  end
-
-  def self.fit_in(source, target)
-    w, h = source.width, source.height
-    if w > h
-      scale = target.width.to_f / w
-    else
-      scale = target.height.to_f / h
+  def x=(new_x)
+    unless @freeform
+      @x2 = new_x + width
     end
-    r = source.dup;
-    r.width, r.height= (w * scale).to_i, (h * scale).to_i
-    return r
+    @x = new_x
   end
 
-  attr_accessor :x, :y, :x2, :y2
+  def y=(new_y)
+    unless @freeform
+      @y2 = new_y + height
+    end
+    @y = new_y
+  end
 
-  def initialize(x=0, y=0, x2=0, y2=0)
-    @x, @y, @x2, @y2 = x, y, x2, y2
+  def x2=(new_x2)
+    unless @freeform
+      @x = new_x2 - width
+    end
+    @x2 = new_x2
+  end
+
+  def y2=(new_y2)
+    unless @freeform
+      @y = new_y2 - height
+    end
+    @y2 = new_y2
   end
 
   def width
@@ -77,9 +70,9 @@ class Surface
     when 1
       surface = args[0]
 
-      raise(TypeError, "expected kind of Surface but received #{surface.class}") unless surface.kind_of?(MACL::Mixin::Surface)
+      MACL::Mixin::Surface.type_check(surface)
 
-      x, y, x2, y2 = surface.to_v4a
+      x, y, x2, y2 = surface.as_sa
     when 4
       x, y, x2, y2 = *args
     else

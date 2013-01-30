@@ -1,7 +1,10 @@
 #
 # macl_local.rb
 #
-require 'colorize'
+
+#
+# '%<x>02d' % { x: 2 }
+# you can format a string by passing a hash as well :O
 
 module MACL
 
@@ -10,7 +13,7 @@ module MACL
   end
 
   def self.linara_add(filename, array)
-    puts ">!!".colorize(:light_yellow)  + " parameter(#{'array'.colorize(:light_yellow)}) is ignored all files will be loaded instead"
+    #puts ">!!".colorize(:light_yellow)  + " parameter(#{'array'.colorize(:light_yellow)}) is ignored all files will be loaded instead"
     array = Dir.glob(File.join(File.dirname(filename), '*.rb'))
     array = array.collect(&File.method(:basename)) - ['_build_order.rb', '_local_require.rb']
     array.sort!
@@ -38,7 +41,7 @@ path = file_path + '/src/**/_local_require.rb'
 
 last_load = File.open(File.join(file_path, 'last_load.log'), 'w+')
 last_load.sync = true
-last_load.write(Time.now.strftime('%m %d, %y - %H:%M:%S') + "\n")
+last_load.write(Time.now.strftime('%m/%d/%y - %H:%M:%S') + "\n")
 
 $alinara = [] # [filename, priority]
 

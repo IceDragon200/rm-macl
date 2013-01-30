@@ -1,18 +1,23 @@
 #-//06/02/2012
 #-//06/02/2012
 #-inject gen_class_header 'Game_Switches'
-class Game_Switches
+class Game
+  class Switches
 
-  def on?(id) 
-    !!self[id]
+    # if the switch currently on?
+    def on?(id)
+      return !!self[id]
+    end
+
+    # if the switch currently off?
+    def off?(id)
+      return !self[id]
+    end
+
+    # toggle the switch state
+    def toggle(id)
+      self[id] = !self[id]
+    end
+
   end
-
-  def off?(id)
-    !self[id]
-  end
-
-  def toggle(id)
-    self[id] = !self[id]
-  end
-
 end

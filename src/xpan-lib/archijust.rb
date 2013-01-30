@@ -1,6 +1,6 @@
 #
 # src/xpan-lib/archijust.rb
-# vr 1.10
+# vr 1.11
 #
 
 ##
@@ -97,17 +97,27 @@ module MACL
 
         define_method(str, &func)
 
-        define_method(sym) do
-          |*args, &block|
-
-          begin
-            dup.__send__(str, *args, &block)
-          rescue Exception => ex
-            puts "define_exfunc: Error in #{sym}"
+        module_eval(%Q(
+          def #{sym}(*args, &block)
+            dup.#{str}(*args, &block)
+          rescue(Exception) => ex
+            puts "Error Occurred in #{'#{self.class}'}.#{sym}"
             p ex
             raise(ex) unless MACL::Mixin::Archijust.debug?
           end
-        end
+        ))
+
+        #define_method(sym) do
+        #  |*args, &block|
+        #
+        #  begin
+        #    dup.__send__(str, *args, &block)
+        #  rescue(Exception) => ex
+        #    puts "define_exfunc: Error in #{sym}"
+        #    p ex
+        #    raise(ex) unless MACL::Mixin::Archijust.debug?
+        #  end
+        #end
         return self
       end
 
