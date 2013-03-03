@@ -1,1 +1,0 @@
-src\build_tools\script_assembler build_ins/macl_list_def_dev.rb builds(ex)/rgss3macl_dev.rb

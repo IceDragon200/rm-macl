@@ -8,7 +8,8 @@
            \ \__\\ \__\\ \__\  \ \__\\ \__\  \ \_______\  \ \_______\
             \/__/ \/__/ \/__/   \/__/ \/__/   \/_______/   \/_______/
 
- vr 1.6
+ vr 2.0.0
 
- ASCII Art by IceDragon
+ ASCII Art by IceDragon (cause he had nothing better to do)
 =end
+require File.join(File.dirname(__FILE__), 'lib', 'macl')

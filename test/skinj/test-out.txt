@@ -1,7 +1,0 @@
-
-DirU 8
-DirL 4
-DirR 6
-DirD 2
-
-((2 + 3) / 2)
