@@ -2,9 +2,17 @@
 # RGSS3-MACL/lib/xpan-lib/colorf.rb
 #   by IceDragon
 #   dc ??/??/2012
-#   dm 03/03/2013
-# vr 1.01
-#   Using the (0.0)...(1.0) scale rather than 0...255
+#   dm 05/03/2013
+# vr 1.1.0
+#   Using floats instead of integers
+#
+# CHANGES
+#   05/03/2013 (vr 1.1.0)
+#     new-method
+#       to_color24
+#       to_color32
+#     new-alias
+#       to_color32 => to_color
 class MACL::ColorF
 
   attr_reader :red, :green, :blue, :alpha
@@ -29,6 +37,15 @@ class MACL::ColorF
     return red * green * blue * alpha
   end
 
+  def to_color24
+    return Color.new(red * 255, green * 255, blue * 255, 255)
+  end
+
+  def to_color32
+    return Color.new(red * 255, green * 255, blue * 255, alpha * 255)
+  end
+
   alias :initialize :set
+  alias :to_color :to_color32
 
 end
