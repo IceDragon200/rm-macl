@@ -3,8 +3,9 @@
 #   by IceDragon
 #   dc ??/??/2012
 #   dm 03/03/2013
-# vr 2.1.2
-class MACL::Pallete
+# vr 2.1.3
+module MACL
+class Pallete
 
   class PalleteError < StandardError
   end
@@ -49,7 +50,7 @@ class MACL::Pallete
   end
 
   def load_pallete
-    @pallete = Bitmap.new(@pallete_name)
+    @pallete = Cache.normal_bitmap(@pallete_name)
   end
 
   def pallete
@@ -88,3 +89,4 @@ class MACL::Pallete
   alias :set_color :add_ext
 
 end
+end # /MACL

@@ -2,15 +2,15 @@
 # RGSS3-MACL/lib/rgss-core-ex/color.rb
 #   by IceDragon
 #   dc ??/??/2012
-#   dm 03/03/2013
-# vr 1.2.1
+#   dm 09/03/2013
+# vr 1.2.2
 class Color
 
-  def self.rgb32(pixeli)
-    return new((pixeli >> 24) & 0xFF, # red
-               (pixeli >> 16) & 0xFF, # green
-               (pixeli >> 8)  & 0xFF, # blue
-               (pixeli     )  & 0xFF) # alpha
+  def self.argb32(pixeli)
+    return new((pixeli >> 16) & 0xFF, # red
+               (pixeli >>  8) & 0xFF, # green
+               (pixeli >>  0) & 0xFF, # blue
+               (pixeli >> 24) & 0xFF) # alpha
   end
 
   def self.rgb24(pixeli)
@@ -19,11 +19,11 @@ class Color
                (pixeli)       & 0xFF) # blue
   end
 
-  def self.rgb16(pixeli)
-    return new(((pixeli >> 12) & 0xF) * 0xF, # red
-               ((pixeli >> 8)  & 0xF) * 0xF, # green
-               ((pixeli >> 4)  & 0xF) * 0xF, # blue
-               ((pixeli     )  & 0xF) * 0xF) # alpha
+  def self.argb16(pixeli)
+    return new(((pixeli >> 8)  & 0xF) * 0xF, # red
+               ((pixeli >> 4)  & 0xF) * 0xF, # green
+               ((pixeli >> 0)  & 0xF) * 0xF, # blue
+               ((pixeli >> 12) & 0xF) * 0xF) # alpha
   end
 
   def self.rgb12(pixeli)
@@ -31,6 +31,22 @@ class Color
                ((pixeli >> 4) & 0xF) * 0xF, # green
                ((pixeli     ) & 0xF) * 0xF) # blue
   end
+
+  def to_argb32
+    return (alpha << 24) + (red << 16) + (green << 8) + (blue)
+  end unless method_defined?(:to_argb32)
+
+  def to_rgb24
+    return (red << 16) + (green << 8) + (blue)
+  end unless method_defined?(:to_rgb24)
+
+  def to_argb16
+    return ((red / 0xF) << 8) + ((green / 0xF) << 4) + (blue / 0xF)
+  end unless method_defined?(:to_argb16)
+
+  def to_rgb12
+    return ((alpha / 0xF) << 12) + ((red / 0xF) << 8) + ((green / 0xF) << 4) + (blue / 0xF)
+  end unless method_defined?(:to_rgb12)
 
   def hash
     [self.red, self.green, self.blue, self.alpha].hash
@@ -40,21 +56,13 @@ class Color
     return :red, :green, :blue
   end unless method_defined?(:rgb_sym)
 
-  def to_a
+  def to_argb32_a
     return [self.red, self.green, self.blue, self.alpha]
-  end unless method_defined?(:to_a)
+  end unless method_defined?(:to_argb32_a)
 
-  def to_a_na
+  def to_rgb24_a
     return to_a[0, 3]
-  end unless method_defined?(:to_a_na)
-
-  def to_rgb24
-    return (red << 16) + (green << 8) + (blue)
-  end unless method_defined?(:to_rgb24)
-
-  def to_rgb12
-    return ((red / 0xF) << 8) + ((green / 0xF) << 4) + (blue / 0xF)
-  end unless method_defined?(:to_rgb12)
+  end unless method_defined?(:to_rgb24_a)
 
   def to_color
     return Color.new(*to_a)
@@ -73,6 +81,8 @@ class Color
   end unless method_defined?(:to_h)
 
   # interfacing for Color/Tone
+  alias_method(:to_a, :to_argb32_a) unless method_defined?(:to_a)
+  alias_method(:to_a_na, :to_rgb24_a) unless method_defined?(:to_a_na)
   alias_method(:to_a_ng, :to_a_na) unless method_defined?(:to_a_ng)
 
 end

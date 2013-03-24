@@ -141,8 +141,9 @@ module SurfaceBang
 
   # remove none-bang exfuncs
   MACL::Mixin::Surface.exfuncs.each do |sym|
-    next if sym.to_s.end_with?(?!) # skip if its a bang function
-    undef_method(sym)
+    if sym.to_s.end_with?(?!) # skip if its a bang function
+      undef_method(sym[0, sym.size - 1]) rescue nil
+    end
   end
 
 end

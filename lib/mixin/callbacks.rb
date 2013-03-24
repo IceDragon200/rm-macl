@@ -2,52 +2,83 @@
 # RGSS3-MACL/lib/mixin/callbacks.rb
 #   by IceDragon
 #   dc 03/03/2013
-#   dm 03/03/2013
-# vr 1.0.0
+#   dm 09/03/2013
+# vr 1.1.3
 module MACL
   module Mixin
     module Callback
 
-      def init_handler
-        @handler = {}
+      class CallbackError < RuntimeError
+      end
+
+      class << self
+        attr_accessor :log
+      end
+
+      attr_accessor :callback_log
+
+      def init_callbacks
+        @callback_log = ::MACL::Mixin::Callback.log # for debugging
+        @callback = {}
         return self
       end
 
-      def clear_handler
-        @handler.clear
+      def clear_callbacks
+        @callback.clear
       end
 
-      def dispose_handler
-        @handler.clear # clear it, makes sure no one uses the handlers.
-        @handler = nil
+      def dispose_callbacks
+        @callback = nil
       end
 
       ##
-      # set_handler(ID sym, Proc func)
-      # set_handler(ID sym, &block)
-      def set_handler(sym, func=nil, &block)
+      # add_callback(ID sym, Proc func)
+      # add_callback(ID sym, &block)
+      def add_callback(sym, func=nil, &block)
+        init_callbacks unless @callback
         if func && block || !func && !block
           raise(ArgumentError,
                 "Either pass a block (block), or a Proc (func)")
         end
-        (@handler[sym] ||= []).push(func || block)
+        (@callback[sym] ||= []).push(func || block)
         return self
       end
 
       ##
-      # unset_handlers(ID sym)
-      def unset_handlers(sym)
-        @handler.delete(sym)
+      # remove_callback(ID sym)
+      def remove_callback(sym)
+        init_callbacks unless @callback
+        @callback.delete(sym)
         return self
       end
 
       ##
-      # call_handler(ID sym, *args, &block)
-      def call_handler(sym, *args, &block)
+      # callback?(sym)
+      def callback?(sym)
+        return @callback.has_key?(sym)
+      end
+
+      ##
+      # call_callback(ID sym, *args, &block)
+      def call_callback(sym, *args, &block)
+        init_callbacks unless @callback
         raise(CallbackError,
-              "callback #{sym} does not exist") unless @handler.has_key?(sym)
-        return @handler[sym].each { |callback| callback.(*args, &block) }
+              "callback #{sym} does not exist") unless callback?(sym)
+        @callback_log << "Callback: #{self} #{sym} #{args.inspect}\n" if @callback_log
+        return @callback[sym].each { |callback| callback.(*args, &block) }
       end
+
+      ##
+      # try_callback(ID sym, *args, &block)
+      def try_callback(sym, *args, &block)
+        call_callback(sym, *args, &block) if callback?(sym)
+      end
+
+      alias :callback :call_callback
+
+      private :callback,
+              :call_callback,
+              :try_callback
 
     end
   end

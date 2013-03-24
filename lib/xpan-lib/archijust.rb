@@ -3,7 +3,7 @@
 #   by IceDragon
 #   dc ??/??/2012
 #   dc 03/03/2013
-# vr 1.1.2
+# vr 1.2.0
 
 ##
 # MACL::Mixin::Archijust
@@ -35,7 +35,7 @@ module MACL
       ##
       # define_uoc(Symbol *syms)
       #
-      # used on a attr_writer, to only update the variable if it has changed
+      # used on a attr_writer, to only update the variable if it has changed.
       # the original method will be aliased under set_<original_name>
       #
       def define_uoc(*syms)
@@ -103,8 +103,7 @@ module MACL
           def #{sym}(*args, &block)
             dup.#{str}(*args, &block)
           rescue(Exception) => ex
-            puts "Error Occurred in #{'#{self.class}'}.#{sym}"
-            p ex
+            puts "Error Occurred in #{'#{self.class}'}##{sym}"
             raise(ex) unless MACL::Mixin::Archijust.debug?
           end
         ))
@@ -139,6 +138,7 @@ module MACL
         ["int", "%s.to_i"],
         ["float", "%s.to_f"],
         ["string", "%s.to_s"],
+        ["bool", "!!%s"]
         #["array", "%s.to_a"],
         #["hash", "%s.to_h"]
       ].each do |(word, conv)|

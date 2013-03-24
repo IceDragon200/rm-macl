@@ -11,7 +11,7 @@ module MACL
 module Mixin
 module Surface
 
-  def to_ary
+  def to_a
     return self.x, self.y, self.width, self.height
   end
 

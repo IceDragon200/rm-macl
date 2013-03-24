@@ -4,7 +4,7 @@
 #   dc ??/??/2012
 #   dm 03/03/2013
 # vr 1.1.0
-require File.join(File.dirname(__FILE__), 'point')
+require File.join(File.dirname(__FILE__), 'vector')
 # DeCasteljau Algorithm
 # Hamburg (Germany), the 19th September 1999. Written by Nils Pipenbrinck aka Submissive/Cubic & $eeN
 # Bezier Curve
@@ -25,7 +25,7 @@ module MACL
       wpoints = points
       until wpoints.size <= 2
         for i in 0...(wpoints.size-1)
-          pnt = MACL::Point.Zero
+          pnt = MACL::Vector2f.new(0, 0)
           lerp(pnt, wpoints[i], wpoints[i+1], t)
           result_points << pnt
         end

@@ -90,7 +90,7 @@ public
     end
   end
 
-  def self.id_to_unary(id, strict=false)
+  def self.id_to_signum(id, strict=false)
     case id
     when ID_NULL
       return 0
@@ -105,7 +105,7 @@ public
 
   def self.anchor_to_unary(anchor, strict=true)
     return anchor_to_ids(anchor).map do |n|
-      id_to_unary(n, strict)
+      id_to_signum(n, strict)
     end
   end
 
@@ -143,7 +143,7 @@ public
     return surface
   end
 
-  def self.split_surface(surface, cols, rows=1)
+  def self.split_surface(surface, cols=1, rows=1)
     raise(ArgumentError, "cols cannot be #{cols}") if !cols or cols == 0
     raise(ArgumentError, "rows cannot be #{rows}") if !rows or rows == 0
 

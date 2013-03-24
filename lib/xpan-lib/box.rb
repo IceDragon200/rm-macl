@@ -8,7 +8,10 @@ require File.join(File.dirname(__FILE__), 'archijust')
 
 module MACL
 
-  class Box2
+  class Box
+  end
+
+  class Box2 < Box
 
     extend MACL::Mixin::Archijust
 
@@ -40,7 +43,7 @@ module MACL
 
   end
 
-  class Box3
+  class Box3 < Box
 
     extend MACL::Mixin::Archijust
 
