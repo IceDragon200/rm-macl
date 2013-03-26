@@ -14,12 +14,12 @@ class Matrix
 
   ##
   # initialize(Array dimensions, Numeric default)
-  def initialize(dimensions, default)
-    @dim = dimensions.size.to_i
+  def initialize(dimensions, default=0)
+    @dim        = dimensions.size.to_i
     @dimensions = dimensions.map(&:to_i)
-    @datasize = @dimensions.dup.unshift(1).inject(:*)
-    @default = default
-    @offsets = []
+    @datasize   = @dimensions.dup.unshift(1).inject(:*)
+    @default    = default
+    @offsets    = []
     reset!
   end
 

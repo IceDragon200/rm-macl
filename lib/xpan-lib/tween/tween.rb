@@ -5,7 +5,6 @@
 #   dc 03/03/2013
 # vr 1.1.2
 require File.join(File.dirname(__FILE__), 'tweenerror')
-require File.join(File.dirname(__FILE__), 'easers')
 
 module MACL
 class Tween
@@ -65,14 +64,14 @@ class Tween
     easer ||= :linear
     maxtime ||= 1.0
     extra_params ||= []
-    unless Tween::EASER_BY_SYMBOL.has_key?(easer)
-      raise(TweenError,
-        'Invalid easer type: %s' % easer.to_s)
+    unless MACL::Easer.has_easer?(easer)
+      raise(TweenError, 'Invalid easer type: %s' % easer.to_s)
     end
     start_values = start_values
     end_values   = end_values
     @start_values, @end_values = start_values, end_values
     @easer_sym, @maxtime = easer, maxtime
+    @easer = MACL::Easer.get_easer(@easer_sym)
     @extra_params = extra_params
     scale_values(1.0) # forces all values to Floats
     @values = []
@@ -103,7 +102,7 @@ class Tween
   end
 
   def easer
-    return Tween::EASER_BY_SYMBOL[@easer_sym]
+    return @easer
   end # // YAY now u can dump it >_>
 
   def done?

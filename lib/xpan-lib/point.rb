@@ -8,7 +8,11 @@ require File.join(File.dirname(__FILE__), 'vector')
 
 module MACL
 
-  Point = Vector2i
-  Point3D = Vector3i
+  class Point < Vector2i
+  end
+
+  class Point3D < Vector3i
+  end
+
 
 end

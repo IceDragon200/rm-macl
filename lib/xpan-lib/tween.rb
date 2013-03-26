@@ -14,7 +14,7 @@
 # Modularize, rewrite, and new by IceDragon
 
 dir = File.dirname(__FILE__)
-%w(tween tweenerror easers easers-ex
-   multi seqr osc tween_struct tool).each do |fn|
+require File.join(dir, 'easer')
+%w(tween tweenerror multi seqr osc tween_struct tool).each do |fn|
   require File.join(dir, 'tween', fn)
 end
