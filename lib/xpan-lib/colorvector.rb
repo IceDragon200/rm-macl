@@ -3,10 +3,13 @@
 #   by IceDragon
 #   dc ??/??/2012
 #   dm 21/03/2013
-# vr 1.2.0
+# vr 1.3.0
 #   Using floats instead of integers
 #
 # CHANGES
+#   27/03/2013 (vr 1.3.0)
+#     Added
+#       #to_h
 #   21/03/2013 (vr 1.2.0)
 #     Changed from ColorF to ColorVector
 #     Added
@@ -97,6 +100,10 @@ class MACL::ColorVector
 
   def to_a
     [red, green, blue, alpha]
+  end
+
+  def to_h
+    return {red: red, green: green, blue: blue, alpha: alpha}
   end
 
   def to_rgb24_a

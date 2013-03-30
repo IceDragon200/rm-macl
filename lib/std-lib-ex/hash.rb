@@ -38,6 +38,10 @@ class Hash
     keys.map { |a| self[a] }
   end
 
+  def select_key_pair(*keys)
+    Hash[keys.map { |key| [key, self[key]] }]
+  end
+
   def enum2keys!
     r, key, value = nil, nil, nil
     replace(inject(Hash.new) do |r, (key, value)|

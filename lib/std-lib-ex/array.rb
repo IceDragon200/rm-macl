@@ -27,6 +27,10 @@ class Array
     self
   end
 
+  def pick!
+    delete(sample)
+  end unless method_defined?(:pick)
+
   def uniq_arrays(*args, &block)
     dup.uniq_arrays(*args,&block)
   end

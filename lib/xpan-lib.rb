@@ -16,7 +16,7 @@ require File.join(dir, 'macl-core')
    notereader
    pallete parcer point
    sequen surface
-   task tween
+   task tween tween2
    vector
   ).each do |fn|
   require File.join(dir, 'xpan-lib', fn)

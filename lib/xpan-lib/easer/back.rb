@@ -7,6 +7,8 @@ module MACL
 class Easer
 class Back < Easer
 
+  attr_accessor :s
+
   def initialize
     super
     @s = 1.70158

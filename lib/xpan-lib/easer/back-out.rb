@@ -10,7 +10,7 @@ class Back::Out < Back
   register(:back_out)
 
   def _ease(t, st, ch, d)
-    ch * ((t=t/d-1) * t * ((@s+1) * t + @s) + 1) + st
+    ch * ((t = t / d - 1) * t * ((@s + 1) * t + @s) + 1) + st
   end
 
 end

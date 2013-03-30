@@ -12,7 +12,7 @@ class Tween
   class << self
 
     def init
-      @@sec_per_frame = 1.0 / Graphics.frame_rate
+      @@sec_per_frame = 1.0 / MACL.frame_rate
     end
 
     def sec_per_frame
@@ -24,15 +24,16 @@ class Tween
     end
 
     def sec_to_frame(sec)
-      Integer(sec * Graphics.frame_rate)
+      Integer(sec * MACL.frame_rate)
     end
 
   end
 
   attr_reader :values
   attr_accessor :start_values, :end_values
-  attr_reader :time, :maxtime
+  attr_reader :time, :timemax
   attr_accessor :delta # by default delta is the seconds per frame
+  attr_reader :easer_sym
 
   def initialize(*args, &block)
     @delta = @@sec_per_frame
@@ -41,7 +42,7 @@ class Tween
 
   def change_time val=nil,max=nil
     @time    = val if val
-    @maxtime = max if max
+    @timemax = max if max
   end
 
   def value index=0
@@ -54,15 +55,15 @@ class Tween
       start_values = hash[:start_values]
       end_values   = hash[:end_values]
       easer        = hash[:easer]
-      maxtime      = hash[:maxtime]
+      timemax      = hash[:timemax]
       extra_params = hash[:extra_params]
     else
-      start_values, end_values, easer, maxtime, extra_params = *args
+      start_values, end_values, easer, timemax, extra_params = *args
     end
     start_values ||= [0]
     end_values ||= [0]
     easer ||= :linear
-    maxtime ||= 1.0
+    timemax ||= 1.0
     extra_params ||= []
     unless MACL::Easer.has_easer?(easer)
       raise(TweenError, 'Invalid easer type: %s' % easer.to_s)
@@ -70,7 +71,7 @@ class Tween
     start_values = start_values
     end_values   = end_values
     @start_values, @end_values = start_values, end_values
-    @easer_sym, @maxtime = easer, maxtime
+    @easer_sym, @timemax = easer, timemax
     @easer = MACL::Easer.get_easer(@easer_sym)
     @extra_params = extra_params
     scale_values(1.0) # forces all values to Floats
@@ -106,7 +107,7 @@ class Tween
   end # // YAY now u can dump it >_>
 
   def done?
-    @time >= @maxtime
+    @time >= @timemax
   end # // Time gets capped anyway
 
   def pred_time
@@ -114,19 +115,19 @@ class Tween
   end
 
   def succ_time
-    @time = (@time + @delta).min(@maxtime)
+    @time = (@time + @delta).min(@timemax)
   end
 
   def time_rate
     time_to_rate(@time)
   end
 
-  def time_to_rate t=@time
-    t / @maxtime
+  def time_to_rate(t=@time)
+    t / @timemax
   end
 
-  def value_at_time(time, sv=@start_values[0], ev=@end_values[0])
-    return easer.ease(time, sv, ev, @maxtime, *@extra_params)
+  def value_at_time(t, sv=@start_values[0], ev=@end_values[0])
+    easer.ease(t, sv, ev, @timemax, *@extra_params)
   end
 
   def invert
@@ -141,17 +142,18 @@ class Tween
 
   def update
     succ_time unless done? # // Save a little cpu..
-    update_value_now
+    update_value_now if time_changed?
   end
 
   def update_value_now
     update_value(@time)
   end
 
-  def update_value time
+  def update_value(t)
     for i in 0...@start_values.size
-      @values[i] = value_at_time time, @start_values[i], @end_values[i]
+      @values[i] = value_at_time(t, @start_values[i], @end_values[i])
     end
+    self
   end
 
   def to_enum
@@ -160,6 +162,16 @@ class Tween
       tween.reset_time
       tween.update_until_done(&yielder.method(:yield))
     end
+  end
+
+private
+
+  def time_changed?
+    if @time != @last_time
+      @last_time = @time
+      return true
+    end
+    return false
   end
 
 end

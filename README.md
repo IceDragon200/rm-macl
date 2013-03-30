@@ -1,6 +1,6 @@
 ﻿RGSS3-MACL
 ==========
-## vr 2.1.0.000 [![Code Climate](https://codeclimate.com/github/IceDragon200/RGSS3-MACL.png)](https://codeclimate.com/github/IceDragon200/RGSS3-MACL)
+## vr 2.1.2.000 [![Code Climate](https://codeclimate.com/github/IceDragon200/RGSS3-MACL.png)](https://codeclimate.com/github/IceDragon200/RGSS3-MACL)
 
 ## Introduction
 Spanning many years, coming from the RM community, this library contains
@@ -27,6 +27,42 @@ PK8
 ```
 
 ## Change Log
+### vr 2.1.2.000 [30/03/2013]
+  ADDED
+    MACL::Grid3
+
+  CHANGE
+    MACL::Grid > MACL::Grid2
+
+  ALIAS
+    MACL::Grid2 as MACL::Grid
+
+  UPDATE
+    MACL::Grid2 [1.0.0]
+
+  BUGFIX
+    MACL::Cube#to_s
+      to_s now uses the to_h instead of the missing to_hash method
+
+### vr 2.1.1.000 [29/03/2013]
+  ADDED
+    MACL::MatrixBase#size alias of MACL::MatrixBase#datasize
+    MACL::frame_rate
+    MACL::Tween2
+      Been longing to do a clean rewrite of Tween, and Tween2 solves that issue,
+      its mostly an cosmetic change from the original, the code is much cleaner,
+      and the usage is slighly different.
+
+  CHANGE
+    MACL::MatrixBase
+      Parent class for Matrix
+
+    MACL::Matrix extends MACL::MatrixBase
+      Meta programming has been removed.
+
+  FIXES
+    Fixed FloatDomainError when using MACL::Easer::Back::InOut
+
 ### vr 2.1.0.000 [25/03/2013]
   MOVED
     MACL::Tween::Easer to MACL::Easer

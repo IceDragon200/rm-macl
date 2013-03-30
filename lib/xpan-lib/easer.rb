@@ -36,6 +36,10 @@ class Easer
     easer.ease(*args)
   end
 
+  ##
+  # _ease(t, st, ch, d)
+  #   note that all _ease code was created and provided by CaptainJet,
+  #   unless stated otherwise
   def _ease(t, st, ch, d=1.0)
     ch + st
   end
@@ -43,7 +47,10 @@ class Easer
   ##
   # ease(Float t, Numeric st, Numeric et, Float d)
   def ease(t, st, et, d=1.0, *args)
-    self._ease(t, st, et-st, d, *args)
+    # BUG Certain easers will return a OutOfRange Float value at 0.0 time
+    #     for now, the start value will be returned for 0.0 time
+    return st if t == 0
+    self._ease(t, st, et - st, d, *args)
   end
 
 end
