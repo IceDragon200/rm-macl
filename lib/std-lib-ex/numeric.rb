@@ -3,7 +3,7 @@
 #   by IceDragon
 #   dc ??/??/2012
 #   dm 03/03/2013
-# vr 1.1.1
+# vr 1.1.2
 class Numeric
 
   ##
@@ -23,7 +23,7 @@ class Numeric
 
   def positive?
     self > 0
-  end unless method_defined?(:positive)
+  end unless method_defined?(:positive?)
 
   ##
   # min(Numeric n)

@@ -9,15 +9,16 @@ require File.join(dir, 'macl-core')
 %w(archijust
    blaz box
    cacher colorvector cube
+   easer
    fifo
    geometry grid
    interpolate
    matrix morph
    notereader
-   pallete parcer point
+   pallete parcer point pos
    sequen surface
    task tween tween2
-   vector
+   vector vectorlist
   ).each do |fn|
   require File.join(dir, 'xpan-lib', fn)
 end

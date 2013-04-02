@@ -2,10 +2,12 @@
 # RGSS3-MACL/lib/xpan-lib/matrix/matrixbase.rb
 #   by IceDragon
 #   dc 29/03/2013
-#   dm 29/03/2013
-# vr 1.0.0
+#   dm 01/04/2013
+# vr 1.1.0
 module MACL
 class MatrixBase
+
+  include Comparable
 
   class MatrixError < StandardError
   end
@@ -178,7 +180,7 @@ class MatrixBase
         num = other[*nn]
         yield num, *inds
       end
-    when *allowed_types
+    when *allowed_datatypes
       rngs = src_vec_start.zip(src_vec_end).map { |s, e| s...e }.reverse
       enum_recursion(0, rngs, []) do |nn|
         inds = Array.new(nn.size, 0)
@@ -225,6 +227,24 @@ class MatrixBase
   end
 
   ##
+  # to_a -> Array
+  def to_a
+    @data.dup
+  end
+
+  ##
+  # <=>(Matrix other)
+  def <=>(other)
+    self.to_a <=> other.to_a
+  end
+
+  ##
+  # hash -> int
+  def hash
+    to_a.hash
+  end
+
+  ##
   # ::make_type_error(Object other)
   def self.make_type_error(other)
     err_msg = "Expected type %s or %s but recieved %s"
@@ -236,7 +256,7 @@ class MatrixBase
   alias :[] :get
   alias :[]= :set
 
-  private :enum_recursion, :bang_do!, :bang_at_do!, :allowed_types, :after_set
+  private :enum_recursion, :bang_do!, :bang_at_do!, :allowed_datatypes, :after_set
 
 end
 end

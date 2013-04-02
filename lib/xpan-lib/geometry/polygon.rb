@@ -2,13 +2,12 @@
 # RGSS3-MACL/lib/xpan-lib/geometry/polygon.rb
 #   by IceDragon
 #   dc ??/??/2012
-#   dc 03/03/2013
-# vr 0.9.0
+#   dc 01/04/2013
+# vr 0.9.1
 require File.join(File.dirname(__FILE__), 'oval')
 
 module MACL
 module Geometry
-
 class Polygon < Oval
 
   attr_accessor :sides

@@ -56,9 +56,9 @@ module MACL
     end
 
     def rescale!(new_scale)
-      @width *= new_scale
+      @width  *= new_scale
       @height *= new_scale
-      @depth *= new_scale
+      @depth  *= new_scale
       return self
     end
 

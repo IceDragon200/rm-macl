@@ -3,9 +3,11 @@
 #   by IceDragon
 #   dc ??/??/2012
 #   dm 03/03/2013
-# vr 1.2.1
+# vr 1.2.2
 class Font
 
+  ##
+  # to_h -> Hash
   def to_h
     meths = (self.class.methods).select do |str|
       str.start_with?('default_')

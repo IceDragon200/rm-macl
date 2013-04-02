@@ -60,7 +60,10 @@ class Tween2
   def setup_pairs(pairs)
     raise(ArgumentError, "Bad pair in pairs") if pairs.any? { |a| a.size != 2 }
     @pairs = pairs.map { |a| a.map(&:to_f) }.freeze
+    refresh_values
+  end
 
+  def refresh_values
     @start_values = @pairs.map(&:first).freeze
     @end_values   = @pairs.map(&:last).freeze
   end
