@@ -22,7 +22,7 @@
 #       to_color24
 #       to_color32
 #     new-alias
-#       to_color32 => to_color
+#       to_color32 -> to_color
 class MACL::ColorVector
 
   attr_reader :red, :green, :blue, :alpha

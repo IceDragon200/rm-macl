@@ -1,6 +1,6 @@
 ﻿RGSS3-MACL
 ==========
-## vr 2.1.3.000 [![Code Climate](https://codeclimate.com/github/IceDragon200/RGSS3-MACL.png)](https://codeclimate.com/github/IceDragon200/RGSS3-MACL)
+## vr 2.2.1.000 [![Code Climate](https://codeclimate.com/github/IceDragon200/RGSS3-MACL.png)](https://codeclimate.com/github/IceDragon200/RGSS3-MACL)
 
 ## Introduction
 Spanning many years, coming from the RM community, this library contains
@@ -27,6 +27,34 @@ PK8
 ```
 
 ## Change Log
+
+### vr 2.2.1.000 [04/05/2013]
+```
+  ADDED
+    MACL::Mixin::StackElement::uint_reader
+    MACL::Mixin::StackElement::uint_writer
+    MACL::Mixin::StackElement::uint_accessor
+      Forces Incoming and Outgoing values to be greater than 0
+```
+
+### vr 2.2.0.000 [05/04/2013]
+```
+  ADDED
+    MACL::Mixin::StackElement [lib/mixin/stackelement.rb]
+
+```
+### vr 2.1.5.000 [04/04/2013]
+```
+  CHANGE
+    MACL::Vector* can now do math funcs with Arrays of the same size
+
+```
+### vr 2.1.4.000 [02/04/2013]
+```
+  BUGFIX
+    MACL::Pos3
+
+```
 ### vr 2.1.3.000 [01/04/2013]
 ```
   ADDED

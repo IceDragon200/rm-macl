@@ -2,12 +2,16 @@
 # RGSS3-MACL/lib/xpan-lib/surface/surface-tools.rb
 #   by IceDragon
 #   dc ??/??/2012
-#   dm 03/03/2013
-# vr 1.0.1
-module MACL::Surface::Tool
+#   dm 11/04/2013
+# vr 1.2.0
+module MACL
+class Surface
+module Tool
 
 private
 
+  ##
+  # ::open_free_surface(Class<subclassof MACL::Mixin::Surface> klass)
   def self.open_free_surface(klass)
     surf = klass.new
     ostate = surf.freeform
@@ -17,15 +21,30 @@ private
     return surf
   end
 
+  ##
+  # ::init_anchor_cache
+  def self.init_anchor_cache
+    for z in 0..3
+      for y in 0..3
+        for x in 0..3
+          anchor2 =  0x200 | (y << 4) | (x << 0)
+          anchor3 = 0x3000 | (z << 8) | (y << 4) | (x << 0)
+          ANCHOR_CACHE[anchor2] = calc_anchor_ids(anchor2).freeze if z == 0
+          ANCHOR_CACHE[anchor3] = calc_anchor_ids(anchor3).freeze
+        end
+      end
+    end
+  end
+
 public
 
   # Surface (2D) - as of v 1.3 2D functions are appended with 0x2 followed
   # by 2 HEX digits
-  # 0x2xy
+  # 0x2yx
   #
   # Surface3D - all 3d contract functions are appended with 0x3 followed by 3
   # HEX digits
-  # 0x3xyz
+  # 0x3zyx
   #    ^
   #   _Z___
   #  |\  2 \
@@ -39,113 +58,127 @@ public
   #   x - enum[disabled, left, mid, right]
   #   y - enum[disabled, top, mid, bottom]
   #   z - enum[disabled, floor, mid, ceil]
-  ID_NULL   = :null
-  ID_FLOOR  = :left
-  ID_CENTER = :center
-  ID_CEIL   = :right
-  def self.anchor_to_ids(anchor)
-    # Legacy Patch
-    anchor =
-      case anchor
-      when 0  ; 0x200
-      when 1  ; 0x213
-      when 2  ; 0x223
-      when 3  ; 0x233
-      when 4  ; 0x212
-      when 5  ; 0x222
-      when 6  ; 0x232
-      when 7  ; 0x211
-      when 8  ; 0x221
-      when 9  ; 0x231
-      when 28 ; 0x202
-      when 46 ; 0x220
-      when 80 ; 0x201
-      when 20 ; 0x203
-      when 40 ; 0x210
-      when 60 ; 0x230
-      else
-        anchor
-      end
+  ID_NULL = 0x0
+  ID_MIN  = 0x1
+  ID_MID  = 0x2
+  ID_MAX  = 0x3
 
-    ids = [ID_NULL, ID_FLOOR, ID_CENTER, ID_CEIL]
-    str = nil
-    # 3D
-    if anchor > 0x200 && anchor < 0x234
-      str = "%03x" % anchor
-    elsif anchor > 0x3000 && anchor < 0x3334
-      str = "%04x" % anchor
-    end
+  ANCHOR_CACHE = {}
 
-    if str
-      ary = str.split('')
-      ary.shift # drop the 0x2 or 0x3 so your left with x,y[,z]
-      return ary.map do |arg|
-        n = arg.to_i
-        raise(ArgumentError,
-          "invalid numeric value #{n} in #{str} anchor") if n > 3
-        ids[n]
-      end
+  ##
+  # ::calc_anchor_ids(ANCHOR anchor)
+  def self.calc_anchor_ids(anchor)
+    # is this a 2D Anchor?
+    if (anchor >> 8) == 2
+      [(anchor >> 0) & 0xF, (anchor >> 4) & 0xF]
+    # is this a 3D Anchor?
+    elsif (anchor >> 12) == 3
+      [(anchor >> 0) & 0xF, (anchor >> 4) & 0xF, (anchor >> 8) & 0xF]
     else
       raise(MACL::Mixin::SurfaceAnchorError.mk(anchor))
     end
   end
 
+  ##
+  # ::anchor_to_ids(ANCHOR anchor)
+  def self.anchor_to_ids(anchor)
+    # Legacy Patch
+    if anchor >= 0 && anchor < 10
+      anchor = MACL::Surface::NUMPAD_ANCHOR[anchor]
+    elsif anchor > 19 && anchor < 81
+      anchor = MACL::Surface::EXTENDED_ANCHOR[anchor]
+    end
+    ANCHOR_CACHE[anchor]
+  end
+
+  ##
+  # ::id_to_signum(ID id, bool strict)
   def self.id_to_signum(id, strict=false)
     case id
-    when ID_NULL
-      return 0
-    when ID_FLOOR
-      return -1
-    when ID_CENTER
-      return strict ? 0 : 0.5
-    when ID_CEIL
-      return 1
+    when ID_NULL then return 0
+    when ID_MIN  then return -1
+    when ID_MID  then return strict ? 0 : 0.5
+    when ID_MAX  then return 1
     end
   end
 
-  def self.anchor_to_unary(anchor, strict=true)
-    return anchor_to_ids(anchor).map do |n|
-      id_to_signum(n, strict)
-    end
+  ##
+  # ::anchor_to_signums(ANCHOR anchor, bool strict)
+  def self.anchor_to_signums(anchor, strict=true)
+    return anchor_to_ids(anchor).map { |n| id_to_signum(n, strict) }
   end
 
+  ##
+  # ::anchor_to_vec2(ANCHOR anchor, bool strict)
+  def self.anchor_to_vec2(anchor, strict=true)
+    MACL::Vector2I.new(*anchor_to_signums(anchor, strict)[0, 2])
+  end
+
+  ##
+  # ::anchor_to_vec3(ANCHOR anchor, bool strict)
+  def self.anchor_to_vec3(anchor, strict=true)
+    MACL::Vector3I.new(*anchor_to_signums(anchor, strict))
+  end
+
+  ##
+  # ::match?()
   def self.match?(surface1, surface2)
-    return surface1.to_sa == surface2.to_sa
+    surface1.to_sa == surface2.to_sa
   end
 
-  def self.anchor_surfaces(anchor, src_surface, *surfaces)
+  ##
+  # ::calc_area_surface(Class result_klass, *Surface objs) -> new result_klass
+  def self.calc_area_surface(result_klass, *objs)
+    mx = objs.min_by(&:x)
+    my = objs.min_by(&:y)
+    mw = objs.max_by(&:x2)
+    mh = objs.max_by(&:y2)
+    return open_free_surface(result_klass) do |surf|
+      surf.x = mx.x
+      surf.y = my.y
+      surf.x2 = mw.x2
+      surf.y2 = mh.y2
+    end
+  end
+
+  ##
+  # ::calc_area_surface(*Surface objs) -> Rect
+  def self.area_rect(*objs)
+    return calc_area_surface(Rect, *objs)
+  end
+
+  ##
+  # ::anchor_surfaces(ANCHOR anchor, Surface src_surface, *Surface surfaces)
+  def self.anchor_surfaces(*args)
+    case args.size
+    when 1
+      arg, = args
+      anchor, src_surface, surfaces = arg[:anchor],
+                                      arg[:src_surface],
+                                      arg[:surfaces]
+    else
+      anchor = args.shift
+      src_surface = args.shift
+      surfaces = args
+    end
     surfaces_rect = area_rect(*surfaces)
-    rect = src_surface.align_to(anchor: anchor, surface: surfaces_rect)
-    dif_x = rect.x - src_surface.x
-    dif_y = rect.y - src_surface.y
-    surfaces.each { |surf| surf.x -= dif_x; surf.y -= dif_y }
+    aligned_rect = surfaces_rect.align_to(anchor: anchor, surface: src_surface)
+    dif_x = aligned_rect.x - surfaces_rect.x
+    dif_y = aligned_rect.y - surfaces_rect.y
+    surfaces.each { |surf| surf.x += dif_x; surf.y += dif_y }
   end
 
-  #def self.calc_pressure(n, anchor, invert=false)
-  #  if anchor == ANCHOR[:horz]
-  #    return 0 if n < self.x || n > self.x2
-  #    n = n - self.x
-  #    n2 = (self.x2 - self.x)
-  #    n = n2 - n if invert
-  #    n = n / n2.to_f
-  #  elsif anchor == ANCHOR[:vert]
-  #    return 0 if n < self.y || n > self.y2
-  #    n = n - self.y
-  #    n2 = (self.y2 - self.y)
-  #    n = n2 - n if invert
-  #    n = n / n2.to_f
-  #  end
-  #  return n
-  #end
-
-  def self.rotate(surface)
+  ##
+  # flipflop_size(Surface surface)
+  #   Swaps the Surface's width and height
+  def self.flipflop_size(surface)
     surface.width, surface.height = surface.height, surface.width
     return surface
   end
 
   def self.split_surface(surface, cols=1, rows=1)
-    raise(ArgumentError, "cols cannot be #{cols}") if !cols or cols == 0
-    raise(ArgumentError, "rows cannot be #{rows}") if !rows or rows == 0
+    raise(ArgumentError, "cols cannot be #{cols}") if !cols or cols <= 0
+    raise(ArgumentError, "rows cannot be #{rows}") if !rows or rows <= 0
 
     surf_klass = surface.class
 
@@ -190,11 +223,11 @@ public
       last_x = surface.x
       for sx in slices_x
         result.push(open_free_surface(surf_klass) do |surf|
-          surf.x  = last_x
-          surf.y  = last_y
-          surf.x2 = sx
-          surf.y2 = sy
-        end)
+                      surf.x  = last_x
+                      surf.y  = last_y
+                      surf.x2 = sx
+                      surf.y2 = sy
+                    end)
         last_x = sx
       end
       last_y = sy
@@ -222,32 +255,13 @@ public
     end
   end
 
-  def self.calc_area_surface(result_klass=Surface, *objs)
-    mx = objs.min_by(&:x)
-    my = objs.min_by(&:y)
-    mw = objs.max_by(&:x2)
-    mh = objs.max_by(&:y2)
-    return open_free_surface(result_klass) do |surf|
-      surf.x = mx.x
-      surf.y = my.y
-      surf.x2 = mw.x2
-      surf.y2 = mh.y2
-    end
-  end
-
-  def self.area_rect(*objs)
-    return calc_area_surface(Rect, *objs)
-  end
-
   def self.fit_in(source, target)
     w, h = source.width, source.height
-    if w > h
-      scale = target.width.to_f / w
-    else
-      scale = target.height.to_f / h
-    end
+    scale = if w > h then ( target.width.to_f / w)
+            else          (target.height.to_f / h)
+            end
     r = source.dup;
-    r.width, r.height= (w * scale).to_i, (h * scale).to_i
+    r.width, r.height = (w * scale).to_i, (h * scale).to_i
     return r
   end
 
@@ -259,4 +273,59 @@ public
     surface.y + (surface.height - n) / 2
   end
 
+  def self.calc_mid_z(surface, n=0)
+    surface.z + (surface.depth - n) / 2
+  end
+
+  ## initial 1.1.0
+  # ::bound_surface_to(Surface dst, Surface src)
+  #   Tries to keep the (dst) Surface withing the bounds of the (src) Surface
+  def self.bound_surface_to(dst, src)
+    dst.freeform_do(false) do
+      if dst.width < src.width
+        dst.x = src.x if dst.x < src.x
+        dst.x2 = src.x2 if dst.x2 > src.x2
+      end
+      if dst.height < src.height
+        dst.y = src.y if dst.y < src.y
+        dst.y2 = src.y2 if dst.y2 > src.y2
+      end
+    end
+  end
+
+  def self.tile_objects(objects, rect=Graphics.rect)
+    surf = Surface.new(0, 0, 0, 0)
+    surf.freeform = true
+
+    largest_h = 0
+    objects.each_with_index do |obj, i|
+
+      r = obj.to_rect
+
+      largest_h = r.height if largest_h < r.height
+
+      if((surf.x2 + r.width) > rect.x2)
+        surf.x2 = 0
+        surf.y2 += largest_h
+        largest_h = 0
+      end
+
+      obj.x = surf.x2
+      obj.y = surf.y2
+
+      r = obj.to_rect
+
+      surf.x2 = r.x2 if surf.x2 < r.x2
+      #surf.y2 = r.y2 if surf.y2 < r.y2
+    end
+
+    return surf.to_rect
+  end
+
+  ##
+  #
+  init_anchor_cache
+
+end
+end
 end

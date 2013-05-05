@@ -10,9 +10,11 @@ class Quint::InOut < Quint
   register(:quint_inout)
 
   def _ease(t, st, ch, d)
-    (t /= d / 2.0) < 1 ?
-      ch / 2.0 * t ** 5 + st :
+    if (t /= d / 2.0) < 1
+      ch / 2.0 * t ** 5 + st
+    else
       ch / 2.0 * ((t -= 2) * t ** 4 + 2) + st
+    end
   end
 
 end

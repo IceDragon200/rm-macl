@@ -1,11 +1,10 @@
 #
 # RGSS3-MACL/lib/xpan-lib/tween.rb
-#
-# original by CaptainJet
-# mb IceDragon
-# dc 15/12/2011
-# dm 06/12/2012
-# vr 1.11
+#   by CaptainJet
+#   mb IceDragon (mistdragon100@gmail.com)
+#   dc 15/12/2011
+#   dm 06/12/2012
+# vr 1.1.1
 #
 # // Special Credits To:
 # Robert Penner (For whatever reason Jet mentioned him)

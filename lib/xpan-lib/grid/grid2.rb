@@ -153,14 +153,14 @@ class Grid2
   end
 
   ##
-  # col_ia(int x) => Array<int>
+  # col_ia(int x) -> Array<int>
   #   Returns an Array of indecies for colummn (x)
   def col_ia(x)
     (0...rows).map { |y| xy_to_index(x, y) }
   end
 
   ##
-  # row_ia(int y) => Array<int>
+  # row_ia(int y) -> Array<int>
   #   Returns an Array of indecies for row (y)
   def row_ia(y)
     (0...columns).map { |x| xy_to_index(x, y) }

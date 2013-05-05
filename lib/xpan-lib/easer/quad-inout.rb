@@ -10,9 +10,11 @@ class Quad::InOut < Quad
   register(:quad_inout)
 
   def _ease(t, st, ch, d)
-    (t /= d / 2.0) < 1 ?
-      ch / 2.0 * t ** 2 + st :
+    if (t /= d / 2.0) < 1
+      ch / 2.0 * t ** 2 + st
+    else
       -ch / 2.0 * ((t -= 1) * (t - 2) - 1) + st
+    end
   end
 
 end

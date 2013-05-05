@@ -8,26 +8,32 @@
 module MACL
 module RungeKutta
 
-  def euler(v, t, dt, d)
+  ##
+  # euler(v, d, t, dt)
+  #   Numeric v - Start Value
+  #   Numeric d - Change Value
+  #   Float t   - Current Time (0.0..1.0)
+  #   Float dt  - Delta Time   (0.0..1.0)
+  def euler(v, d, t, dt)
     v + d * (t + dt)
   end
 
-  def rk4(v, t, dt, d)
-    k1 = euler(t, 0.0, v, d)
-    k2 = euler(t, dt * 0.5, v, k1)
-    k3 = euler(t, dt * 0.5, v, k2)
-    k4 = euler(t, dt, v, k3)
+  ##
+  # rk4(v, d, t, dt)
+  #   Numeric v - Start Value
+  #   Numeric d - Change Value
+  #   Float t   - Current Time (0.0..1.0)
+  #   Float dt  - Delta Time   (0.0..1.0)
+  def rk4(v, d, t, dt)
+    k1 = euler(v, d, t, dt)
+    k2 = euler(v, k1, t, dt * 0.5)
+    k3 = euler(v, k2, t, dt * 0.5)
+    k4 = euler(v, k1, t, dt)
 
-    return (k1 + (k2 + k3) * 2.0 + k4) * (1.0 / 6.0)
+    return (k1 + (k2 + k3) * 2.0 + k4) / 3.5
   end
 
   extend self
 
 end
 end
-
-RK = MACL::RungeKutta
-(0..12).each do |i|
-  p RK.rk4(0.0, i / 12.0, 0.0, 4.0)
-end
-

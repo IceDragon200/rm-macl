@@ -8,14 +8,14 @@ require File.join(File.dirname(__FILE__), 'path')
 
 module MACL
 module Geometry
-
 class Line < Path
 
+  ##
+  # initialize(Point p1, Point p2)
   def initialize(p1, p2)
     super(p1, p2)
   end
 
 end
-
 end
 end

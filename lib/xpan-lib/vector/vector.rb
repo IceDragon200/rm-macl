@@ -1,13 +1,18 @@
 #
-# RGSS3-MACL/lib/xpan-lib/vector.rb
+# RGSS3-MACL/lib/xpan-lib/vector/vector.rb
 #   by IceDragon
 #   dc 25/02/2013
 #   dm 01/04/2013
-# vr 1.5.0
+# vr 1.5.1
+dir = File.dirname(__FILE__)
+%w(vector2 vector3 vector4).each do |fn|
+  require File.join(dir, 'abstract', fn)
+end
+
 module MACL
 class Vector
 
-  VERSION = "1.5.0".freeze
+  VERSION = "1.5.1".freeze
 
   include Comparable
 
@@ -19,61 +24,6 @@ class Vector
 
   def hash
     return to_a.hash
-  end
-
-  ##
-  # Vector2 methods
-
-  def normalize!
-    rad = radian
-    self.x = Math.cos(rad)
-    self.y = Math.sin(rad)
-    self
-  end
-
-  def normalize
-    return dup.normalize!
-  end
-
-  def magnitude
-    return Math.sqrt(self.x * self.x + self.y * self.y)
-  end
-
-  def magnitude=(new_magnitude)
-    rad = radian
-    self.x = new_magnitude * Math.cos(rad)
-    self.y = new_magnitude * Math.sin(rad)
-  end
-
-  def radian
-    Math.atan2(self.y, self.x)
-  end
-
-  def radian=(new_radian)
-    mag = magnitude
-    self.x = mag * Math.cos(new_radian)
-    self.y = mag * Math.sin(new_radian)
-  end
-
-  def angle
-    return radian * PI180
-  end
-
-  def angle=(new_angle)
-    self.radian = new_angle / PI180
-  end
-
-  def polar
-    return magnitude, radian
-  end
-
-  def flipflop!
-    @x, @y = @y, @x
-    return self
-  end
-
-  def cartesian
-    return self.class.params_variables.map { |s| instance_variable_get(s) }
   end
 
   def do_set!(*args)
@@ -89,7 +39,11 @@ class Vector
                                          self.class.default_value]
         end
       when Numeric
-        Array.new(size) { |i| [self.class.params[i], other] }
+        self.class.params.zip([other] * size)
+      when Array
+        raise(ArgumentError,
+              "Expected array of size #{size}") unless other.size == size
+        self.class.params.zip(other)
       else
         raise(TypeError,
               "Expected type Vector or Numeric but recieved #{other.class}")
@@ -97,7 +51,7 @@ class Vector
     elsif (args.size == size)
       self.class.params.zip(args)
     else
-      raise(TypeError, "Expected 0, 1 or #{size}")
+      raise(ArgumentError, "Expected 0, 1 or #{size}")
     end
 
     if block_given?
@@ -108,19 +62,31 @@ class Vector
     self
   end
 
+  def do_set(*args)
+    dup.do_set!(*args)
+  end
+
   def add!(*args)
+    raise(ArgumentError,
+          "Expected 1 or more but recieved #{args.size}") unless args.size > 0
     do_set!(*args) { |meth, v| send(meth) + v }
   end
 
   def sub!(*args)
+    raise(ArgumentError,
+          "Expected 1 or more but recieved #{args.size}") unless args.size > 0
     do_set!(*args) { |meth, v| send(meth) - v }
   end
 
   def mul!(*args)
+    raise(ArgumentError,
+          "Expected 1 or more but recieved #{args.size}") unless args.size > 0
     do_set!(*args) { |meth, v| send(meth) * v }
   end
 
   def div!(*args)
+    raise(ArgumentError,
+          "Expected 1 or more but recieved #{args.size}") unless args.size > 0
     do_set!(*args) { |meth, v| send(meth) / (v == 0 ? 1 : v) }
   end
 
@@ -140,27 +106,38 @@ class Vector
     dup.div!(*args)
   end
 
+  ##
+  # set()
+  # set(Vector vec)
+  # set(Numeric n)
+  # set(..n)
   def set(*args)
     case args.size
     when 0    then do_set!(self.class.default_value)
-    when 1    then do_set!(args[0])
+    when 1    then do_set!(args.first)
     when size then do_set!(*args)
     end
     self
   end
 
+  ##
+  # size -> Integer
   def size
     return self.class.params_size
   end
 
-  def [](n)
-    raise(ArgumentError, "Index out of range") if n < 0 || n >= size
-    return to_a[n]
+  ##
+  # [](int i) -> Numeric
+  def [](i)
+    raise(ArgumentError, "Index out of range") if i < 0 || i >= size
+    return to_a[i]
   end
 
+  ##
+  # []=(int index, Numeric n)
   def []=(i, n)
     raise(ArgumentError, "Index out of range") if n < 0 || n >= size
-
+    send(self.class.params[i].to_s + "=", n)
   end
 
   def negate!
@@ -181,11 +158,40 @@ class Vector
     return dup.affirm!
   end
 
+  def abs!
+    self.class.params.each do |sym|
+      send(sym.to_s + "=", send(sym).abs)
+    end
+    self
+  end
+
+  def abs
+    dup.abs!
+  end
+
+  ##
+  # to_a -> Array<Numeric>
+  def to_a
+    return self.class.params_variables.map { |s| instance_variable_get(s) }
+  end
+
+  ##
+  # zero?
+  def zero?
+    to_a.all?(&:zero?)
+  end
+
+  ##
+  # smooth_step(Vector other)
+  def smooth_step(other, delta=0.0)
+    do_set(other) { |meth, v| send(meth) + (v - send(meth)) * delta }
+  end
+
   def self.polar(mag, radian)
     new(mag * Math.cos(radian), mag * Math.sin(radian))
   end
 
-  def self.from_cartesian(*args)
+  def self.cartesian(*args)
     unless args.size == params_size
       raise(ArgumentError,
             "Expected #{params_size} but recieved #{args.size}")
@@ -193,37 +199,60 @@ class Vector
     new(*args)
   end
 
-  def self.Zero
+  ##
+  # ::zero -> Vector
+  def self.zero
     new(default_value)
   end
 
   ##
+  # ::one -> Vector
+  def self.one
+    new(1)
+  end
+
+  ###
   # class settings
+
+  ##
+  # ::params
   def self.params
-    nil
+    raise(RuntimeError, "Params have not been defined for #{self}")
   end
 
+  ##
+  # ::params_variables
   def self.params_variables
-    @params_variables ||= params.map { |s| "@" + s }.freeze
+    @params_variables ||= params.map { |s| "@" + s.to_s }.freeze
   end
 
+  ##
+  # ::params_map
   def self.params_map
     @params_map ||= params.zip(@params_variables).freeze
   end
 
+  ##
+  # ::params_size
   def self.params_size
     @params_size ||= params.size
   end
 
+  ##
+  # ::default_value
   def self.default_value
     0
   end
 
+  ##
+  # ::convert_param
   def self.convert_param(param)
     param
   end
 
-  def self.make_attr(param)
+  ##
+  # ::make_attr
+  def self.make_param_attr(param)
     attr_reader(param)
     var = "@%s" % param
     define_method(param.to_s + "=") do |n|
@@ -231,7 +260,15 @@ class Vector
     end
   end
 
-  alias :to_a :cartesian
+  ##
+  # ::make_param_attrs
+  def self.make_param_attrs
+    params.each { |s| make_param_attr(s) }
+  end
+
+  ###
+  # aliases
+  alias :cartesian :to_a
   alias :length :size
   alias :initialize :set
 
@@ -243,7 +280,13 @@ class Vector
   alias :-@ :negate
   alias :+@ :affirm
 
+  ###
+  # visibility
   private :do_set!
+
+  class << self
+    private :make_param_attr, :make_param_attrs
+  end
 
 end
 end

@@ -14,12 +14,13 @@ class Tween2
   attr_accessor :tick, :tickdelta
 
   ##
-  # initialize(int tickmax, Object obj, Array<Array<int>[2]> pairs)
-  #   obj is expected to be either a Symbol or a MACL::Easer
-  def initialize(tickmax, obj=:linear, *pairs)
+  # initialize(int tickmax, Easer easer, Array<Array<int>[2]> pairs)
+  # initialize(int tickmax, Symbol easer, Array<Array<int>[2]> pairs)
+  #   easer is expected to be either a Symbol or a MACL::Easer
+  def initialize(tickmax, easer=:linear, *pairs)
     init_members
     setup_tick(tickmax)
-    setup_easer(obj)
+    setup_easer(easer)
     setup_pairs(pairs)
     refresh_result
   end
@@ -58,7 +59,7 @@ class Tween2
   ##
   # setup_pairs(Hash<Numeric, Numeric> pairs)
   def setup_pairs(pairs)
-    raise(ArgumentError, "Bad pair in pairs") if pairs.any? { |a| a.size != 2 }
+    #raise(ArgumentError, "Bad pair in pairs") if pairs.any? { |a| a.size != 2 }
     @pairs = pairs.map { |a| a.map(&:to_f) }.freeze
     refresh_values
   end
@@ -96,6 +97,17 @@ class Tween2
 
   def active?
     return @tickdelta > 0 ? (@tick < @tickmax) : (@tick > 0)
+  end
+
+  def to_a
+    ary = []
+    old_ticks = @tick
+    reset_tick
+    update_result
+    (ary << result; update) until !active?
+    @tick = old_ticks
+    update_result
+    return ary
   end
 
   private :init_members, :update_result

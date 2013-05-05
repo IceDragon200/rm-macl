@@ -64,7 +64,7 @@ module RPG
     end
 
     def audio_path
-      return 'audio/bgm/%s'
+      return 'Audio/BGM/%s'
     end
 
     def play(pos=0)
@@ -91,7 +91,7 @@ module RPG
     end
 
     def audio_path
-      return 'audio/bgs/%s'
+      return 'Audio/BGS/%s'
     end
 
     def play(pos=0)
@@ -116,7 +116,7 @@ module RPG
     end
 
     def audio_path
-      return 'audio/me/%s'
+      return 'Audio/ME/%s'
     end
 
     def play
@@ -141,7 +141,7 @@ module RPG
     end
 
     def audio_path
-      return 'audio/se/%s'
+      return 'Audio/SE/%s'
     end
 
     def play

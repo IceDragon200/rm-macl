@@ -9,7 +9,7 @@ require File.join(File.dirname(__FILE__), '..', 'point')
 module MACL
 module Geometry
 
-  Point = MACL::Point2
+  Point = MACL::Point2d
 
 end
 end

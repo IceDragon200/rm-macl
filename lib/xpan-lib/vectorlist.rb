@@ -9,6 +9,9 @@ require File.join(File.dirname(__FILE__), 'matrix')
 module MACL
 class VectorList < Matrix
 
+  ##
+  # initialize(int size)
+  # initialize(int size, Numeric default)
   def initialize(size, default=0)
     super([size], default)
   end

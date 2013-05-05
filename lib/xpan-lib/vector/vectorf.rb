@@ -7,45 +7,41 @@
 require File.join(File.dirname(__FILE__), 'vector')
 
 module MACL
-class Vectorf < Vector
+module Extender
+module VectorF
 
-  def self.default_value
+  def default_value
     0.0
   end
 
-  def self.convert_param(param)
+  def convert_param(param)
     param.to_f
   end
 
 end
+end
 
-class Vector2f < Vectorf
+class Vector2F < Vector
 
-  def self.params
-    [:x, :y]
-  end
-
-  params.each { |s| make_attr(s) }
+  include Abstract::Vector2
+  extend Extender::VectorF
+  make_param_attrs
 
 end
 
-class Vector3f < Vectorf
+class Vector3F < Vector
 
-  def self.params
-    [:x, :y, :z]
-  end
-
-  params.each { |s| make_attr(s) }
+  include Abstract::Vector3
+  extend Extender::VectorF
+  make_param_attrs
 
 end
 
-class Vector4f < Vectorf
+class Vector4F < Vector
 
-  def self.params
-    [:x, :y, :x2, :y2]
-  end
-
-  params.each { |s| make_attr(s) }
+  include Abstract::Vector4
+  extend Extender::VectorF
+  make_param_attrs
 
 end
 end

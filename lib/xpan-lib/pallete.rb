@@ -12,7 +12,7 @@ class Pallete
 
   attr_accessor :pallete_name, :columns, :cell_size
 
-  def initialize(filename="graphics/system/pallete.png")
+  def initialize(filename="Graphics/System/pallete.png")
     @pallete_name = filename
     @sym_colors = {}
     @ext_colors = {}
@@ -26,18 +26,34 @@ class Pallete
 
   def add_ext(name, *args)
     case args.size
-    when 1 # Color or Hex Int
+    # Color or Hex Int
+    when 1
       arg, = args
-      arg = Color.hex(arg) if arg.is_a?(Numeric)
-      rgss_color = arg
+      col =
+        if arg.is_a?(Numeric)
+          if arg > 0xFFFFFF  then Color.argb32(arg)
+          elsif arg > 0xFFFF then Color.rgb24(arg)
+          elsif arg > 0xFFF  then Color.argb16(arg)
+          else                    Color.rgb12(arg)
+          end
+        elsif arg.is_a?(Color)
+          arg.dup
+        else
+          raise(TypeError, "cannot convert %s into %s" % [arg, Color])
+        end
+      rgss_color = col
     when 3, 4
       r, g, b, a = *args
-      a ||= 255
+      a ||= 0xFF
       rgss_color = Color.new(r, g, b, a)
     else
-      raise(ArgumentError)
+      raise(ArgumentError, "expected 1, 3, or 4 but recieved %d" % args.size)
     end
-    @ext_colors[name] = rgss_color
+    if @ext_colors.has_key?(name)
+      raise(PalleteError, "Color #{name} was already set!")
+    else
+      @ext_colors[name] = rgss_color
+    end
   end
 
   def pallete?
@@ -66,8 +82,7 @@ class Pallete
   def sym_color(sym)
     if sym.is_a?(Symbol)
       sym = sym.to_s
-      console.fwarn_warn(
-        "use of Symbol (:#{sym}) for #{self}.sym_color is depreceated")
+      warn("use of Symbol (:#{sym}) for #{self}#sym_color is depreceated")
     end
 
     unless @ext_colors.has_key?(sym) || @sym_colors.has_key?(sym)

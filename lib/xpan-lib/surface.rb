@@ -2,15 +2,17 @@
 # RGSS3-MACL/lib/xpan-lib/surface.rb
 #   by IceDragon
 #   dc ??/??/2012
-#   dc 03/03/2013
-# vr 1.3.3
+#   dc 03/04/2013
+# vr 1.4.0
 module MACL
   class Surface
 
-    VERSION = '1.3.3'.freeze
+    VERSION = '1.4.0'.freeze
 
   end
 end
+
+require_relative 'surface/constants.rb'
 
 require_relative 'surface/msurface.rb'
 require_relative 'surface/msurface-exfunc.rb'

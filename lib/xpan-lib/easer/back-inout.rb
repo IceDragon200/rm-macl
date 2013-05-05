@@ -11,9 +11,11 @@ class Back::InOut < Back
 
   def _ease(t, st, ch, d)
     s = @s
-    (t /= d/2.0) < 1 ?
-      ch / 2.0 * (t * t * (((s *= (1.525)) + 1) * t - s)) + st :
+    if (t /= d/2.0) < 1
+      ch / 2.0 * (t * t * (((s *= (1.525)) + 1) * t - s)) + st
+    else
       ch / 2.0 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + st
+    end
   end
 
 end

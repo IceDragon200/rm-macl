@@ -72,7 +72,7 @@ class Surface
     when 1
       surface = args[0]
 
-      MACL::Mixin::Surface.type_check(surface)
+      MACL::Mixin::Surface.assert_type(surface)
 
       x, y, x2, y2 = surface.to_sa
     when 4

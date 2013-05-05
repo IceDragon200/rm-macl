@@ -3,18 +3,29 @@
 #   by IceDragon
 #   dc 01/04/2012
 #   dc 01/04/2013
-# vr 1.0.0
-
+# vr 1.0.1
 require File.join(File.dirname(__FILE__), 'vector')
 
 module MACL
-class Pos3 < Vector3f
+class Pos3 < Vector3F
 
-  attr_accessor :orientation
+  class Axis < Pos3
+  end
 
-  def initialize(x, y, z, o=UNKNOWN)
+  attr_reader :orientation # int orientation
+
+  ##
+  # initialize(Numeric x, Numeric y, Numeric z, Axis o)
+  def initialize(x=0.0, y=0.0, z=0.0, o=UNKNOWN)
     super(x, y, z)
-    @orientation = o.kind_of?(Pos3) ? o.orientation : o
+    self.orientation = o
+  end
+
+  ##
+  # orientation=(Fixnum o)
+  # orientation=(Axis o)
+  def orientation=(o)
+    @orientation = o.is_a?(Fixnum) ? o : o.orientation
   end
 
   ##
@@ -23,44 +34,76 @@ class Pos3 < Vector3f
     self.add!(d * step)
   end
 
+  ##
+  # move_up(Numeric step)
   def move_up(step)
     move_straight(step, UP)
   end
 
+  ##
+  # move_down(Numeric step)
   def move_down(step)
     move_straight(step, DOWN)
   end
 
+  ##
+  # move_north(Numeric step)
   def move_north(step)
     move_straight(step, NORTH)
   end
 
+  ##
+  # move_south(Numeric step)
   def move_south(step)
     move_straight(step, SOUTH)
   end
 
+  ##
+  # move_east(Numeric step)
   def move_east(step)
     move_straight(step, EAST)
   end
 
+  ##
+  # move_west(Numeric step)
   def move_west(step)
     move_straight(step, WEST)
   end
 
+  ##
+  # move_forward(Numeric step)
   def move_forward(step)
-    move_straight(step, AXES[@orientation])
+    move_straight(step, get_axis)
   end
 
+  ##
+  # move_backward(Numeric step)
   def move_backward(step)
-    move_straight(step, AXESI[@orientation])
+    move_straight(step, get_axisi)
   end
 
+  ##
+  # get_axis
+  def get_axis
+    AXES[@orientation]
+  end
+
+  ##
+  # get_axisi
+  def get_axisi
+    AXESI[@orientation]
+  end
+
+  ##
+  # get_rotation(Axis axis)
   def get_rotation(axis)
-    Pos3.get_orientation(ROTATION_MATRIX[axis.orientation][orientation])
+    Axis.get_orientation(ROTATION_MATRIX[axis.orientation][orientation])
   end
 
+  ##
+  # ::get_orientation(Numeric step)
   def self.get_orientation(id)
-    id = id.orientation if id.kind_of?(MACL::Vector)
+    id = id.orientation if id.kind_of?(Axis)
     if (id >= 0 && id < VALID_AXES.size)
       return VALID_AXES[id]
     end
@@ -70,13 +113,13 @@ class Pos3 < Vector3f
   ##
   # Based on the Minecraft Forge net.minecraftforge.common.ForgeDirection
   # http://www.minecraftforge.net/
-  EAST    = new( 1.0, 0.0, 0.0, 5).freeze
-  WEST    = new(-1.0, 0.0, 0.0, 4).freeze
-  UP      = new( 0.0, 1.0, 0.0, 1).freeze
-  DOWN    = new( 0.0,-1.0, 0.0, 0).freeze
-  SOUTH   = new( 0.0, 0.0, 1.0, 3).freeze
-  NORTH   = new( 0.0, 0.0,-1.0, 2).freeze
-  UNKNOWN = new( 0.0, 0.0, 0.0, 6).freeze
+  EAST    = Axis.new( 1.0, 0.0, 0.0, 5).freeze
+  WEST    = Axis.new(-1.0, 0.0, 0.0, 4).freeze
+  UP      = Axis.new( 0.0, 1.0, 0.0, 1).freeze
+  DOWN    = Axis.new( 0.0,-1.0, 0.0, 0).freeze
+  SOUTH   = Axis.new( 0.0, 0.0, 1.0, 3).freeze
+  NORTH   = Axis.new( 0.0, 0.0,-1.0, 2).freeze
+  UNKNOWN = Axis.new( 0.0, 0.0, 0.0, 6).freeze
 
   # All possible Axes
   AXES  = [DOWN, UP, NORTH, SOUTH, WEST, EAST, UNKNOWN].freeze
@@ -96,6 +139,8 @@ class Pos3 < Vector3f
     [3, 2, 0, 1, 4, 5, 6],
     [0, 1, 2, 3, 4, 5, 6]
   ].map! { |a| a.map! { |i| AXES[i] }.freeze }.freeze
+
+  alias :axis :get_axis
 
 end
 end

@@ -191,21 +191,21 @@ class Grid3
   end
 
   ##
-  # col_ia(int x, int z) => Array<int>
+  # col_ia(int x, int z) -> Array<int>
   #   Returns an Array of indecies for colummn (x, z)
   def col_ia(x, z)
     (0...rows).map { |y| xyz_to_index(x, y, z) }
   end
 
   ##
-  # row_ia(int y, int z) => Array<int>
+  # row_ia(int y, int z) -> Array<int>
   #   Returns an Array of indecies for row (y, z)
   def row_ia(y, z)
     (0...columns).map { |x| xyz_toindex(x, y, z) }
   end
 
   ##
-  # lay_ia(int x, int y) => Array<int>
+  # lay_ia(int x, int y) -> Array<int>
   #   Returns an Array of indecies for row (x, y)
   def row_ia(x, y)
     (0...layers).map { |z| xyz_toindex(x, y, z) }

@@ -8,24 +8,32 @@ module MACL
 module Mixin
 module ColorMath
 
+  ##
+  # alpha_r -> Rate
   def alpha_r
     return self.alpha / 255.0
   end
 
+  ##
+  # red_r -> Rate
   def red_r
     return self.red / 255.0
   end
 
+  ##
+  # green_r -> Rate
   def green_r
     return self.green / 255.0
   end
 
+  ##
+  # blue_r -> Rate
   def blue_r
     return self.blue / 255.0
   end
 
   ##
-  # lerp!(Color trg_color, Float r)
+  # lerp!(Color trg_color, Rate r)
   #   r 0.0..1.0
   def lerp!(trg_color, r)
     self.red   = self.red   + (trg_color.red   - self.red)   * r
@@ -34,6 +42,8 @@ module ColorMath
     return self
   end
 
+  ##
+  # lerp(Color trg_color, Rate r)
   def lerp(trg_color, r)
     return dup.lerp!(trg_color, r)
   end

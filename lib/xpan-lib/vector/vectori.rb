@@ -7,7 +7,8 @@
 require File.join(File.dirname(__FILE__), 'vector')
 
 module MACL
-class Vectori < Vector
+module Extender
+module VectorI
 
   def self.default_value
     0
@@ -18,34 +19,29 @@ class Vectori < Vector
   end
 
 end
+end
 
-class Vector2i < Vectori
+class Vector2I < Vector
 
-  def self.params
-    [:x, :y]
-  end
-
-  params.each { |s| make_attr(s) }
+  include Abstract::Vector2
+  extend Extender::VectorI
+  make_param_attrs
 
 end
 
-class Vector3i < Vectori
+class Vector3I < Vector
 
-  def self.params
-    [:x, :y, :z]
-  end
-
-  params.each { |s| make_attr(s) }
+  include Abstract::Vector3
+  extend Extender::VectorI
+  make_param_attrs
 
 end
 
-class Vector4i < Vectori
+class Vector4I < Vector
 
-  def self.params
-    [:x, :y, :x2, :y2]
-  end
-
-  params.each { |s| make_attr(s) }
+  include Abstract::Vector4
+  extend Extender::VectorI
+  make_param_attrs
 
 end
 end

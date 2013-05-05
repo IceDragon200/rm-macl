@@ -2,8 +2,8 @@
 # RGSS3-MACL/lib/mixin/callbacks.rb
 #   by IceDragon
 #   dc 03/03/2013
-#   dm 09/03/2013
-# vr 1.1.3
+#   dm 22/04/2013
+# vr 1.1.5
 module MACL
 module Mixin
 module Callback
@@ -17,16 +17,25 @@ module Callback
 
   attr_accessor :callback_log
 
+  ##
+  # init_callbacks
   def init_callbacks
-    @callback_log = ::MACL::Mixin::Callback.log # for debugging
+    @callback_log = MACL::Mixin::Callback.log # for debugging
     @callback = {}
-    return self
+    @callback_settings = {
+      args_prepend: [],
+      args_append: []
+    }
   end
 
+  ##
+  # clear_callbacks
   def clear_callbacks
     @callback.clear
   end
 
+  ##
+  # dispose_callbacks
   def dispose_callbacks
     @callback = nil
   end
@@ -41,7 +50,6 @@ module Callback
             "Either pass a block (block), or a Proc (func)")
     end
     (@callback[sym] ||= []).push(func || block)
-    return self
   end
 
   ##
@@ -49,23 +57,32 @@ module Callback
   def remove_callback(sym)
     init_callbacks unless @callback
     @callback.delete(sym)
-    return self
   end
 
   ##
-  # callback?(sym)
+  # callback?(ID sym)
   def callback?(sym)
-    return @callback.has_key?(sym)
+    @callback.has_key?(sym)
   end
 
   ##
-  # call_callback(ID sym, *args, &block)
+  # call_callback(ID sym, void *args, &block)
   def call_callback(sym, *args, &block)
     init_callbacks unless @callback
     raise(CallbackError,
           "callback #{sym} does not exist") unless callback?(sym)
-    @callback_log << "Callback: #{self} #{sym} #{args.inspect}\n" if @callback_log
-    return @callback[sym].each { |callback| callback.(*args, &block) }
+    if @callback_log
+      @callback_log << "Callback: #{self} #{sym} #{args.inspect}\n"
+    end
+    nargs = args
+    unless (apn = @callback_settings[:args_append]).empty?
+      nargs.concat(apn)
+    end
+    unless (pre = @callback_settings[:args_prepend]).empty?
+      nargs.replace(pre.concat(nargs))
+    end
+    @callback[sym].each { |callback| callback.(*nargs, &block) }
+    true
   end
 
   ##
@@ -74,9 +91,16 @@ module Callback
     call_callback(sym, *args, &block) if callback?(sym)
   end
 
+  ##
+  # callbacks -> Array<Key>
+  def callbacks
+    @callback.keys
+  end
+
   alias :callback :call_callback
 
-  private :callback,
+  private :init_callbacks,
+          :callback,
           :call_callback,
           :try_callback
 

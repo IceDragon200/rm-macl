@@ -7,7 +7,7 @@
 dir = File.dirname(__FILE__)
 require File.join(dir, 'macl-core')
 %w(archijust
-   blaz box
+   blaz book box
    cacher colorvector cube
    easer
    fifo

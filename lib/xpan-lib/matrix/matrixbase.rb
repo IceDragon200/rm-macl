@@ -3,7 +3,7 @@
 #   by IceDragon
 #   dc 29/03/2013
 #   dm 01/04/2013
-# vr 1.1.0
+# vr 1.1.1
 module MACL
 class MatrixBase
 
@@ -41,7 +41,7 @@ class MatrixBase
   end
 
   ##
-  # dimnet => [[*floor], [*ceil]]
+  # dimnet -> [[*floor], [*ceil]]
   def dimnet
     return Array.new(@dimensions.size, 0), @dimensions.dup
   end
@@ -63,7 +63,7 @@ class MatrixBase
   end
 
   ##
-  # dims_to_index(Numeric *dims) dims_to_index(x, y, z)
+  # dims_to_index(Numeric *dims) dims_to_index(x, y, z) -> int
   def dims_to_index(*dims)
     unless @dim == dims.size
       raise(ArgumentError, "Expected #{@dim} args but #{dims.size} given")
@@ -77,7 +77,7 @@ class MatrixBase
   end
 
   ##
-  # index_to_dims(int index)
+  # index_to_dims(int index) -> Array<int>
   def index_to_dims(index)
     return nil if (index < 0 || index >= datasize)
     dims = []
@@ -91,7 +91,7 @@ class MatrixBase
   end
 
   ##
-  # get(Numeric *dims) get(x, y, z, n...)
+  # get(Numeric *dims) get(x, y, z, n...) -> Numeric
   def get(*dims)
     return @default if dims.any? do |d| d < 0 end
     n = dims_to_index(*dims)
@@ -102,8 +102,10 @@ class MatrixBase
   # set(Numeric *args) set(x, y, z, n..., value)
   def set(*args)
     dims = args[0, args.size - 1]
-    raise(ArgumentError,
-          "%d dimensions must be provided" % @dim) unless dims == @dim
+    unless dims.size == @dim
+      raise(ArgumentError,
+            "%d dimensions must be provided, %d was given" % [@dim, dims.size])
+    end
     if n = dims_to_index(*dims)
       @data[n] = args[-1]
       after_set(n)
@@ -125,7 +127,7 @@ class MatrixBase
   end
 
   ##
-  # allowed_datatypes
+  # allowed_datatypes -> Array<Class>
   #   returns an Array of classes which are allowed by the Matrix as data
   def allowed_datatypes
     [Numeric]
@@ -139,7 +141,7 @@ class MatrixBase
   end
 
   ##
-  # bang_do!(other)
+  # bang_do!(other) -> self
   #   abstract function for operating on all @data in the Matrix
   def bang_do!(other)
     case other
@@ -164,7 +166,7 @@ class MatrixBase
   end
 
   ##
-  # bang_at_do!(other)
+  # bang_at_do!(other) -> self
   #   abstract function for operating on a select @data in the Matrix
   def bang_at_do!(trg_vec, other, src_vec_start, src_vec_end)
     raise(ArgumentError,
@@ -196,7 +198,7 @@ class MatrixBase
   end
 
   ##
-  # replace!(Object other)
+  # replace!(Object other) -> self
   #   Replaces all the data in the Matrix with other
   #   if other is a Matrix then it will replace the data using the other's
   #   data
@@ -205,7 +207,7 @@ class MatrixBase
   end
 
   ##
-  # replace_at!(Array<int> trg_vec, Object other, Array<int> src_vec_start, Array<int> src_vec_end)
+  # replace_at!(Array<int> trg_vec, Object other, Array<int> src_vec_start, Array<int> src_vec_end) -> self
   #   see replace!
   #   Operates on a select region of the Matrix starting at trg_vec
   def replace_at!(*args)
@@ -213,27 +215,27 @@ class MatrixBase
   end
 
   ##
-  # replace(Object other)
+  # replace(Object other) -> self
   #   see replace!
   def replace(*args)
     dup.replace!(*args)
   end
 
   ##
-  # replace_at(Object other)
+  # replace_at(Object other) -> self
   #   see replace_at!
   def replace_at(*args)
     dup.replace_at!(*args)
   end
 
   ##
-  # to_a -> Array
+  # to_a -> Array<Numeric>
   def to_a
     @data.dup
   end
 
   ##
-  # <=>(Matrix other)
+  # <=>(Matrix other) -> int
   def <=>(other)
     self.to_a <=> other.to_a
   end
@@ -245,7 +247,7 @@ class MatrixBase
   end
 
   ##
-  # ::make_type_error(Object other)
+  # ::make_type_error(Object other) -> TypeError
   def self.make_type_error(other)
     err_msg = "Expected type %s or %s but recieved %s"
     err_msg %= [allowed_types.join(', '), self, other]
@@ -260,3 +262,5 @@ class MatrixBase
 
 end
 end
+
+matrix = MACL::MatrixBase.new([2, 3, 4, 5, 6, 7, 8, 9], 0); matrix[1, 2, 3, 1, 2, 3, 4, 5] = 1
