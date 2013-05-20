@@ -2,10 +2,8 @@
 # RGSS3-MACL/lib/xpan-lib/surface/msurface.rb
 #   by IceDragon
 #   dc ??/??/2012
-#   dc 24/04/2013
-# vr 2.2.1
-require File.join(File.dirname(__FILE__), '..', 'archijust')
-
+#   dc 11/05/2013
+# vr 2.3.0
 module MACL
 module Mixin
 module Surface
@@ -78,33 +76,60 @@ module Surface
     return self
   end
 
-  ##
-  # anchor_point(anchor) -> Point
-  #   Calculates and returns the "Anchor" Point (x, y[, z]) Surface
-  def anchor_point(anchor)
-    anchor_ids = MACL::Surface::Tool.anchor_to_ids(anchor)
-
-    x = case anchor_ids[0]
-    when MACL::Surface::Tool::ID_NULL then self.x
+  def anchor_x(id)
+    case id
+    when MACL::Surface::Tool::ID_NULL then nil
     when MACL::Surface::Tool::ID_MIN  then self.x
     when MACL::Surface::Tool::ID_MID  then self.cx
     when MACL::Surface::Tool::ID_MAX  then self.x2
     end
+  end
 
-    y = case anchor_ids[1]
-    when MACL::Surface::Tool::ID_NULL then self.y
+  def anchor_y(id)
+    case id
+    when MACL::Surface::Tool::ID_NULL then nil
     when MACL::Surface::Tool::ID_MIN  then self.y
     when MACL::Surface::Tool::ID_MID  then self.cy
     when MACL::Surface::Tool::ID_MAX  then self.y2
     end
+  end
 
+  def set_anchor_x(id, n)
+    case id
+    when MACL::Surface::Tool::ID_NULL then #self.x  = pnt.x
+    when MACL::Surface::Tool::ID_MIN  then self.x  = n
+    when MACL::Surface::Tool::ID_MID  then self.cx = n
+    when MACL::Surface::Tool::ID_MAX  then self.x2 = n
+    end
+  end
+
+  def set_anchor_y(id, n)
+    case id
+    when MACL::Surface::Tool::ID_NULL then #self.y  = pnt.y
+    when MACL::Surface::Tool::ID_MIN  then self.y  = n
+    when MACL::Surface::Tool::ID_MID  then self.cy = n
+    when MACL::Surface::Tool::ID_MAX  then self.y2 = n
+    end
+  end
+
+  ##
+  # anchor_point(anchor) -> Point
+  #   Calculates and returns the "Anchor" Point (x, y[, z]) Surface
+  def anchor_point_abs_a(anchor)
+    anchor_ids = MACL::Surface::Tool.anchor_to_ids(anchor)
+    x = anchor_x(anchor_ids[0])
+    y = anchor_y(anchor_ids[1])
     if surface_3d?
-      z = case anchor_ids[3]
-      when MACL::Surface::Tool::ID_NULL then self.z
-      when MACL::Surface::Tool::ID_MIN  then self.z
-      when MACL::Surface::Tool::ID_MID  then self.cz
-      when MACL::Surface::Tool::ID_MAX  then self.z2
-      end
+      z = anchor_z(anchor_ids[2])
+      return [x, y, z]
+    else
+      return [x, y]
+    end
+  end
+
+  def anchor_point(anchor)
+    x, y, z = anchor_point_abs_a(anchor)
+    if surface_3d?
       return MACL::Point3d.new(x, y, z)
     else
       return MACL::Point2d.new(x, y)

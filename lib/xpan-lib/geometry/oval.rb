@@ -4,8 +4,6 @@
 #   dc ??/??/2012
 #   dc 18/04/2013
 # vr 1.1.0
-require File.join(File.dirname(__FILE__), '..', 'surface')
-
 module MACL
 module Geometry
 class Oval

@@ -1,5 +1,5 @@
 #
-# RGSS3-MACL/lib/xpan-lib/archijust.rb
+# RGSS3-MACL/lib/mixin/archijust.rb
 #   by IceDragon
 #   dc ??/??/2012
 #   dc 03/03/2013
@@ -117,6 +117,9 @@ module Archijust
     return self
   end
 
+  ##
+  # multi_setter(String name, Array<String> syms...)
+  #   defines method (name) and sets the attributes from (syms)
   def multi_setter(name, *syms)
     module_eval(%Q(
       def #{name}(*args)

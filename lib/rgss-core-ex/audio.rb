@@ -55,7 +55,12 @@ module MACL
 end
 
 module RPG
-  class BGM
+
+  class AudioFile
+
+  end
+
+  class BGM < AudioFile
 
     include MACL::Mixin::AudioVolume
 
@@ -79,10 +84,8 @@ module RPG
     end
 
   end
-end
 
-module RPG
-  class BGS
+  class BGS < AudioFile
 
     include MACL::Mixin::AudioVolume
 
@@ -104,10 +107,8 @@ module RPG
     end
 
   end
-end
 
-module RPG
-  class ME
+  class ME < AudioFile
 
     include MACL::Mixin::AudioVolume
 
@@ -129,10 +130,8 @@ module RPG
     end
 
   end
-end
 
-module RPG
-  class SE
+  class SE < AudioFile
 
     include MACL::Mixin::AudioVolume
 

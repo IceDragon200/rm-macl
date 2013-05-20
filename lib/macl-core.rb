@@ -5,7 +5,7 @@
 #   dm 05/05/2013
 module MACL
 
-  VERSION = '2.2.1.000'.freeze
+  VERSION = '2.2.4'.freeze
 
   ##
   # ::frame_rate

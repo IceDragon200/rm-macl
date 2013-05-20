@@ -6,19 +6,23 @@
 # vr 1.0.0
 dir = File.dirname(__FILE__)
 require File.join(dir, 'macl-core')
-%w(archijust
+require File.join(dir, 'mixin')
+%w(
    blaz book box
    cacher colorvector cube
    easer
    fifo
-   geometry grid
+   grid
    interpolate
    matrix morph
    notereader
+   vector
    pallete parcer point pos
-   sequen surface
+   surface
+   geometry
+   sequen
    task tween tween2
-   vector vectorlist
+   vectorlist
   ).each do |fn|
   require File.join(dir, 'xpan-lib', fn)
 end

@@ -4,16 +4,10 @@
 #   dc ??/??/2012
 #   dc 03/03/2013
 # vr 1.0.2
-require File.join(File.dirname(__FILE__), 'vector')
-
 module MACL
 
-  class Point2d < Vector2I
-  end
-
-  class Point3d < Vector3I
-  end
-
+  class Point2d < Vector2I; end
+  class Point3d < Vector3I; end
   Point = Point2d
 
 end

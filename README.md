@@ -1,6 +1,6 @@
 ﻿RGSS3-MACL
 ==========
-## vr 2.2.1.000 [![Code Climate](https://codeclimate.com/github/IceDragon200/RGSS3-MACL.png)](https://codeclimate.com/github/IceDragon200/RGSS3-MACL)
+## vr 2.2.4 [![Code Climate](https://codeclimate.com/github/IceDragon200/RGSS3-MACL.png)](https://codeclimate.com/github/IceDragon200/RGSS3-MACL)
 
 ## Introduction
 Spanning many years, coming from the RM community, this library contains
@@ -28,12 +28,48 @@ PK8
 
 ## Change Log
 
+### vr 2.2.4 [16/05/2013]
+```
+  CHANGE
+    VERSION is now just 3 numbers, the last 3 seemed too extra
+
+  FIXED
+    gm-classes.rb
+    gm-modules.rb
+      Both where reloading the mixin/ source files instead of their respective
+      gm-classes/ and gm-modules/
+
+  MOVED
+    lib/xpan-lib/archijust.rb > lib/mixin/archijust.rb
+      Always wondered why I didn't move it to the mixins instead of the
+      Xpansion Lib
+```
+
+### vr 2.2.3.000 [11/05/2013]
+```
+  ADDED
+    MACL::Mixin::Surface#anchor_*
+    MACL::Mixin::Surface#set_anchor_*
+
+  CHANGE
+    MACL::Mixin::Surface#reanchor
+      Now uses the anchor_* methods for calculation and setting
+
+```
+
+### vr 2.2.2.000 [05/05/2013]
+```
+  ADDED
+    MACL::Pos2
+
+```
+
 ### vr 2.2.1.000 [04/05/2013]
 ```
   ADDED
-    MACL::Mixin::StackElement::uint_reader
-    MACL::Mixin::StackElement::uint_writer
-    MACL::Mixin::StackElement::uint_accessor
+    MACL::Mixin::Archijust::uint_reader
+    MACL::Mixin::Archijust::uint_writer
+    MACL::Mixin::Archijust::uint_accessor
       Forces Incoming and Outgoing values to be greater than 0
 ```
 

@@ -3,10 +3,26 @@
 #   by IceDragon
 #   dc ??/??/2012
 #   dm 11/04/2013
-# vr 1.2.0
 module MACL
 class Surface
 module Tool
+
+  VERSION = "1.3.1".freeze
+
+  ##
+  # Anchor IDS
+  ID_NULL = 0x0 # 0  (disabled anchor point)
+  ID_MIN  = 0x1 # -1 (negative anchor point)
+  ID_MID  = 0x2 # 0 or 0.5 (depends on the requirement)
+  ID_MAX  = 0x3 # +1 (positive anchor point)
+
+  ##
+  # Hash<ANCHOR, ID> ANCHOR_CACHE
+  ANCHOR_CACHE = {}
+
+  ##
+  # Hash<ANCHOR, VectorI> ANCHOR_CACHE
+  ANCHOR_VECTOR = {}
 
 private
 
@@ -27,10 +43,14 @@ private
     for z in 0..3
       for y in 0..3
         for x in 0..3
-          anchor2 =  0x200 | (y << 4) | (x << 0)
+          if z == 0
+            anchor2 =  0x200 | (y << 4) | (x << 0)
+            ANCHOR_CACHE[anchor2] = calc_anchor_ids(anchor2).freeze
+            ANCHOR_VECTOR[anchor2] = MACL::Vector2I.new(*anchor_to_signums(anchor2)).freeze
+          end
           anchor3 = 0x3000 | (z << 8) | (y << 4) | (x << 0)
-          ANCHOR_CACHE[anchor2] = calc_anchor_ids(anchor2).freeze if z == 0
           ANCHOR_CACHE[anchor3] = calc_anchor_ids(anchor3).freeze
+          ANCHOR_VECTOR[anchor3] = MACL::Vector3I.new(*anchor_to_signums(anchor3)).freeze
         end
       end
     end
@@ -58,12 +78,6 @@ public
   #   x - enum[disabled, left, mid, right]
   #   y - enum[disabled, top, mid, bottom]
   #   z - enum[disabled, floor, mid, ceil]
-  ID_NULL = 0x0
-  ID_MIN  = 0x1
-  ID_MID  = 0x2
-  ID_MAX  = 0x3
-
-  ANCHOR_CACHE = {}
 
   ##
   # ::calc_anchor_ids(ANCHOR anchor)
@@ -79,16 +93,39 @@ public
     end
   end
 
+  ## added in 1.3.0
+  # ::obj_to_anchor(anchor)
+  def self.obj_to_anchor(anchor)
+    if anchor.is_a?(MACL::Vector)
+      case anchor
+      when MACL::Abstract::Vector2
+        anchor =  0x200 | (anchor.y.signum << 4) | (anchor.x.signum  << 0)
+      when MACL::Abstract::Vector3
+        anchor = 0x3000 | (anchor.z.signum << 8) | (anchor.y.signum << 4) | (anchor.x.signum << 0)
+      else
+        raise(TypeError, "cannot convert %s to ANCHOR" % anchor.class.name)
+      end
+    else
+      # Legacy Patch
+      if anchor >= 0 && anchor < 10
+        anchor = MACL::Surface::NUMPAD_ANCHOR[anchor]
+      elsif anchor > 19 && anchor < 81
+        anchor = MACL::Surface::EXTENDED_ANCHOR[anchor]
+      end
+    end
+    return anchor
+  end
+
   ##
   # ::anchor_to_ids(ANCHOR anchor)
   def self.anchor_to_ids(anchor)
-    # Legacy Patch
-    if anchor >= 0 && anchor < 10
-      anchor = MACL::Surface::NUMPAD_ANCHOR[anchor]
-    elsif anchor > 19 && anchor < 81
-      anchor = MACL::Surface::EXTENDED_ANCHOR[anchor]
-    end
-    ANCHOR_CACHE[anchor]
+    ANCHOR_CACHE[obj_to_anchor(anchor)]
+  end
+
+  ##
+  # ::anchor_to_vector(ANCHOR anchor)
+  def self.anchor_to_vector(anchor)
+    ANCHOR_VECTOR[obj_to_anchor(anchor)]
   end
 
   ##
@@ -109,15 +146,15 @@ public
   end
 
   ##
-  # ::anchor_to_vec2(ANCHOR anchor, bool strict)
-  def self.anchor_to_vec2(anchor, strict=true)
-    MACL::Vector2I.new(*anchor_to_signums(anchor, strict)[0, 2])
+  # ::anchor_to_v2f(ANCHOR anchor, bool strict)
+  def self.anchor_to_v2f(anchor, strict=true)
+    MACL::Vector2F.new(*anchor_to_signums(anchor, strict)[0, 2])
   end
 
   ##
-  # ::anchor_to_vec3(ANCHOR anchor, bool strict)
-  def self.anchor_to_vec3(anchor, strict=true)
-    MACL::Vector3I.new(*anchor_to_signums(anchor, strict))
+  # ::anchor_to_v3f(ANCHOR anchor, bool strict)
+  def self.anchor_to_v3f(anchor, strict=true)
+    MACL::Vector3F.new(*anchor_to_signums(anchor, strict))
   end
 
   ##
@@ -165,17 +202,24 @@ public
     aligned_rect = surfaces_rect.align_to(anchor: anchor, surface: src_surface)
     dif_x = aligned_rect.x - surfaces_rect.x
     dif_y = aligned_rect.y - surfaces_rect.y
-    surfaces.each { |surf| surf.x += dif_x; surf.y += dif_y }
+    surfaces.each { |surf|
+      surf.do_freeform(false) do |s|
+        s.x += dif_x
+        s.y += dif_y
+      end
+    }
   end
 
   ##
-  # flipflop_size(Surface surface)
+  # ::flipflop_size(Surface surface)
   #   Swaps the Surface's width and height
   def self.flipflop_size(surface)
     surface.width, surface.height = surface.height, surface.width
     return surface
   end
 
+  ##
+  # ::split_surface(Surface surface, Integer cols, Integer rows)
   def self.split_surface(surface, cols=1, rows=1)
     raise(ArgumentError, "cols cannot be #{cols}") if !cols or cols <= 0
     raise(ArgumentError, "rows cannot be #{rows}") if !rows or rows <= 0
@@ -205,6 +249,8 @@ public
     return result
   end
 
+  ##
+  # ::split_surface(Surface surface, Array<Integer> slice_x, Array<Integer> slice_y)
   def self.slice_surface(surface, slice_x=[], slice_y=[])
     surf_klass = surface.class
 
@@ -236,6 +282,8 @@ public
     return result
   end
 
+  ##
+  # ::v4a_to_rect(Array<Integer>[x, y, x2, y2] v4a)
   def self.v4a_to_rect(v4a)
     x, y, x2, y2 = *v4a
 
@@ -245,6 +293,9 @@ public
     return Rect.new(x, y, w, h)
   end
 
+  ##
+  # ::center(Surface r1, Surface r2)
+  #   Creates a new surface from the result of centering r2 within r1
   def self.center(r1, r2)
     surf_klass = r2.class
     return open_free_surface(surf_klass) do |surf|
@@ -255,24 +306,35 @@ public
     end
   end
 
+  ##
+  # ::fit_in(Surface source, Surface target)
+  #   Rescales the surface to "fit" inside the target
   def self.fit_in(source, target)
     w, h = source.width, source.height
     scale = if w > h then ( target.width.to_f / w)
             else          (target.height.to_f / h)
             end
     r = source.dup;
-    r.width, r.height = (w * scale).to_i, (h * scale).to_i
+    r.freeform_do(false) do
+      r.width, r.height = (w * scale).to_i, (h * scale).to_i
+    end
     return r
   end
 
+  ##
+  # ::calc_mid_x(Surface surface, Integer n)
   def self.calc_mid_x(surface, n=0)
     surface.x + (surface.width - n) / 2
   end
 
+  ##
+  # ::calc_mid_y(Surface surface, Integer n)
   def self.calc_mid_y(surface, n=0)
     surface.y + (surface.height - n) / 2
   end
 
+  ##
+  # ::calc_mid_z(Surface surface, Integer n)
   def self.calc_mid_z(surface, n=0)
     surface.z + (surface.depth - n) / 2
   end
@@ -293,6 +355,11 @@ public
     end
   end
 
+  ##
+  # ::tile_objects(Array<Surface> objects)
+  # ::tile_objects(Array<Surface> objects, Surface rect)
+  #   Attempts to tile the elements of (objects) within the (rect)
+  #   Not very useful for serious Tiling, mostly done for debugging
   def self.tile_objects(objects, rect=Graphics.rect)
     surf = Surface.new(0, 0, 0, 0)
     surf.freeform = true
@@ -322,8 +389,18 @@ public
     return surf.to_rect
   end
 
+  ## initial 1.3.1
+  # ::squarify(Surface surface)
+  def self.squarify(surface)
+    open_free_surface(surface.class) do |surf|
+      surf.x = surface.x
+      surf.y = surface.y
+      surf.width = surf.height = [surface.width, surface.height].min
+    end
+  end
+
   ##
-  #
+  # Setup the Anchor Cache (Anchor IDS and Vector)
   init_anchor_cache
 
 end

@@ -1,13 +1,9 @@
 #
-# RGSS3-MACL/lib/gm-classes/game-map.rb
+# RGSS3-MACL/lib/gm-classes/Map.rb
 #   by IceDragon
 #   dc ??/??/2012
 #   dm 03/03/2013
 # vr 1.1.0
-dir = File.dirname(__FILE__)
-require File.join(dir, '..', 'std-lib-ex', 'object')
-require File.join(dir, '..', 'gm-modules', 'map-manager')
-
 class Game
   class Map
 

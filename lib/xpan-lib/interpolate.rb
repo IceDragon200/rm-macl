@@ -4,7 +4,6 @@
 #   dc ??/??/2012
 #   dm 03/03/2013
 # vr 1.1.0
-require File.join(File.dirname(__FILE__), 'vector')
 # DeCasteljau Algorithm
 # Hamburg (Germany), the 19th September 1999. Written by Nils Pipenbrinck aka Submissive/Cubic & $eeN
 # Bezier Curve

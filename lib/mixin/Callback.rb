@@ -11,11 +11,9 @@ module Callback
   class CallbackError < RuntimeError
   end
 
-  class << self
-    attr_accessor :log
-  end
+  extend MACL::Mixin::Log
 
-  attr_accessor :callback_log
+  attr_accessor :callback_log # IO
 
   ##
   # init_callbacks
@@ -71,9 +69,11 @@ module Callback
     init_callbacks unless @callback
     raise(CallbackError,
           "callback #{sym} does not exist") unless callback?(sym)
+
     if @callback_log
-      @callback_log << "Callback: #{self} #{sym} #{args.inspect}\n"
+      @callback_log.puts("Callback: #{self} #{sym} #{args.inspect}")
     end
+
     nargs = args
     unless (apn = @callback_settings[:args_append]).empty?
       nargs.concat(apn)

@@ -33,7 +33,7 @@ module ColorMath
   end
 
   ##
-  # lerp!(Color trg_color, Rate r)
+  # lerp!(Color trg_color, Rate r) -> self
   #   r 0.0..1.0
   def lerp!(trg_color, r)
     self.red   = self.red   + (trg_color.red   - self.red)   * r
@@ -43,16 +43,31 @@ module ColorMath
   end
 
   ##
-  # lerp(Color trg_color, Rate r)
+  # lerp(Color trg_color, Rate r) -> Color
   def lerp(trg_color, r)
     return dup.lerp!(trg_color, r)
   end
 
+  ##
+  # (add|sub|mul|div|replace)(Colorable color)
+  # (add|sub|mul|div|replace)(Array<Integer>[:red, :green, :blue] values)
+  # (add|sub|mul|div|replace)(Array<Integer>[:red, :green, :blue, :alpha] values)
+  # (add|sub|mul|div|replace)(Numeric i)
   {add: :+, sub: :-, mul: :*, div: :/, replace: ''}.map do |(word, sym)|
     str = sym.empty? ? "arg.%1$s * delta" : "((self.%1$s_r #{sym} arg.%1$s_r * delta) * 255).to_i"
+    ary_str = sym.empty? ? "%1$s * delta" : "((self.%2$s_r #{sym} (%1$s / 255.0) * delta) * 255).to_i"
     module_eval(%Q(
       def #{word}!(arg)
         case arg
+        when Array
+          if arg.size >= 3
+            delta = (arg[3] || 255) / 255.0
+            self.red   = #{ary_str % ['arg[0]', 'red']}
+            self.green = #{ary_str % ['arg[1]', 'green']}
+            self.blue  = #{ary_str % ['arg[2]', 'blue']}
+          else
+            raise(ArgumentError, "Expected Array of size 3 or 4 but recieved \%d" % arg.size)
+          end
         when ColorMath
           delta = arg.alpha_r
           self.red   = #{str % 'red'}

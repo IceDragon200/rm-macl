@@ -2,25 +2,19 @@
 # RGSS3-MACL/lib/xpan-lib/surface.rb
 #   by IceDragon
 #   dc ??/??/2012
-#   dc 03/04/2013
-# vr 1.4.0
+#   dc 06/05/2013
+# vr 1.4.1
 module MACL
   class Surface
 
-    VERSION = '1.4.0'.freeze
+    VERSION = '1.4.1'.freeze
 
   end
 end
 
-require_relative 'surface/constants.rb'
-
-require_relative 'surface/msurface.rb'
-require_relative 'surface/msurface-exfunc.rb'
-require_relative 'surface/surface-error.rb'
-require_relative 'surface/surface.rb'
-require_relative 'surface/surface_to.rb'
-require_relative 'surface/surface-tools.rb'
-
-require_relative 'surface/msurface3d.rb'
-require_relative 'surface/msurface3d-exfunc.rb'
-require_relative 'surface/surface3d.rb'
+dir = File.dirname(__FILE__)
+require File.join(dir, "vector")
+%w(Constants mSurface mSurface-exfunc SurfaceError Surface Surface-to_func
+   Surface-Tool mSurface3D mSurface3D-exfunc Surface3D).each do |fn|
+  require File.join(dir, 'surface', fn)
+end

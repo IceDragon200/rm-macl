@@ -2,10 +2,13 @@
 # RGSS3-MACL/lib/xpan-lib/surface/msurface-exfunc.rb
 #   by IceDragon
 #   dc ??/??/2012
-#   dc 22/04/2013
-# vr 1.4.0
+#   dc 11/05/2013
+# vr 1.4.1
 #
 # CHANGES
+#   1.4.1
+#     reanchor rewritten slightly using new anchor_* methods
+#
 #   1.4.0
 #     reanchor added
 #
@@ -14,7 +17,7 @@
 #       Have been dropped since, their functionality can be completed using
 #       #contract and #release with various anchors
 #
-require File.join(File.dirname(__FILE__), 'msurface')
+require File.join(File.dirname(__FILE__), 'mSurface')
 
 ##
 # MSurface
@@ -136,32 +139,25 @@ module Surface
     return self
   end
 
-  define_exfunc 'reanchor' do |org_anchor, new_anchor|
-    pnt = anchor_point(org_anchor)
-    anchor_ids = MACL::Surface::Tool.anchor_to_ids(new_anchor)
-
-    case anchor_ids[0]
-    when MACL::Surface::Tool::ID_NULL then #self.x  = pnt.x
-    when MACL::Surface::Tool::ID_MIN  then self.x  = pnt.x
-    when MACL::Surface::Tool::ID_MID  then self.cx = pnt.x
-    when MACL::Surface::Tool::ID_MAX  then self.x2 = pnt.x
+  define_exfunc 'reanchor' do |*args|
+    case args.size
+    when 1 # Hash<ANCHOR org_anchor, ANCHOR new_anchor>
+      hsh, = args
+      Hash.assert_type(hsh)
+      org_anchor = hsh.keys.first
+      new_anchor = hsh[org_anchor]
+    when 2 # ANCHOR org_anchor, ANCHOR new_anchor
+      org_anchor, new_anchor = *args
+    else
+      raise(ArgumentError,
+            "expected 1 or 2 arguments but recieved %d" % args.size)
     end
+    nx, ny, nz = anchor_point_abs_a(org_anchor)
+    ax, ay, az = MACL::Surface::Tool.anchor_to_ids(new_anchor)
 
-    case anchor_ids[1]
-    when MACL::Surface::Tool::ID_NULL then #self.y  = pnt.y
-    when MACL::Surface::Tool::ID_MIN  then self.y  = pnt.y
-    when MACL::Surface::Tool::ID_MID  then self.cy = pnt.y
-    when MACL::Surface::Tool::ID_MAX  then self.y2 = pnt.y
-    end
-
-    if surface_3d?
-      case anchor_ids[2]
-      when MACL::Surface::Tool::ID_NULL then #self.z  = pnt.z
-      when MACL::Surface::Tool::ID_MIN  then self.z  = pnt.z
-      when MACL::Surface::Tool::ID_MID  then self.cz = pnt.z
-      when MACL::Surface::Tool::ID_MAX  then self.z2 = pnt.z
-      end
-    end
+    set_anchor_x(ax, nx) if nx
+    set_anchor_y(ay, ny) if ny
+    set_anchor_z(az, nz) if nz if surface_3d?
 
     return self
   end

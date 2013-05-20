@@ -6,6 +6,6 @@
 # vr 1.0.0
 dir = File.dirname(__FILE__)
 require File.join(dir, 'macl-core')
-%w(callbacks table-ex).each do |fn|
-  require File.join(dir, 'mixin', fn)
+%w(map-manager scene-manager).each do |fn|
+  require File.join(dir, 'gm-modules', fn)
 end

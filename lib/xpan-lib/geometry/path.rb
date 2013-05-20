@@ -6,7 +6,6 @@
 # vr 0.0.1
 dir = File.dirname(__FILE__)
 require File.join(dir, 'point')
-require File.join(dir, '..', 'easer')
 
 module MACL
 module Geometry

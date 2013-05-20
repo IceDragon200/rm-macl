@@ -4,8 +4,6 @@
 #   dc 30/03/2012
 #   dm 30/03/2013
 # vr 1.0.0
-require File.join(File.dirname(__FILE__), '..', 'cube')
-
 module MACL
 class Grid3
 

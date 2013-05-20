@@ -4,8 +4,8 @@
 #   dc ??/??/2012
 #   dc 03/03/2013
 # vr 1.1.0
-require File.join(File.dirname(__FILE__), 'surface')
-require File.join(File.dirname(__FILE__), 'surface3d')
+require File.join(File.dirname(__FILE__), 'Surface')
+require File.join(File.dirname(__FILE__), 'Surface3D')
 
 module MACL
 module Mixin
