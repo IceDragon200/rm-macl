@@ -1,11 +1,12 @@
 #
 # RGSS3-MACL/lib/macl-core.rb
-#   by IceDragon
+#   by IceDragon (mistdragon100@gmail.com)
 #   dc 03/03/2013
-#   dm 05/05/2013
+#   dm 19/06/2013
+# MACL core module, containing version information and a few assistant functions
 module MACL
 
-  VERSION = '2.2.4'.freeze
+  VERSION = '2.3.0'.freeze
 
   ##
   # ::frame_rate

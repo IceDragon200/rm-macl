@@ -6,6 +6,6 @@
 # vr 1.0.0
 dir = File.dirname(__FILE__)
 require File.join(dir, 'macl-core')
-%w(Array Hash Kernel MatchData Module Numeric Object String).each do |fn|
+%w(array hash kernel match_data module numeric object string).each do |fn|
   require File.join(dir, 'core-ext', fn)
 end

@@ -33,19 +33,19 @@ class Numeric
   # min(Numeric n)
   def min(n)
     n < self ? n : self
-  end unless method_defined? :min
+  end unless method_defined?(:min)
 
   ##
   # max(Numeric n)
   def max(n)
     n > self ? n : self
-  end unless method_defined? :max
+  end unless method_defined?(:max)
 
   ##
   # clamp(Numeric flr, Numeric cil)
   def clamp(flr, cil)
-    self < flr ? flr : (self > cil ? cil : self)
-  end unless method_defined? :clamp
+    (self < flr) ? flr : ((self > cil) ? cil : self)
+  end unless method_defined?(:clamp)
 
   ##
   # signum -> int

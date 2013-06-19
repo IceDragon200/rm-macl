@@ -22,7 +22,7 @@ class Array
   # offset(Object obj, Boolean reverse)
   #   see #offset!
   def offset(obj, reverse=false)
-    dup.offset!(offset, reverse)
+    dup.offset!(obj, reverse)
   end
 
   ##

@@ -9,33 +9,6 @@ class Easer
 
   @@easers = {}
 
-  def self.register(sym, neaser=self)
-    nm = self.name.gsub("MACL::Easer::", "")
-    define_method(:name) { nm }
-    define_method(:symbol) { sym }
-    @@easers[sym] = self.new
-  end
-
-  def self.get_easer(sym)
-    @@easers[sym]
-  end
-
-  def self.easers
-    @@easers
-  end
-
-  def self.has_easer?(sym)
-    @@easers.has_key?(sym)
-  end
-
-  def self.easer
-    @easer ||= new
-  end
-
-  def self.ease(*args)
-    easer.ease(*args)
-  end
-
   ##
   # _ease(t, st, ch, d)
   #   note that all _ease code was created and provided by CaptainJet,
@@ -51,6 +24,37 @@ class Easer
     #     for now, the start value will be returned for 0.0 time
     return st if t == 0
     self._ease(t, st, et - st, d, *args)
+  end
+
+  def self.register(sym, neaser=self)
+    nm = self.name.gsub("MACL::Easer::", "")
+    define_method(:name) { nm }
+    define_method(:symbol) { sym }
+    @@easers[sym] = self.new
+  end
+
+  def self.easers
+    @@easers
+  end
+
+  def self.get_easer(sym)
+    @@easers[sym]
+  end
+
+  def self.[](sym)
+    @@easers[sym]
+  end
+
+  def self.has_easer?(sym)
+    @@easers.has_key?(sym)
+  end
+
+  def self.easer
+    @_easer ||= new
+  end
+
+  def self.ease(*args)
+    easer.ease(*args)
   end
 
 end

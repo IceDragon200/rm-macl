@@ -7,44 +7,6 @@
 class Color
 
   ##
-  # ::argb32(Integer pixeli) -> Color
-  #   pixeli 0xAARRGGBB
-  def self.argb32(pixeli)
-    return new((pixeli >> 16) & 0xFF, # red
-               (pixeli >>  8) & 0xFF, # green
-               (pixeli >>  0) & 0xFF, # blue
-               (pixeli >> 24) & 0xFF) # alpha
-  end
-
-  ##
-  # ::rgb24(Integer pixeli) -> Color
-  #   pixeli 0xRRGGBB
-  def self.rgb24(pixeli)
-    return new((pixeli >> 16) & 0xFF, # red
-               (pixeli >> 8)  & 0xFF, # green
-               (pixeli >> 0)  & 0xFF) # blue
-  end
-
-  ##
-  # ::argb16(Integer pixeli) -> Color
-  #   pixeli 0xARGB
-  def self.argb16(pixeli)
-    return new(((pixeli >> 8)  & 0xF) * 0x11, # red
-               ((pixeli >> 4)  & 0xF) * 0x11, # green
-               ((pixeli >> 0)  & 0xF) * 0x11, # blue
-               ((pixeli >> 12) & 0xF) * 0x11) # alpha
-  end
-
-  ##
-  # ::argb12(Integer pixeli) -> Color
-  #   pixeli 0xRGB
-  def self.rgb12(pixeli)
-    return new(((pixeli >> 8) & 0xF) * 0x11, # red
-               ((pixeli >> 4) & 0xF) * 0x11, # green
-               ((pixeli >> 0) & 0xF) * 0x11) # blue
-  end
-
-  ##
   # to_argb32 -> Integer
   #   0xAARRGGBB
   def to_argb32
@@ -129,8 +91,55 @@ class Color
     return { red: red, green: green, blue: blue, alpha: alpha }
   end unless method_defined?(:to_h)
 
+  class << self
+
+    ## TODO
+    # ::cast(Object color)
+    def cast(obj)
+    end unless method_defined?(:cast)
+
+  end
+
+  ##
+  # ::argb32(Integer pixeli) -> Color
+  #   pixeli 0xAARRGGBB
+  def self.argb32(pixeli)
+    return new((pixeli >> 16) & 0xFF, # red
+               (pixeli >>  8) & 0xFF, # green
+               (pixeli >>  0) & 0xFF, # blue
+               (pixeli >> 24) & 0xFF) # alpha
+  end
+
+  ##
+  # ::rgb24(Integer pixeli) -> Color
+  #   pixeli 0xRRGGBB
+  def self.rgb24(pixeli)
+    return new((pixeli >> 16) & 0xFF, # red
+               (pixeli >> 8)  & 0xFF, # green
+               (pixeli >> 0)  & 0xFF) # blue
+  end
+
+  ##
+  # ::argb16(Integer pixeli) -> Color
+  #   pixeli 0xARGB
+  def self.argb16(pixeli)
+    return new(((pixeli >> 8)  & 0xF) * 0x11, # red
+               ((pixeli >> 4)  & 0xF) * 0x11, # green
+               ((pixeli >> 0)  & 0xF) * 0x11, # blue
+               ((pixeli >> 12) & 0xF) * 0x11) # alpha
+  end
+
+  ##
+  # ::argb12(Integer pixeli) -> Color
+  #   pixeli 0xRGB
+  def self.rgb12(pixeli)
+    return new(((pixeli >> 8) & 0xF) * 0x11, # red
+               ((pixeli >> 4) & 0xF) * 0x11, # green
+               ((pixeli >> 0) & 0xF) * 0x11) # blue
+  end
+
   # interfacing for Color/Tone
-  alias_method(:to_a_na, :to_rgb24_a) unless method_defined?(:to_a_na)
-  alias_method(:to_a_ng, :to_a_na) unless method_defined?(:to_a_ng)
+  alias :to_a_na :to_rgb24_a unless method_defined?(:to_a_na)
+  alias :to_a_ng :to_a_na unless method_defined?(:to_a_ng)
 
 end

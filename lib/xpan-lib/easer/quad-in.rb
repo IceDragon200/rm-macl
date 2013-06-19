@@ -4,15 +4,15 @@
 #   dm 24/03/2013
 # vr 1.0.0
 module MACL
-class Easer
-class Quad::In < Quad
+  class Easer
+    class Quad::In < Quad
 
-  register(:quad_in)
+      register(:quad_in)
 
-  def _ease(t, st, ch, d)
-    ch * (t /= d.to_f) * t + st
+      def _ease(t, st, ch, d)
+        ch * (t /= d.to_f) * t + st
+      end
+
+    end
   end
-
-end
-end
 end

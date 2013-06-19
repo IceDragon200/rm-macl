@@ -6,6 +6,6 @@
 # vr 1.0.0
 dir = File.dirname(__FILE__)
 require File.join(dir, 'macl-core')
-%w(Log Archijust Callback ColorMath TableEx StackElement).each do |fn|
+%w(log archijust callback color_math table_ex stack_element).each do |fn|
   require File.join(dir, 'mixin', fn)
 end

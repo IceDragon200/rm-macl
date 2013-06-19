@@ -26,33 +26,36 @@ class Vector
     return to_a.hash
   end
 
-  def do_set!(*args)
-    params =
+  def vec_params(*args)
     if (args.size == 0)
-      self.class.params.map { |s| send(s) }
+      return self.class.params.map { |s| send(s) }
     elsif (args.size == 1)
       other, = *args
       case other
       when Vector
-        self.class.params.map do |mth|
+        return self.class.params.map do |mth|
           [mth, other.respond_to?(mth) ? other.send(mth) :
                                          self.class.default_value]
         end
       when Numeric
-        self.class.params.zip([other] * size)
+        return self.class.params.zip([other] * size)
       when Array
         raise(ArgumentError,
               "Expected array of size #{size}") unless other.size == size
-        self.class.params.zip(other)
+        return self.class.params.zip(other)
       else
         raise(TypeError,
               "Expected type Vector or Numeric but recieved #{other.class}")
       end
     elsif (args.size == size)
-      self.class.params.zip(args)
+      return self.class.params.zip(args)
     else
       raise(ArgumentError, "Expected 0, 1 or #{size}")
     end
+  end
+
+  def do_set!(*args)
+    params = vec_params(*args)
 
     if block_given?
       params.each { |(mth, val)| send(mth.to_s + "=", yield(mth, val)) }
@@ -124,6 +127,14 @@ class Vector
   # size -> Integer
   def size
     return self.class.params_size
+  end
+
+  ##
+  # dot -> Numeric
+  #   Dot product of 2 vectors
+  def dot(*args)
+    params = vec_params(*args)
+    return params[0, size].zip(to_a).inject(0) { |r, (a, b)| r + a * b }
   end
 
   ##
@@ -283,6 +294,7 @@ class Vector
   ###
   # visibility
   private :do_set!
+  private :vec_params
 
   class << self
     private :make_param_attr, :make_param_attrs

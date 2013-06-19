@@ -1,6 +1,6 @@
 ﻿RGSS3-MACL
 ==========
-## vr 2.2.4 [![Code Climate](https://codeclimate.com/github/IceDragon200/RGSS3-MACL.png)](https://codeclimate.com/github/IceDragon200/RGSS3-MACL)
+## vr 2.3.0 [![Code Climate](https://codeclimate.com/github/IceDragon200/RGSS3-MACL.png)](https://codeclimate.com/github/IceDragon200/RGSS3-MACL)
 
 ## Introduction
 Spanning many years, coming from the RM community, this library contains
@@ -27,6 +27,11 @@ PK8
 ```
 
 ## Change Log
+### vr 2.3.0 [19/06/2013]
+  CHANGE
+    Surface::ANCHOR_* have changed slightly
+      ANCHOR_CENTER refers not to the absolute center of a surface, but
+      the Horizontal center position, use ANCHOR_MIDDLE_CENTER instead
 
 ### vr 2.2.4 [16/05/2013]
 ```

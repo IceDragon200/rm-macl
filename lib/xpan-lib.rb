@@ -17,7 +17,7 @@ require File.join(dir, 'mixin')
    matrix morph
    notereader
    vector
-   pallete parcer point pos
+   palette parcer point pos
    surface
    geometry
    sequen

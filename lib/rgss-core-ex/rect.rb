@@ -7,25 +7,26 @@
 class Rect
 
   ##
-  # empty?
+  # empty? -> Boolean
+  #   is this Rect empty, or its area is 0?
   def empty?
     return (width == 0 or height == 0)
   end unless method_defined?(:empty?)
 
   ##
-  # to_a
+  # to_a -> Array<Integer>[x, y, width, height]
   def to_a
     return [x, y, width, height]
   end unless method_defined?(:to_a)
 
   ##
-  # to_h
+  # to_h -> Hash<Symbol[x, y, width, height], Integer>
   def to_h
     return { x: x, y: y, width: width, height: height }
   end unless method_defined?(:to_h)
 
   ##
-  # to_rect
+  # to_rect -> Rect
   def to_rect
     return Rect.new(x, y, width, height)
   end unless method_defined?(:to_rect)
@@ -47,7 +48,7 @@ class << self
       end
     else
       raise(TypeError,
-            "expected type Array of Rect but recieved %s" % obj.class.name)
+            "expected type Array or Rect but recieved %s" % obj.class.name)
     end
   end unless method_defined?(:cast)
 

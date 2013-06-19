@@ -2,8 +2,8 @@
 # RGSS3-MACL/lib/mixin/archijust.rb
 #   by IceDragon
 #   dc ??/??/2012
-#   dc 03/03/2013
-# vr 1.2.1
+#   dc 22/05/2013
+# vr 1.3.0
 
 ##
 # MACL::Mixin::Archijust
@@ -14,6 +14,28 @@ module Archijust
   def self.debug?
     false
   end
+
+  def memoize(*syms)
+    syms.each do |sym|
+      nm = 'pre_memoize_%s' % sym.to_s
+      alias_method nm, sym
+      module_eval(%Q(
+        def #{sym}(*args, &block)
+          @#{'memoized_%s' % sym.to_s} ||= #{nm}(*args, &block)
+        end
+      ))
+    end
+
+    return true
+  end unless method_defined?(:memoize)
+
+  def memoize_as(hash)
+    hash.each_pair do |sym, n|
+      module_eval(%Q(def #{sym}; @#{sym} ||= #{n} end))
+    end
+
+    return true
+  end unless method_defined?(:memoize_as)
 
   ##
   # define_as(Hash<Symbol, Object>)

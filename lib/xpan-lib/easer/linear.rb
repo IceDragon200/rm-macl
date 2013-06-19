@@ -4,15 +4,15 @@
 #   dm 24/03/2013
 # vr 1.0.0
 module MACL
-class Easer
-class Linear < Easer
+  class Easer
+    class Linear < Easer
 
-  register(:linear)
+      register(:linear)
 
-  def _ease(t, st, ch, d)
-    ch * t / d + st
+      def _ease(t, st, ch, d)
+        ch * t / d + st
+      end
+
+    end
   end
-
-end
-end
 end

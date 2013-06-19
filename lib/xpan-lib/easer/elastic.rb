@@ -4,14 +4,16 @@
 #   dm 24/03/2013
 # vr 1.0.0
 module MACL
-class Easer
-class Elastic < Easer
+  class Easer
+    class Elastic < Easer
 
-  def initialize
-    super
-    @a, @p = 5, 0
+      attr_accessor :a, :p
+
+      def initialize
+        super
+        @a, @p = 5, 0
+      end
+
+    end
   end
-
-end
-end
 end

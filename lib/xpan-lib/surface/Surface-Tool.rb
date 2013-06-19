@@ -105,6 +105,19 @@ public
       else
         raise(TypeError, "cannot convert %s to ANCHOR" % anchor.class.name)
       end
+    elsif anchor.is_a?(Symbol)
+      ### replace this later
+      case anchor
+      when :nw then anchor = 0x211 # top-left
+      when :n  then anchor = 0x212 # top-center
+      when :ne then anchor = 0x213 # top-right
+      when :sw then anchor = 0x231 # bottom-left
+      when :s  then anchor = 0x232 # bottom-center
+      when :se then anchor = 0x233 # bottom-right
+      when :w  then anchor = 0x221 # right
+      when :e  then anchor = 0x223 # left
+      else          raise(ArgumentError, "invalid anchor symbols %s" % anchor)
+      end
     else
       # Legacy Patch
       if anchor >= 0 && anchor < 10
@@ -179,7 +192,7 @@ public
   end
 
   ##
-  # ::calc_area_surface(*Surface objs) -> Rect
+  # ::area_rect(*Surface objs) -> Rect
   def self.area_rect(*objs)
     return calc_area_surface(Rect, *objs)
   end
@@ -356,11 +369,11 @@ public
   end
 
   ##
-  # ::tile_objects(Array<Surface> objects)
-  # ::tile_objects(Array<Surface> objects, Surface rect)
+  # ::tile_surfaces(Array<Surface> objects)
+  # ::tile_surfaces(Array<Surface> objects, Surface rect)
   #   Attempts to tile the elements of (objects) within the (rect)
   #   Not very useful for serious Tiling, mostly done for debugging
-  def self.tile_objects(objects, rect=Graphics.rect)
+  def self.tile_surfaces(objects, rect=Graphics.rect)
     surf = Surface.new(0, 0, 0, 0)
     surf.freeform = true
 
