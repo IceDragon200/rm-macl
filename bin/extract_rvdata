@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 #encoding:UTF-8
-# RGSS3-MACL/lib/build-tools/cmd-extract_rvdata.rb
+# rm-macl/lib/rm-macl/build-tools/cmd-extract_rvdata.rb
 #
 require 'zlib'
 require 'rgss3-macl/core-ext/kernel'

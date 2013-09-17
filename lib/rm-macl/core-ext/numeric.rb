@@ -1,9 +1,7 @@
 ﻿#
-# RGSS3-MACL/lib/core-ext/numeric.rb
-#   by IceDragon
-#   dc ??/??/2012
-#   dm 03/03/2013
-# vr 1.1.2
+# rm-macl/lib/rm-macl/core-ext/numeric.rb
+#
+require 'rm-macl/macl-core'
 class Numeric
 
   ##
@@ -67,3 +65,4 @@ class Numeric
   end unless method_defined?(:wall)
 
 end
+MACL.register('macl/core/numeric', '1.2.0')

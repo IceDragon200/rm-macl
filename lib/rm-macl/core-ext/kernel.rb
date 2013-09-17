@@ -1,9 +1,7 @@
 ﻿#
-# RGSS3-MACL/lib/core-ext/kernel.rb
-#   by IceDragon
-#   dc ??/??/2012
-#   dm 03/03/2013
-# vr 1.2.1
+# rm-macl/lib/rm-macl/core-ext/kernel.rb
+#
+require 'rm-macl/macl-core'
 module Kernel
 
   ##
@@ -48,3 +46,4 @@ module Kernel
   end unless method_defined?(:Symbol)
 
 end
+MACL.register('macl/core/kernel', '1.3.0')

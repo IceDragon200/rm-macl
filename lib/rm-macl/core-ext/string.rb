@@ -1,9 +1,7 @@
 #
-# RGSS3-MACL/lib/core-ext/string.rb
-#   by IceDragon
-#   dc ??/??/2012
-#   dm 14/04/2013
-# vr 1.3.0
+# rm-macl/lib/rm-macl/core-ext/string.rb
+#
+require 'rm-macl/macl-core'
 class String
 
   ##
@@ -86,3 +84,4 @@ class String
   end
 
 end
+MACL.register('macl/core/string', '1.4.0')

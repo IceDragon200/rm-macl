@@ -1,6 +1,7 @@
 #
-# RGSS3-MACL/lib/core-ext/enumerable.rb
+# rm-macl/lib/rm-macl/core-ext/enumerable.rb
 #
+require 'rm-macl/macl-core'
 module Enumerable
 
   def each_with_objects(*args, &block)
@@ -18,3 +19,4 @@ module Enumerable
   end unless method_defined?(:map_with_objects)
 
 end
+MACL.register('macl/core/enumerable', '1.2.0')

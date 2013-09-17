@@ -1,9 +1,7 @@
 #
-# RGSS3-MACL/lib/core-ext/matchdata.rb
-#   by IceDragon
-#   dc ??/??/2012
-#   dm 03/03/2013
-# vr 1.0.1
+# rm-macl/lib/rm-macl/core-ext/match_data.rb
+#
+require 'rm-macl/macl-core'
 class MatchData
 
   ##
@@ -18,3 +16,4 @@ class MatchData
   end unless method_defined?(:to_h)
 
 end
+MACL.register('macl/core/match_data', '1.1.0')

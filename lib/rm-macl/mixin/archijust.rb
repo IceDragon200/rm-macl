@@ -1,12 +1,7 @@
 #
-# RGSS3-MACL/lib/mixin/archijust.rb
-#   by IceDragon
-#   dc ??/??/2012
-#   dc 22/05/2013
-# vr 1.3.0
-
-##
-# MACL::Mixin::Archijust
+# rm-macl/lib/rm-macl/mixin/archijust.rb
+#
+require 'rm-macl/macl-core'
 module MACL
   module Mixin
     module Archijust
@@ -192,3 +187,4 @@ module MACL
     end
   end
 end
+MACL.register('macl/mixin/archijust', '1.4.0')

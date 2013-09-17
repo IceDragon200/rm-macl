@@ -1,9 +1,7 @@
 #
-# RGSS3-MACL/lib/mixin/color-math.rb
-#   by IceDragon
-#   dc 09/03/2013
-#   dm 06/06/2013
-# vr 1.1.0
+# rm-macl/lib/rm-macl/mixin/color-math.rb
+#
+require 'rm-macl/macl-core'
 module MACL
   module Mixin
     module ColorMath
@@ -138,3 +136,4 @@ module MACL
     end
   end
 end
+MACL.register('macl/mixin/color_math', '1.2.0')

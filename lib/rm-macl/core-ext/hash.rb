@@ -1,9 +1,7 @@
 ﻿#
-# RGSS3-MACL/lib/core-ext/hash.rb
-#   by IceDragon
-#   dc ??/??/2012
-#   dm 14/04/2013
-# vr 1.2.0
+# rm-macl/lib/rm-macl/core-ext/hash.rb
+#
+require 'rm-macl/macl-core'
 class Hash
 
   ##
@@ -79,3 +77,4 @@ class Hash
   end
 
 end
+MACL.register('macl/core/hash', '1.3.0')

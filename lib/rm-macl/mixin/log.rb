@@ -1,14 +1,10 @@
 #
-# RGSS3-MACL/lib/mixin/log.rb
-#   by IceDragon
-#   dc 18/05/2013
-#   dc 18/05/2013
-# vr 1.0.0
+# rm-macl/lib/rm-macl/mixin/log.rb
+#
+require 'rm-macl/macl-core'
 module MACL
   module Mixin
     module Log
-
-      VERSION = "1.0.0".freeze
 
       attr_accessor :log # IO
 
@@ -19,3 +15,4 @@ module MACL
     end
   end
 end
+MACL.register('macl/mixin/log', '1.1.0')

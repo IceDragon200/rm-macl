@@ -1,9 +1,7 @@
 #
-# RGSS3-MACL/lib/mixin/table-ex.rb
-#   by IceDragon
-#   dc 03/03/2013
-#   dm 21/04/2013
-# vr 2.2.0
+# rm-macl/lib/rm-macl/mixin/table_ex.rb
+#
+require 'rm-macl/macl-core'
 module MACL
   module Mixin
     module TableEx
@@ -248,3 +246,4 @@ module MACL
     end
   end
 end
+MACL.register('macl/mixin/table_ex', '2.3.0')

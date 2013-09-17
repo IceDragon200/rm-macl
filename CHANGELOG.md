@@ -28,7 +28,7 @@
       gm-classes/ and gm-modules/
 
   MOVED
-    lib/xpan-lib/archijust.rb > lib/mixin/archijust.rb
+    lib/xpan/archijust.rb > lib/mixin/archijust.rb
       Always wondered why I didn't move it to the mixins instead of the
       Xpansion Lib
 ```

@@ -1,5 +1,5 @@
 #
-# RGSS3-MACL/lib/rgss3-macl/version.rb
+# rm-macl/lib/rm-macl/version.rb
 #
 module MACL
 

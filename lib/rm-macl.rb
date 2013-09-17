@@ -12,11 +12,6 @@
 #
 require 'rm-macl/version'
 require 'rm-macl/macl-core'
-require 'rm-macl/fallback-lib'
 require 'rm-macl/mixin'
 require 'rm-macl/core-ext'
-require 'rm-macl/rgss-core-ex'
-require 'rm-macl/rpg-ex'
-require 'rm-macl/gm-modules'
-require 'rm-macl/gm-classes'
-require 'rm-macl/xpan-lib'
+require 'rm-macl/xpan'

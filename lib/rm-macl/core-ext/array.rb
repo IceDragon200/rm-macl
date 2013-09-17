@@ -1,6 +1,7 @@
 ﻿#
 # rm-macl/lib/rm-macl/core-ext/array.rb
 #
+require 'rm-macl/macl-core'
 class Array
 
   ##
@@ -96,3 +97,4 @@ class Array
   alias :pick :sample unless method_defined?(:pick)
 
 end
+MACL.register('macl/core/array', '1.2.0')

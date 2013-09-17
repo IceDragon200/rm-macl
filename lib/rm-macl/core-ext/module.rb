@@ -1,9 +1,7 @@
 #
-# RGSS3-MACL/lib/core-ext/module.rb
-#   by IceDragon
-#   dc ??/??/2012
-#   dm 22/05/2013
-# vr 2.0.0
+# rm-macl/lib/rm-macl/core-ext/module.rb
+#
+require 'rm-macl/macl-core'
 class Module
 
   ##
@@ -38,3 +36,4 @@ class Module
   end
 
 end
+MACL.register('macl/core/module', '2.1.0')

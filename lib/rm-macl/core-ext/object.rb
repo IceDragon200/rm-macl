@@ -1,9 +1,7 @@
 ﻿#
-# RGSS3-MACL/lib/core-ext/object.rb
-#   by IceDragon
-#   dc ??/??/2012
-#   dm 03/03/2013
-# vr 1.2.1
+# rm-macl/lib/rm-macl/core-ext/object.rb
+#
+require 'rm-macl/macl-core'
 class Object
 
   ##
@@ -21,3 +19,4 @@ class Object
   alias :deep_clone :marshal_clone unless method_defined?(:deep_clone)
 
 end
+MACL.register('macl/core/object', '1.3.0')

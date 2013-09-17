@@ -1,9 +1,7 @@
 #
-# RGSS3-MACL/lib/mixin/stackelement.rb
-#   by IceDragon
-#   dc 05/04/2013
-#   dm 05/04/2013
-# vr 1.0.0
+# rm-macl/lib/rm-macl/mixin/stack_element.rb
+#
+require 'rm-macl/macl-core'
 module MACL
   module Mixin
     module StackElement
@@ -223,3 +221,4 @@ module MACL
     end
   end
 end
+MACL.register('macl/mixin/stack_element', '1.1.0')

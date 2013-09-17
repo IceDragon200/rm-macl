@@ -1,9 +1,8 @@
 #
-# RGSS3-MACL/lib/mixin/callbacks.rb
-#   by IceDragon
-#   dc 03/03/2013
-#   dm 22/04/2013
-# vr 1.1.6
+# rm-macl/lib/rm-macl/mixin/callback.rb
+#
+require 'rm-macl/macl-core'
+require 'rm-macl/mixin/log'
 module MACL
   module Mixin
     module Callback
@@ -106,3 +105,4 @@ module MACL
     end
   end
 end
+MACL.register('macl/mixin/callback', '1.2.0')
