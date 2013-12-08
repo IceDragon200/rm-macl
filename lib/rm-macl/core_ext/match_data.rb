@@ -1,6 +1,6 @@
 #
-# rm-macl/lib/rm-macl/core-ext/match_data.rb
-#
+# rm-macl/lib/rm-macl/core_ext/match_data.rb
+#   by IceDragon
 require 'rm-macl/macl-core'
 class MatchData
 
@@ -13,7 +13,7 @@ class MatchData
     else                 names.each do |s| hsh[s] = self[s] end
     end
     hsh
-  end unless method_defined?(:to_h)
+  end unless method_defined? :to_h
 
 end
-MACL.register('macl/core/match_data', '1.1.0')
+MACL.register('macl/core_ext/match_data', '1.1.0')

@@ -1,6 +1,6 @@
 #
-# rm-macl/lib/rm-macl/core-ext/string.rb
-#
+# rm-macl/lib/rm-macl/core_ext/string.rb
+#   by IceDragon
 require 'rm-macl/macl-core'
 class String
 
@@ -10,13 +10,13 @@ class String
     space = filler * indent_amount
     replace(each_line.map { |line| space + line }.join(''))
     self
-  end
+  end unless method_defined? :indent!
 
   ##
   # indent(int indent_amount, char filler)
   def indent(*args)
     dup.indent!(*args)
-  end
+  end unless method_defined? :indent
 
   ##
   # line_wrap(int line_width)
@@ -84,4 +84,4 @@ class String
   end
 
 end
-MACL.register('macl/core/string', '1.4.0')
+MACL.register('macl/core_ext/string', '1.4.0')

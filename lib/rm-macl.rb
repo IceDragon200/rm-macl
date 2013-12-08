@@ -13,5 +13,8 @@
 require 'rm-macl/version'
 require 'rm-macl/macl-core'
 require 'rm-macl/mixin'
-require 'rm-macl/core-ext'
+require 'rm-macl/core_ext'
+require 'rm-macl/util'
 require 'rm-macl/xpan'
+require 'rm-macl/rgss3-ext'
+MACL.register('macl', MACL::VERSION)

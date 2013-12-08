@@ -1,6 +1,6 @@
 ﻿#
-# rm-macl/lib/rm-macl/core-ext/hash.rb
-#
+# rm-macl/lib/rm-macl/core_ext/hash.rb
+#   by IceDragon
 require 'rm-macl/macl-core'
 class Hash
 
@@ -44,7 +44,9 @@ class Hash
   end
 
   ##
-  # get_values(...Object* key) -> Array<Object*>
+  # Returns an Array of all the values from the coresponding keys
+  # @param [Array<Object>] keys
+  # @return [Array<Object>]
   def get_values(*keys)
     keys.map { |a| self[a] }
   end
@@ -77,4 +79,4 @@ class Hash
   end
 
 end
-MACL.register('macl/core/hash', '1.3.0')
+MACL.register('macl/core_ext/hash', '1.3.0')
