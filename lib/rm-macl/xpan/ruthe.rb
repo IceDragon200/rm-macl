@@ -1,13 +1,13 @@
 #
 # rm-macl/lib/rm-macl/xpan/ruthe.rb
-#
-#   Module/Class Importation (kinda like Lua)
+#   by IceDragon
+# Module/Class Importation (kinda like Lua)
 #   USAGE:
 #      mod   = MACL::Ruthe.import(filename, type)
 #      klass = MACL::Ruthe.import("my_class.rb", Class)
 #      mod   = MACL::Ruthe.import("my_module.rb", Module)
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   module Ruthe
 
     def import(filename, mod, *args)

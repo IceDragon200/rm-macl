@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/palette.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   class Palette
 
     ### errors
@@ -14,12 +14,14 @@ module MACL
 
     ### instance_variables
     attr_writer :can_replace_color
+    attr_accessor :name
 
     ##
     # initialize
     def initialize
       @colors = {}
       @can_replace_color = true
+      @name = ''
     end
 
     ##
@@ -31,7 +33,7 @@ module MACL
     ##
     # entries
     def entries
-      return @colors
+      return @colors.entries
     end
 
     ## Enumerable
@@ -53,10 +55,16 @@ module MACL
     end
 
     ##
-    # has_color?(Symbol sym)
-    # has_color?(String sym)
+    # has_color?(Symbol sym) -> Color or false
+    # has_color?(String sym) -> Color or false
     def has_color?(sym)
       return @colors[sym] || false
+    end
+
+    ##
+    # set_color_abs(String|Symbol osym, Color color)
+    def set_color_abs(sym, color)
+      @colors[sym] = color
     end
 
     ##
@@ -67,7 +75,7 @@ module MACL
       # Color or Hex Int
       when 1
         arg, = args
-        col = Color.cast(arg)
+        col = Convert.Color(arg)
         rgss_color = col
       when 3, 4
         r, g, b, a = *args
@@ -79,7 +87,7 @@ module MACL
       if !can_replace_color? && has_color?(sym)
         raise(PaletteError, "Color #{sym} was already set!")
       else
-        @colors[sym] = rgss_color
+        set_color_abs(sym, rgss_color)
       end
     end
 
@@ -95,10 +103,33 @@ module MACL
         if sug
           msg.concat(" did you mean #{sug[0]} (#{sug[0].class})?")
         else
-          msg.concat("\n where you looking for one of these: \n#{entries.keys.inspect}")
+          msg.concat("\n where you looking for one of these: \n#{keys.inspect}")
         end
         raise(PaletteError, msg)
       end
+    end
+
+    def freeze_entries
+      @colors.each_value(&:freeze)
+    end
+
+    def import(other_palette)
+      other_palette.entries.each do |(k, v)|
+        set_color(k, v.dup)
+      end
+      return self
+    end
+
+    ##
+    # keys -> String / Symbol
+    def keys
+      @colors.keys
+    end
+
+    ### Hash interface
+    def key?(key)
+      sym = cast_key(key)
+      @colors.key?(sym)
     end
 
     ### aliases
@@ -107,4 +138,4 @@ module MACL
 
   end
 end # /MACL
-MACL.register('macl/xpan/palette', '2.3.0')
+MACL.register('macl/xpan/palette', '2.3.1') if defined?(MACL.register)

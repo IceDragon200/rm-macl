@@ -1,9 +1,10 @@
 #!/usr/bin/ruby
-#encoding:UTF-8
-# rm-macl/lib/rm-macl/build-tools/cmd-extract_rvdata.rb
+# rm-macl/bin/extract_rvdata
 #
+#$LOAD_PATH << File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH << '/home/icy/Dropbox/code/Git/rm-macl/lib'
 require 'zlib'
-require 'rgss3-macl/core-ext/kernel'
+require 'rm-macl/core_ext/kernel'
 
 ##
 # File.sanitize_filename(String filename)
@@ -19,16 +20,16 @@ module RVDATA
   CHAR_NEWLINE = "\n"
 
   HELP_STR = <<_EOF_
-  RMVX/A Scripts Extractor V#{VERSION}
-  by IceDragon
+RMVX/A Scripts Extractor V#{VERSION}
+by IceDragon
 
-  USAGE ruby cmd-extract_scripts_rvdata.rb "src_filename" -o "output_directory"
-    -d --default
-      Sets the default settings
+USAGE ruby extract_rvdata "src_filename" -o "output_directory"
+  -d --default
+    Sets the default settings
 
-    -o --output <pathname>
-      Set the extraction destination
-      The folder will be created if it does not exist
+  -o --output <pathname>
+    Set the extraction destination
+    The folder will be created if it does not exist
 
 _EOF_
 
@@ -103,4 +104,4 @@ _EOF_
 
 end
 
-RVDATA.run.(ARGV.dup)
+RVDATA.run(ARGV.dup)

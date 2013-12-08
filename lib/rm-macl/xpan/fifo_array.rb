@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/fifo_array.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   class FifoArray
 
     include Enumerable

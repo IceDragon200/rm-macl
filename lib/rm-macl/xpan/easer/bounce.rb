@@ -4,9 +4,9 @@
 #   dm 24/03/2013
 # vr 1.0.0
 module MACL
-class Easer
-class Bounce < Easer
+  class Easer
+    class Bounce < Easer
 
-end
-end
+    end
+  end
 end

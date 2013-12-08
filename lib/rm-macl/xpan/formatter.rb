@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/formatter.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   module Formatter
 
     METRIC_NUM_BY_SYMBOL = {

@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/morph.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   module Morph
     class Growth
 

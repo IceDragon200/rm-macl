@@ -1,7 +1,8 @@
 #
 # rm-macl/lib/rm-macl/mixin/table_ex.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
+require 'rm-macl/xpan/convert'
 module MACL
   module Mixin
     module TableEx
@@ -18,6 +19,33 @@ module MACL
       # zm - Z-Minus
       FillRule = Struct.new(:xp, :xm, :yp, :ym, :zp, :zm)
       FILL_ALL = FillRule.new(true, true, true, true, true, true).freeze
+
+      def dimension
+        return 3 if zsize > 1
+        return 2 if ysize > 1
+        return 1
+      end
+
+      def one_d?
+        dimension == 1
+      end
+
+      def two_d?
+        dimension == 2
+      end
+
+      def three_d?
+        dimension == 3
+      end
+
+      def size
+        xsize * ysize * zsize
+      end
+
+      def fail_if_one_d(funcn)
+        raise(TableError,
+              "#{funcn} cannot be used with a 1D table") if one_d?
+      end
 
       def iterate
         to_enum(:iterate) unless block_given?
@@ -151,19 +179,17 @@ module MACL
       # fill_rect(Rect rect, Integer n)            |
       # fill_rect(Rect rect, Integer n, Integer z) |-> nil
       def fill_rect(rect, n, z=0)
-        if self.dimension == 1
-          raise(TableError,
-                "#fill_rect can only be used with a 2D or 3D table")
-        end
+        fail_if_one_d(__method__)
         r = bound_in_rect(rect.dup)
         return if r.empty?
-        if self.dimension == 2
+        case dimension
+        when 2
           for y in r.y...r.y2
             for x in r.x...r.x2
               self[x, y] = n
             end
           end
-        else
+        when 3
           for y in r.y...r.y2
             for x in r.x...r.x2
               self[x, y, z] = n
@@ -178,6 +204,64 @@ module MACL
       # clear_rect(Rect rect, Integer z) |-> nil
       def clear_rect(rect, z=0)
         fill_rect(rect, 0, z)
+      end
+
+      ##
+      # @overload blit(table, pos, src)
+      #   @param [Table] table
+      #   @param [Integer] pos
+      #   @param [Range] src
+      # @overload blit(table, pos, src)
+      #   @param [Table] table
+      #   @param [Vector2I] pos
+      #   @param [Rect] src
+      # @overload blit(table, pos, src)
+      #   @param [Table] table
+      #   @param [Vector3I] pos
+      #   @param [Cube] src
+      def blit(table, pos, src)
+        case dimension
+        when 3
+          pos = MACL::Convert.Vector3I(pos)
+          src = MACL::Convert.Cube(src)
+          zr = src.z...src.depth
+          yr = src.y...src.height
+          xr = src.x...src.width
+        when 2
+          pos = MACL::Convert.Vector2I(pos)
+          src = MACL::Convert.Rect(src)
+          yr = src.y...src.height
+          xr = src.x...src.width
+        when 1
+          pos = Integer(pos)
+          src = Range(src)
+          src.each do |x|
+
+          end
+        end
+        self
+      end
+
+      def set_layer!(z, data)
+        if data.is_a?(Array) && data.size != xsize * ysize
+          raise ArgumentError, "data size mismatch"
+        end
+        ysize.times do |y|
+          xsize.times do |x|
+            i = x + y * xsize
+            case data
+            when Array
+              self[x, y, z] = data[i]
+            else
+              self[x, y, z] = data
+            end
+          end
+        end
+        self
+      end
+
+      def set_layer(z, data)
+        dup.set_layer!(z, data)
       end
 
       def bucket_fill1(x, n, fill_rule=FILL_ALL, src=nil)

@@ -1,300 +1,167 @@
 #
 # rm-macl/lib/rm-macl/xpan/vector/vector.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-require 'rm-macl/xpan/vector/abstract/vector2'
-require 'rm-macl/xpan/vector/abstract/vector3'
-require 'rm-macl/xpan/vector/abstract/vector4'
-
+require 'rm-macl/core_ext/math'
+require 'rm-macl/core_ext/module'
+require 'rm-macl/xpan/type-stub'
 module MACL
   class Vector
 
+    include Enumerable
     include Comparable
 
-    PI180 = 180.0 / Math::PI
+    attr_reader :data
 
-    def <=>(other)
-      self.to_a <=> other.to_a
+    def initialize(size)
+      @data = Array.new(size, 0)
+    end
+
+    def coerce(obj)
+      return self, obj
     end
 
     def hash
-      return to_a.hash
+      [self.class, @data].hash
     end
 
-    def vec_params(*args)
-      if (args.size == 0)
-        return self.class.params.map { |s| send(s) }
-      elsif (args.size == 1)
-        other, = *args
-        case other
-        when Vector
-          return self.class.params.map do |mth|
-            [mth, other.respond_to?(mth) ? other.send(mth) :
-                                           self.class.default_value]
-          end
-        when Numeric
-          return self.class.params.zip([other] * size)
-        when Array
-          raise(ArgumentError,
-                "Expected array of size #{size}") unless other.size == size
-          return self.class.params.zip(other)
-        else
-          raise(TypeError,
-                "Expected type Vector or Numeric but recieved #{other.class}")
-        end
-      elsif (args.size == size)
-        return self.class.params.zip(args)
-      else
-        raise(ArgumentError, "Expected 0, 1 or #{size}")
-      end
+    def to_a
+      @data.to_a
     end
 
-    def do_set!(*args)
-      params = vec_params(*args)
-
-      if block_given?
-        params.each { |(mth, val)| send(mth.to_s + "=", yield(mth, val)) }
-      else
-        params.each { |(mth, val)| send(mth.to_s + "=", val) }
-      end
-      self
-    end
-
-    def do_set(*args)
-      dup.do_set!(*args)
-    end
-
-    def add!(*args)
-      raise(ArgumentError,
-            "Expected 1 or more but recieved #{args.size}") unless args.size > 0
-      do_set!(*args) { |meth, v| send(meth) + v }
-    end
-
-    def sub!(*args)
-      raise(ArgumentError,
-            "Expected 1 or more but recieved #{args.size}") unless args.size > 0
-      do_set!(*args) { |meth, v| send(meth) - v }
-    end
-
-    def mul!(*args)
-      raise(ArgumentError,
-            "Expected 1 or more but recieved #{args.size}") unless args.size > 0
-      do_set!(*args) { |meth, v| send(meth) * v }
-    end
-
-    def div!(*args)
-      raise(ArgumentError,
-            "Expected 1 or more but recieved #{args.size}") unless args.size > 0
-      do_set!(*args) { |meth, v| send(meth) / (v == 0 ? 1 : v) }
-    end
-
-    def add(*args)
-      dup.add!(*args)
-    end
-
-    def sub(*args)
-      dup.sub!(*args)
-    end
-
-    def mul(*args)
-      dup.mul!(*args)
-    end
-
-    def div(*args)
-      dup.div!(*args)
-    end
-
-    ##
-    # set()
-    # set(Vector vec)
-    # set(Numeric n)
-    # set(..n)
-    def set(*args)
-      case args.size
-      when 0    then do_set!(self.class.default_value)
-      when 1    then do_set!(args.first)
-      when size then do_set!(*args)
-      end
-      self
-    end
-
-    ##
-    # size -> Integer
     def size
-      return self.class.params_size
+      @data.size
     end
 
-    ##
-    # dot -> Numeric
-    #   Dot product of 2 vectors
-    def dot(*args)
-      params = vec_params(*args)
-      return params[0, size].zip(to_a).inject(0) { |r, (a, b)| r + a * b }
+    def [](*args)
+      @data[*args]
     end
 
-    ##
-    # [](int i) -> Numeric
-    def [](i)
-      raise(ArgumentError, "Index out of range") if i < 0 || i >= size
-      return to_a[i]
+    def []=(*args)
+      @data.[]=(*args)
     end
 
-    ##
-    # []=(int index, Numeric n)
-    def []=(i, n)
-      raise(ArgumentError, "Index out of range") if n < 0 || n >= size
-      send(self.class.params[i].to_s + "=", n)
+    def _vector_enum_(obj, &block)
+      to_enum(:_vector_enum_, obj) unless block_given?
+      case obj
+      when Numeric
+        size.times { |i| yield obj, i }
+      when Array, Vector
+        if obj.size != size
+          raise ArgumentError, "wrong #{obj.class}#size (expected #{size})"
+        end
+        obj.each_with_index(&block)
+      else
+        raise TypeError,
+              "wrong argument type #{obj.class} (expected Numeric, Array or Vector)"
+      end
+      self
     end
 
-    def negate!
-      do_set! { |_, n| -n }
-      return self
+    def each(&block)
+      @data.each(&block)
     end
 
-    def negate
-      return dup.negate!
+    def <=>(obj)
+      @data <=> _vector_enum_(obj).to_a
+    end
+
+    def replace(other)
+      _vector_enum_(other) { |x, i| @data[i] = x }
+    end
+
+    def add!(other)
+      _vector_enum_(other) { |x, i| @data[i] += x }
+    end
+
+    def sub!(other)
+      _vector_enum_(other) { |x, i| @data[i] -= x }
+    end
+
+    def mul!(other)
+      _vector_enum_(other) { |x, i| @data[i] *= x }
+    end
+
+    def div!(other)
+      _vector_enum_(other) { |x, i| @data[i] /= x }
+    end
+
+    def pow!(other)
+      _vector_enum_(other) { |x, i| @data[i] **= x }
+    end
+
+    def root!(other)
+      _vector_enum_(other) { |x, i| @data[i] = Math.rootn(@data[i], x) }
     end
 
     def affirm!
-      do_set! { |_, n| +n }
-      return self
+      @data.map!(&:+@); self
     end
 
-    def affirm
-      return dup.affirm!
+    def negate!
+      @data.map!(&:-@); self
     end
 
     def abs!
-      self.class.params.each do |sym|
-        send(sym.to_s + "=", send(sym).abs)
-      end
-      self
+      @data.map!(&:abs); self
+    end
+
+    def add(other)
+      dup.tap { |o| o.add!(other) }
+    end
+
+    def sub(other)
+      dup.tap { |o| o.sub!(other) }
+    end
+
+    def mul(other)
+      dup.tap { |o| o.mul!(other) }
+    end
+
+    def div(other)
+      dup.tap { |o| o.div!(other) }
+    end
+
+    def pow(other)
+      dup.tap { |o| o.pow!(other) }
+    end
+
+    def root(other)
+      dup.tap { |o| o.root!(other) }
+    end
+
+    def affirm
+      dup.tap { |o| o.affirm! }
+    end
+
+    def negate
+      dup.tap { |o| o.negate! }
     end
 
     def abs
-      dup.abs!
+      dup.tap { |o| o.abs! }
     end
 
-    ##
-    # to_a -> Array<Numeric>
-    def to_a
-      return self.class.params_variables.map { |s| instance_variable_get(s) }
+    def dot(other)
+      @data.to_enum(:zip, _vector_enum_(other)).inject(0) { |r, (a, b)| r + a * b }
     end
 
-    ##
-    # zero?
-    def zero?
-      to_a.all?(&:zero?)
+    def magnitude
+      Math.sqrt(@data.inject(0) { |r, x| r + x * x })
     end
-
-    ##
-    # smooth_step(Vector other)
-    def smooth_step(other, delta=0.0)
-      do_set(other) { |meth, v| send(meth) + (v - send(meth)) * delta }
-    end
-
-    def self.polar(mag, radian)
-      new(mag * Math.cos(radian), mag * Math.sin(radian))
-    end
-
-    def self.cartesian(*args)
-      unless args.size == params_size
-        raise(ArgumentError,
-              "Expected #{params_size} but recieved #{args.size}")
-      end
-      new(*args)
-    end
-
-    ##
-    # ::zero -> Vector
-    def self.zero
-      new(default_value)
-    end
-
-    ##
-    # ::one -> Vector
-    def self.one
-      new(1)
-    end
-
-    ###
-    # class settings
-
-    ##
-    # ::params
-    def self.params
-      raise(RuntimeError, "Params have not been defined for #{self}")
-    end
-
-    ##
-    # ::params_variables
-    def self.params_variables
-      @params_variables ||= params.map { |s| "@" + s.to_s }.freeze
-    end
-
-    ##
-    # ::params_map
-    def self.params_map
-      @params_map ||= params.zip(@params_variables).freeze
-    end
-
-    ##
-    # ::params_size
-    def self.params_size
-      @params_size ||= params.size
-    end
-
-    ##
-    # ::default_value
-    def self.default_value
-      0
-    end
-
-    ##
-    # ::convert_param
-    def self.convert_param(param)
-      param
-    end
-
-    ##
-    # ::make_attr
-    def self.make_param_attr(param)
-      attr_reader(param)
-      var = "@%s" % param
-      define_method(param.to_s + "=") do |n|
-        instance_variable_set(var, self.class.convert_param(n))
-      end
-    end
-
-    ##
-    # ::make_param_attrs
-    def self.make_param_attrs
-      params.each { |s| make_param_attr(s) }
-    end
-
-    ###
-    # aliases
-    alias :cartesian :to_a
-    alias :length :size
-    alias :initialize :set
 
     alias :+ :add
     alias :- :sub
     alias :* :mul
     alias :/ :div
+    alias :** :pow
 
     alias :-@ :negate
     alias :+@ :affirm
 
-    ###
-    # visibility
-    private :do_set!
-    private :vec_params
-
-    class << self
-      private :make_param_attr, :make_param_attrs
-    end
+    protected :data
+    private :_vector_enum_
 
   end
 end
-MACL.register('macl/xpan/vector/vector', '1.6.0')
+MACL.register('macl/xpan/vector/vector', '2.0.0')

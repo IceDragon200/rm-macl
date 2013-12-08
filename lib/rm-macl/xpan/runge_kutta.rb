@@ -1,8 +1,9 @@
 #
 # rm-macl/lib/rm-macl/xpan/rungekutta.rb
-#   RungeKutta implementations
+#   by IceDragon
+# RungeKutta implementations
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   module RungeKutta
 
     ##

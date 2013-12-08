@@ -1,6 +1,6 @@
 #
 # rm-macl/lib/rm-macl/mixin/callback.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
 require 'rm-macl/mixin/log'
 module MACL

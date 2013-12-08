@@ -1,13 +1,13 @@
 #
 # rm-macl/lib/rm-macl/xpan/surface/constants.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
 module MACL
-  class Surface
+  module Surface
 
     ##
     # anchors (2D)
-    ANCHOR_NONE          = 0x200
+    ANCHOR_NONE          = 0x200 # 0x2(YX)
 
     ANCHOR_TOP           = ANCHOR_NONE | 0x10
     ANCHOR_MIDDLE        = ANCHOR_NONE | 0x20

@@ -4,15 +4,15 @@
 #   dm 24/03/2013
 # vr 1.0.0
 module MACL
-class Easer
-class Cubic::In < Cubic
+  class Easer
+    class Cubic::In < Cubic
 
-  register(:cubic_in)
+      register(:cubic_in)
 
-  def _ease(t, st, ch, d)
-    ch * (t /= d) * t * t + st
+      def _ease(t, st, ch, d)
+        ch * (t /= d) * t * t + st
+      end
+
+    end
   end
-
-end
-end
 end

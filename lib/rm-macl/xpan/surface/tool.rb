@@ -1,170 +1,24 @@
 #
 # rm-macl/lib/rm-macl/xpan/surface/tool.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
+require 'rm-macl/xpan/surface/anchor'
+require 'rm-macl/xpan/surface/surface2'
+require 'rm-macl/xpan/surface/surface3'
+require 'rm-macl/xpan/vector'
 module MACL
-  class Surface
+  module Surface
     module Tool
 
       ##
-      # Anchor IDS
-      ID_NULL = 0x0 # 0  (disabled anchor point)
-      ID_MIN  = 0x1 # -1 (negative anchor point)
-      ID_MID  = 0x2 # 0 or 0.5 (depends on the requirement)
-      ID_MAX  = 0x3 # +1 (positive anchor point)
-
-      ##
-      # Hash<ANCHOR, ID> ANCHOR_CACHE
-      ANCHOR_CACHE = {}
-
-      ##
-      # Hash<ANCHOR, VectorI> ANCHOR_CACHE
-      ANCHOR_VECTOR = {}
-
-    private
-
-      ##
-      # ::open_free_surface(Class<subclassof MACL::Mixin::Surface> klass)
-      def self.open_free_surface(klass)
+      # ::new_surface(Class<subclassof MACL::Mixin::Surface> klass)
+      def self.new_surface(klass)
         surf = klass.new
         ostate = surf.freeform
         surf.freeform = true
         yield surf
         surf.freeform = ostate
         return surf
-      end
-
-      ##
-      # ::init_anchor_cache
-      def self.init_anchor_cache
-        for z in 0..3
-          for y in 0..3
-            for x in 0..3
-              if z == 0
-                anchor2 =  0x200 | (y << 4) | (x << 0)
-                ANCHOR_CACHE[anchor2] = calc_anchor_ids(anchor2).freeze
-                ANCHOR_VECTOR[anchor2] = MACL::Vector2I.new(*anchor_to_signums(anchor2)).freeze
-              end
-              anchor3 = 0x3000 | (z << 8) | (y << 4) | (x << 0)
-              ANCHOR_CACHE[anchor3] = calc_anchor_ids(anchor3).freeze
-              ANCHOR_VECTOR[anchor3] = MACL::Vector3I.new(*anchor_to_signums(anchor3)).freeze
-            end
-          end
-        end
-      end
-
-    public
-
-      # Surface (2D) - as of v 1.3 2D functions are appended with 0x2 followed
-      # by 2 HEX digits
-      # 0x2yx
-      #
-      # Surface3 - all 3d contract functions are appended with 0x3 followed by 3
-      # HEX digits
-      # 0x3zyx
-      #    ^
-      #   _Z___
-      #  |\  2 \
-      #  |1\____\
-      #  \ | 0  |
-      #< X\|____|
-      #      Y
-      #     \/
-      #
-      #   n - enum[    0   ,   1,   2,    3  ]
-      #   x - enum[disabled, left, mid, right]
-      #   y - enum[disabled, top, mid, bottom]
-      #   z - enum[disabled, floor, mid, ceil]
-
-      ##
-      # ::calc_anchor_ids(ANCHOR anchor)
-      def self.calc_anchor_ids(anchor)
-        # is this a 2D Anchor?
-        if (anchor >> 8) == 2
-          [(anchor >> 0) & 0xF, (anchor >> 4) & 0xF]
-        # is this a 3D Anchor?
-        elsif (anchor >> 12) == 3
-          [(anchor >> 0) & 0xF, (anchor >> 4) & 0xF, (anchor >> 8) & 0xF]
-        else
-          raise(MACL::Mixin::SurfaceAnchorError.mk(anchor))
-        end
-      end
-
-      ## added in 1.3.0
-      # ::obj_to_anchor(anchor)
-      def self.obj_to_anchor(anchor)
-        if anchor.is_a?(MACL::Vector)
-          case anchor
-          when MACL::Abstract::Vector2
-            anchor =  0x200 | (anchor.y.signum << 4) | (anchor.x.signum  << 0)
-          when MACL::Abstract::Vector3
-            anchor = 0x3000 | (anchor.z.signum << 8) | (anchor.y.signum << 4) | (anchor.x.signum << 0)
-          else
-            raise(TypeError, "cannot convert %s to ANCHOR" % anchor.class.name)
-          end
-        elsif anchor.is_a?(Symbol)
-          ### replace this later
-          case anchor
-          when :nw then anchor = 0x211 # top-left
-          when :n  then anchor = 0x212 # top-center
-          when :ne then anchor = 0x213 # top-right
-          when :sw then anchor = 0x231 # bottom-left
-          when :s  then anchor = 0x232 # bottom-center
-          when :se then anchor = 0x233 # bottom-right
-          when :w  then anchor = 0x221 # right
-          when :e  then anchor = 0x223 # left
-          else          raise(ArgumentError, "invalid anchor symbols %s" % anchor)
-          end
-        else
-          # Legacy Patch
-          if anchor >= 0 && anchor < 10
-            anchor = MACL::Surface::NUMPAD_ANCHOR[anchor]
-          elsif anchor > 19 && anchor < 81
-            anchor = MACL::Surface::EXTENDED_ANCHOR[anchor]
-          end
-        end
-        return anchor
-      end
-
-      ##
-      # ::anchor_to_ids(ANCHOR anchor)
-      def self.anchor_to_ids(anchor)
-        ANCHOR_CACHE[obj_to_anchor(anchor)]
-      end
-
-      ##
-      # ::anchor_to_vector(ANCHOR anchor)
-      def self.anchor_to_vector(anchor)
-        ANCHOR_VECTOR[obj_to_anchor(anchor)]
-      end
-
-      ##
-      # ::id_to_signum(ID id, bool strict)
-      def self.id_to_signum(id, strict=false)
-        case id
-        when ID_NULL then return 0
-        when ID_MIN  then return -1
-        when ID_MID  then return strict ? 0 : 0.5
-        when ID_MAX  then return 1
-        end
-      end
-
-      ##
-      # ::anchor_to_signums(ANCHOR anchor, bool strict)
-      def self.anchor_to_signums(anchor, strict=true)
-        return anchor_to_ids(anchor).map { |n| id_to_signum(n, strict) }
-      end
-
-      ##
-      # ::anchor_to_v2f(ANCHOR anchor, bool strict)
-      def self.anchor_to_v2f(anchor, strict=true)
-        MACL::Vector2F.new(*anchor_to_signums(anchor, strict)[0, 2])
-      end
-
-      ##
-      # ::anchor_to_v3f(ANCHOR anchor, bool strict)
-      def self.anchor_to_v3f(anchor, strict=true)
-        MACL::Vector3F.new(*anchor_to_signums(anchor, strict))
       end
 
       ##
@@ -180,7 +34,7 @@ module MACL
         my = objs.min_by(&:y)
         mw = objs.max_by(&:x2)
         mh = objs.max_by(&:y2)
-        return open_free_surface(result_klass) do |surf|
+        return new_surface(result_klass) do |surf|
           surf.x = mx.x
           surf.y = my.y
           surf.x2 = mw.x2
@@ -245,7 +99,7 @@ module MACL
         for y in 0...rows
           for x in 0...cols
 
-            resurf = open_free_surface(surf_klass) do |surf|
+            resurf = new_surface(surf_klass) do |surf|
               surf.freeform = false
               surf.x = surface.x + x * w
               surf.y = surface.y + y * h
@@ -279,7 +133,7 @@ module MACL
         for sy in slices_y
           last_x = surface.x
           for sx in slices_x
-            result.push(open_free_surface(surf_klass) do |surf|
+            result.push(new_surface(surf_klass) do |surf|
                           surf.x  = last_x
                           surf.y  = last_y
                           surf.x2 = sx
@@ -309,7 +163,7 @@ module MACL
       #   Creates a new surface from the result of centering r2 within r1
       def self.center(r1, r2)
         surf_klass = r2.class
-        return open_free_surface(surf_klass) do |surf|
+        return new_surface(surf_klass) do |surf|
           surf.x = r1.x + (r1.width - r2.width) / 2
           surf.y = r1.y + (r1.height - r2.height) / 2
           surf.x2 = surf.x + r2.width
@@ -330,24 +184,6 @@ module MACL
           r.width, r.height = (w * scale).to_i, (h * scale).to_i
         end
         return r
-      end
-
-      ##
-      # ::calc_mid_x(Surface surface, Integer n)
-      def self.calc_mid_x(surface, n=0)
-        surface.x + (surface.width - n) / 2
-      end
-
-      ##
-      # ::calc_mid_y(Surface surface, Integer n)
-      def self.calc_mid_y(surface, n=0)
-        surface.y + (surface.height - n) / 2
-      end
-
-      ##
-      # ::calc_mid_z(Surface surface, Integer n)
-      def self.calc_mid_z(surface, n=0)
-        surface.z + (surface.depth - n) / 2
       end
 
       ## initial 1.1.0
@@ -372,7 +208,7 @@ module MACL
       #   Attempts to tile the elements of (objects) within the (rect)
       #   Not very useful for serious Tiling, mostly done for debugging
       def self.tile_surfaces(objects, rect=Graphics.rect)
-        surf = Surface.new(0, 0, 0, 0)
+        surf = Surface2.new(0, 0, 0, 0)
         surf.freeform = true
 
         largest_h = 0
@@ -403,7 +239,7 @@ module MACL
       ## initial 1.3.1
       # ::squarify(Surface surface)
       def self.squarify(surface)
-        open_free_surface(surface.class) do |surf|
+        new_surface(surface.class) do |surf|
           surf.x = surface.x
           surf.y = surface.y
           surf.width = surf.height = [surface.width, surface.height].min
@@ -420,11 +256,8 @@ module MACL
           vec.z = vec.z.clamp(surf.z, surf.z2)
         end
       end
-      ##
-      # Setup the Anchor Cache (Anchor IDS and Vector)
-      init_anchor_cache
 
     end
   end
 end
-MACL.register('macl/xpan/surface/tool', '1.4.0')
+MACL.register('macl/xpan/surface/tool', '1.5.0')

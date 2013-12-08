@@ -1,7 +1,5 @@
 #
 # rm-macl/lib/rm-macl/xpan/matrix.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-require 'rm-macl/xpan/matrix/matrix_base'
-require 'rm-macl/xpan/matrix/matrix'
-MACL.register('macl/xpan/matrix', '1.2.0')
+MACL.register('macl/xpan/matrix', '0.0.0')

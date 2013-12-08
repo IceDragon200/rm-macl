@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/sequencer.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   class Sequencer
 
     attr_accessor :maxcount, :index, :count
@@ -43,21 +43,21 @@ module MACL
     attr_accessor :list, :index, :reversed, :cycles, :cycle_index
 
     def initialize
-      clear!
+      clear
     end
 
     def add(obj)
-      a = [obj.respond_to?(:done?),obj.respond_to?(:reset!),obj.respond_to?(:update)]
+      a = [obj.respond_to?(:done), obj.respond_to?(:reset), obj.respond_to?(:update)]
       unless a.all?
         err,name = NoMethodError, obj.class.name
         raise(err,'%s requires a "done?" method'  % name) unless a[0]
-        raise(err,'%s requires a "reset!" method' % name) unless a[1]
+        raise(err,'%s requires a "reset" method' % name)  unless a[1]
         raise(err,'%s requires a "update" method' % name) unless a[2]
       end
       @list.push(obj)
     end
 
-    def clear!
+    def clear
       @list     = []
       @index    = 0
       @reversed = false
@@ -65,16 +65,16 @@ module MACL
       @cycle_index = 0
     end
 
-    def reset!
+    def reset
       @index = 0
-      @list.each(&:reset!)
+      @list.each(&:reset)
     end
 
     def done?
       @list.all?(&:done?)
     end
 
-    def reverse!
+    def reverse
       @reversed = !@reversed
     end
 
@@ -82,11 +82,11 @@ module MACL
       @list[@index]
     end
 
-    def recycle!
+    def recycle
       @cycle_index += 1
       return false if @cycle_index >= @cycles and !(@cycles == -1)
       on_cycle
-      reset!
+      reset
       return true
     end
 
@@ -100,15 +100,16 @@ module MACL
 
       if n.done?
         @index = (@reversed ? @index.pred : @index.succ)
-        return unless recycle! if @index >= @list.size
+        return unless recycle if @index >= @list.size
 
         @index = @index.modulo(@list.size)
 
         n = current
-        n.reset! if n
+        n.reset if n
       end
     end
 
   end
 end
 MACL.register('macl/xpan/sequencer', '1.3.0')
+MACL.register('macl/xpan/sequenex', '1.3.0')

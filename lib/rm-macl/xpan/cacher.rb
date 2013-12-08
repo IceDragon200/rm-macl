@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/cacher.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   class Cacher
 
     class CacheError < StandardError

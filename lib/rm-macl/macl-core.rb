@@ -15,6 +15,12 @@ module MACL
   @@flags = {}
 
   ##
+  # returns all the register modules in the macl as an Array<name, version>
+  def self.registered
+    return @@registry.to_a.sort
+  end
+
+  ##
   # returns the version of the lib installed, else returns nil
   def self.registered?(sym)
     @@registry[sym] || false
@@ -26,7 +32,7 @@ module MACL
     if vstr = @@registry[sym]
       raise Registered, "#{sym} is already registered as #{vstr}"
     end
-    @@registry[sym] = version_str
+    @@registry[sym.dup.freeze] = version_str.dup.freeze
   end
 
   ##
@@ -43,4 +49,4 @@ module MACL
   end
 
 end
-MACL.register('macl/core', '3.0.0')
+MACL.register('macl/core', MACL::VERSION)

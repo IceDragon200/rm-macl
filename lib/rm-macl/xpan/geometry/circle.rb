@@ -1,9 +1,7 @@
 #
 # rm-macl/lib/rm-macl/xpan/geometry/circle.rb
 #   by IceDragon
-#   dc ??/??/2012
-#   dc 03/03/2013
-# vr 0.0.1
+require 'rm-macl/macl-core'
 require 'rm-macl/xpan/geometry/ellipse'
 module MACL
   module Geometry
@@ -34,3 +32,4 @@ module MACL
     end
   end
 end
+MACL.register('macl/xpan/geometry/circle', '1.2.0')

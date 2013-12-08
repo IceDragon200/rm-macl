@@ -1,8 +1,10 @@
 #
 # rm-macl/lib/rm-macl/xpan/cube.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+require 'rm-macl/core_ext/module'
+require 'rm-macl/xpan/surface'
+module MACL #:nodoc:
   class Cube
 
     attr_reader :x, :y, :z, :width, :height, :depth
@@ -49,6 +51,10 @@ module MACL
       return Rect.new(@x, @y, @width, @height)
     end
 
+    def to_cube
+      return MACL::Cube.new(@x, @y, @z, @width, @height, @depth)
+    end
+
     def to_h
       return {
         x: @x, y: @y, z: @z,
@@ -69,6 +75,11 @@ module MACL
     def empty?
       return @width == 0 || @height == 0 || @depth == 0
     end
+
+    tcast_set(Array)                   { |a| new(a[0], a[1], a[2], a[3], a[4], a[5]) }
+    tcast_set(MACL::Mixin::Surface3)   { |s| new(s.x, s.y, s.z, s.width, s.height, s.depth) }
+    tcast_set(self)                    { |s| new(s.x, s.y, s.z, s.width, s.height, s.depth) }
+    tcast_set(:default)                { |d| d.to_cube }
 
     alias :initialize :set
 

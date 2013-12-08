@@ -1,6 +1,6 @@
 #
 # rm-macl/lib/rm-macl/mixin/stack_element.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
 module MACL
   module Mixin

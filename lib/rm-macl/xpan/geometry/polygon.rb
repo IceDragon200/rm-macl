@@ -4,29 +4,41 @@
 #   dc ??/??/2012
 #   dc 01/04/2013
 # vr 0.9.1
+require 'rm-macl/macl-core'
 require 'rm-macl/xpan/geometry/ellipse'
 module MACL
   module Geometry
     class Polygon < Ellipse
 
-      attr_accessor :sides
+      include Pathable
 
-      def initialize(sides, x=0, y=0, w=0, h=0)
-        super(x, y, w, h)
+      attr_reader :sides
+
+      def initialize(sides, x=0, y=0, r1=0, r2=0)
+        super(x, y, r1, r2)
         @sides = sides
         @angle_offset = 180
+      end
+
+      def points
+        @points ||= @sides.times.map { |i| calc_side_point1(i) }
+      end
+
+      def sides=(new_sides)
+        @sides = new_sides.to_i
+        @points = nil
       end
 
       def side_angle_size
         360.0 / @sides
       end
 
-      def get_side_xy1(side=0) # // Exact Point
-        get_angle_xy(side_angle_size * side)
+      def calc_side_point1(side=0) # // Exact Point
+        calc_point_from_angle(side_angle_size * side)
       end
 
-      def get_side_xy2(side=0, n=1) # // Line Point
-        get_angle_xy((side_angle_size * side) + (side_angle_size / 2 * n))
+      def calc_side_point2(side=0, n=1) # // Line Point
+        calc_point_from_angle((side_angle_size * side) + (side_angle_size / 2 * n))
       end
 
       def next_side(n=0)
@@ -52,8 +64,9 @@ module MACL
         end
       end
 
-      alias :get_side_xy :get_side_xy1
+      #alias :get_side_xy :get_side_xy1
 
     end
   end
 end
+MACL.register('macl/xpan/geometry/polygon', '1.1.0')

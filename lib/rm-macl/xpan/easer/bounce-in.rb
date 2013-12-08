@@ -4,15 +4,15 @@
 #   dm 24/03/2013
 # vr 1.0.0
 module MACL
-class Easer
-class Bounce::In < Bounce
+  class Easer
+    class Bounce::In < Bounce
 
-  register(:bounce_in)
+      register(:bounce_in)
 
-  def _ease(t, st, ch, d)
-    ch - MACL::Easer::Bounce::Out.ease(d-t, 0, ch, d) + st
+      def _ease(t, st, ch, d)
+        ch - MACL::Easer::Bounce::Out.ease(d-t, 0, ch, d) + st
+      end
+
+    end
   end
-
-end
-end
 end

@@ -1,6 +1,6 @@
 #
 # rm-macl/lib/rm-macl/xpan/size.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
 require 'rm-macl/xpan/size/size'
 require 'rm-macl/xpan/size/size2'

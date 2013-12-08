@@ -1,13 +1,19 @@
 #
 # rm-macl/lib/rm-macl/mixin/archijust.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
 module MACL
   module Mixin
     module Archijust
 
+      class << self
+        attr_accessor :debug
+      end
+
+      self.debug = false
+
       def self.debug?
-        false
+        debug
       end
 
       def memoize(*syms)
@@ -131,7 +137,7 @@ module MACL
         #    raise(ex) unless MACL::Mixin::Archijust.debug?
         #  end
         #end
-        return self
+        return str.to_sym
       end
 
       ##

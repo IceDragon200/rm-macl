@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/task.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   class Task
 
     def initialize

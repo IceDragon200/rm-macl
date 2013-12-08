@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '..', 'common.rb')
+require_relative 'common.rb'
 p MACL::Formatter.metric_str_to_num("10k")
 p MACL::Formatter.metric_str_to_num("1.21362579213k") # -> 1213.62579213
 p d = MACL::Formatter.num_to_metric_str(23, 'd')

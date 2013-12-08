@@ -1,14 +1,14 @@
 #
 # rm-macl/lib/rm-macl/xpan/geometry/oval.rb
 #   by IceDragon
-#   dc ??/??/2012
-#   dc 18/04/2013
-# vr 1.1.0
+require 'rm-macl/macl-core'
+require 'rm-macl/xpan/surface'
+require 'rm-macl/xpan/geometry/path'
 module MACL
   module Geometry
     class Ellipse
 
-      include MACL::Mixin::Surface
+      include MACL::Mixin::Surface2
 
       attr_accessor :cx, :cy
       attr_accessor :radius_x, :radius_y
@@ -16,7 +16,7 @@ module MACL
 
       ##
       # initialize(Oval oval)
-      # initialize(Integer x, Integer y, Integer radius_x, Integer radius_y)
+      # initialize(Integer cx, Integer cy, Integer radius_x, Integer radius_y)
       def initialize(*args)
         @cx = 0
         @cy = 0
@@ -66,25 +66,26 @@ module MACL
         @radius_y * 2
       end
 
-      def calc_xy_from_angle(angle)
+      def calc_point_from_angle(angle)
         opangle = Math::PI * (angle - @angle_offset) / 180.0
-        return @cx + @radius_x * Math.cos(opangle), @cy + @radius_y * Math.sin(opangle)
+        return MACL::Vector2I.new(@cx + @radius_x * Math.cos(opangle),
+                                  @cy + @radius_y * Math.sin(opangle))
       end
 
-      def calc_angle(x2, y2)
-        dx, dy = x2 - @cx, y2 - @cy
+      def calc_angle(nx, ny)
+        dx, dy = nx - @cx, ny - @cy
         m = dx.abs.max(dy.abs).max(1).to_f
-        180 + (Math.atan2((dy)/m, (dx)/m) / Math::PI) * -180 rescue 0
+        return 180 + (Math.atan2((dy)/m, (dx)/m) / Math::PI) * -180 rescue 0
       end
 
-      def calc_circ_dist(x2, y2)
-        dx, dy = @cx - x2, @cy - y2
+      def calc_circ_dist(nx, ny)
+        dx, dy = @cx - nx, @cy - ny
         m = dx.abs.max(dy.abs).max(1).to_f
-        (dx * Math.cos(Math::PI * dx / m)).abs + (dy * Math.cos(Math::PI * dy / m)).abs
+        return (dx * Math.cos(Math::PI * dx / m)).abs + (dy * Math.cos(Math::PI * dy / m)).abs
       end
 
       def in_circ_area?(x, y)
-        calc_circ_dist(x, y).abs <= calc_circ_dist(*get_angle_xy(calc_angle(x,y))).abs
+        calc_circ_dist(x, y).abs <= calc_circ_dist(*calc_point_from_angle(calc_angle(x,y))).abs
       end
 
       ##
@@ -93,30 +94,31 @@ module MACL
       #
       def set(*args)
         case args.size
-        when 0 then x, y, rx, ry = 0, 0, 0, 0
+        when 0
+          cx, cy, rx, ry = 0, 0, 0, 0
         when 1
           arg, = args
           case arg
           when MACL::Geometry::Ellipse
-            x, y, rx, ry = arg.x, arg.y, arg.radius_x, arg.radius_y
+            cx, cy, rx, ry = arg.cx, arg.cy, arg.radius_x, arg.radius_y
           when Hash
-            x, y, rx, ry = arg[:x], arg[:y], arg[:radius_x], arg[:radius_y]
+            cx, cy, rx, ry = arg[:cx], arg[:cy], arg[:radius_x], arg[:radius_y]
           when Array
-            x, y, rx, ry = *arg
+            cx, cy, rx, ry = *arg
           else
             raise(TypeError,
                   "expected Array, Hash or MACL::Geometry::Oval but received %s" %
                     arg.class.name)
           end
         when 4
-          x, y = args[0] || self.x, args[1] || self.y
+          cx, cy = args[0] || self.cx, args[1] || self.cy
           rx, ry = args[2] || self.radius_x, args[3] || self.radius_y
         else
           raise(ArgumentError, "expected 0, 1 or 4 arguments but received %s" %
                 args.size)
         end
         self.radius_x, self.radius_y = rx, ry
-        self.x, self.y = x, y
+        self.cx, self.cy = cx, cy
         self
       end
 

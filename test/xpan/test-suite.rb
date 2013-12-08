@@ -1,0 +1,6 @@
+require_relative 'common'
+require_relative 'edst/test-suite'
+require_relative 'formatter/test-suite'
+require_relative 'geometry/test-suite'
+require_relative 'interpolate/test-suite'
+require_relative 'ruthe/test-suite'

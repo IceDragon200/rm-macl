@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/pixel_palette.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   class PixelPalette
 
     ### mixins

@@ -1,9 +1,7 @@
 #
 # rm-macl/lib/rm-macl/xpan/geometry/line.rb
 #   by IceDragon
-#   dc ??/??/2012
-#   dc 03/03/2013
-# vr 0.0.1
+require 'rm-macl/macl-core'
 require 'rm-macl/xpan/geometry/path'
 module MACL
   module Geometry
@@ -18,3 +16,4 @@ module MACL
     end
   end
 end
+MACL.register('macl/xpan/geometry/line', '1.0.0')

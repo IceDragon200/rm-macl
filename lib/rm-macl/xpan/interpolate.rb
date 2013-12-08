@@ -1,12 +1,12 @@
 #
 # rm-macl/lib/rm-macl/xpan/interpolate.rb
-#
+#   by IceDragon
 # DeCasteljau Algorithm
 # Hamburg (Germany), the 19th September 1999. Written by Nils Pipenbrinck aka Submissive/Cubic & $eeN
 # Bezier Curve
 # Ported to Ruby by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   module Interpolate
 
     # // Point dest, a, b; float t

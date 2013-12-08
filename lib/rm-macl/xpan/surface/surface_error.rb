@@ -1,6 +1,6 @@
 #
 # rm-macl/lib/rm-macl/xpan/surface/surface-error.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
 module MACL
   module Mixin

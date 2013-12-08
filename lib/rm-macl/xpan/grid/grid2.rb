@@ -1,13 +1,10 @@
 #
 # rm-macl/lib/rm-macl/xpan/grid/grid2.rb
 #   by IceDragon
-#   dc ??/??/2012
-#   dm 30/03/2013
-# vr 1.0.0
+require 'rm-macl/macl-core'
+require 'rm-macl/macl-core'
 module MACL
   class Grid2
-
-    VERSION = "1.0.0".freeze
 
     CELL_ORDER_COLS = 0x0
     CELL_ORDER_ROWS = 0x1
@@ -168,3 +165,4 @@ module MACL
 
   end
 end
+MACL.register('macl/xpan/grid/grid2', '1.1.0')

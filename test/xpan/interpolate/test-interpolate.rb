@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'common.rb')
+require_relative 'common.rb'
 ab, bc, cd, abbc, bccd = Array.new(5) { MACL::Vector2I.zero }
 MACL::Interpolate.lerp(ab, a, b, t)         # // point between a and b (green)
 MACL::Interpolate.lerp(bc, b, c, t)         # // point between b and c (green)

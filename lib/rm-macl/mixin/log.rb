@@ -1,9 +1,9 @@
 #
 # rm-macl/lib/rm-macl/mixin/log.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
-  module Mixin
+module MACL # :nodoc:
+  module Mixin # :nodoc:
     module Log
 
       attr_accessor :log # IO

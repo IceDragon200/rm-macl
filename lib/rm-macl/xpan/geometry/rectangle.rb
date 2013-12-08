@@ -1,28 +1,29 @@
 #
 # rm-macl/lib/rm-macl/xpan/geometry/rectangle.rb
 #   by IceDragon
-#   dc ??/??/2012
-#   dc 18/04/2013
-# vr 1.1.0
+require 'rm-macl/macl-core'
 require 'rm-macl/xpan/surface'
+require 'rm-macl/xpan/geometry/path'
 module MACL
   module Geometry
-    class Rectangle
+    class Rectangle < Path
 
-      include MACL::Mixin::Surface
-
-      attr_accessor :x, :y, :width, :height
+      ##
+      # Surface has its own #points method, so in order to prevent it from
+      # replacing the Path#points, we alias it, and then include the
+      # Surface mixin, alias the newly added #points method and then replace
+      # the new #points with the #path_points
+      alias :path_points :points
+      include MACL::Mixin::Surface2
+      alias :surface_points :points
+      alias :points :path_points
 
       def initialize(*args)
-        set(*args)
-      end
-
-      def set(*args)
         case args.size
         when 1
           arg, = args
           case arg
-          when MACL::Geometry::Rectangle, Rect
+          when Rect, MACL::Geometry::Rectangle
             x, y, w, h = arg.x, arg.y, arg.width, arg.height
           when Hash
             x, y, w, h = arg[:x], arg[:y], arg[:width], arg[:height]
@@ -36,22 +37,50 @@ module MACL
         when 4
           x, y, w, h = *args
         end
-        @x, @y, @width, @height = x, y, w, h
+        x2 = x + w
+        y2 = y + h
+        super([x, y], [x2, y], [x2, y2], [x, y2])
       end
 
-      def get_points
-        cPoint = MACL::Geometry::Point
-        [cPoint.new(x, y), cPoint.new(x2, y), cPoint.new(x, y2), cPoint.new(x2, y2)]
+      def x
+        points[0].x
       end
 
-      def to_a
-        [x, y, width, height]
+      def y
+        points[1].y
       end
 
-      def square?
-        return width == height
+      def width
+        points[1].x - points[0].x
+      end
+
+      def height
+        points[2].y - points[0].y
+      end
+
+      def x=(nx)
+        nw = width
+        points[0].x = points[3].x = nx
+        points[1].x = points[2].x = nx + nw
+      end
+
+      def y=(ny)
+        nh = height
+        points[0].y = points[3].y = ny
+        points[1].y = points[2].y = ny + nh
+      end
+
+      def width=(nw)
+        nx = x
+        points[1].x = points[2].x = nx + nw
+      end
+
+      def height=(nh)
+        ny = y
+        points[2].y = points[3].y = ny + nh
       end
 
     end
   end
 end
+MACL.register('macl/xpan/geometry/rectangle', '1.2.0')

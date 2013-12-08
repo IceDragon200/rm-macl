@@ -1,6 +1,6 @@
 #
 # rm-macl/lib/rm-macl/xpan/blaz.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
 module MACL #:nodoc:
   class Blaz
@@ -11,7 +11,7 @@ module MACL #:nodoc:
 
     def initialize(&block)
       @commands = []
-      instance_exec &block if block_given?
+      instance_exec(&block) if block_given?
     end
 
     #-// Symbol[]

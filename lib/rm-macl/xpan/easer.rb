@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/easer.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   class Easer
 
     @@easers = {}
@@ -58,6 +58,11 @@ module MACL
   end
 end
 
+##
+# Most Easer functions where written by UziMonkey <michael.c.morin@gmail.com>
+# These Easer functions are taken from Robert Penner's Easing function
+# they where moved to there respective Easing classes by IceDragon
+# Easer::Null was written by IceDragon
 require 'rm-macl/xpan/easer/back'
 require 'rm-macl/xpan/easer/quad'
 require 'rm-macl/xpan/easer/null'

@@ -1,6 +1,6 @@
 #
 # rm-macl/lib/rm-macl/mixin/color-math.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
 module MACL
   module Mixin
@@ -41,68 +41,45 @@ module MACL
       end
 
       ##
-      # lerp(Color trg_color, Rate r) -> Color
-      def lerp(trg_color, r)
-        return dup.lerp!(trg_color, r)
+      #
+      def add!(arg)
+        color = Convert.Color(arg)
+        self.red   += (color.red   * color.alpha) / 255
+        self.green += (color.green * color.alpha) / 255
+        self.blue  += (color.blue  * color.alpha) / 255
+        self
       end
 
-      ##
-      # rgb_set(*args)
-      def rgb_set(*args)
-        org_alpha = self.alpha
-        set(*args)
-        self.alpha = org_alpha
-        return self
+      def sub!(arg)
+        color = Convert.Color(arg)
+        self.red   -= (color.red   * color.alpha) / 255
+        self.green -= (color.green * color.alpha) / 255
+        self.blue  -= (color.blue  * color.alpha) / 255
+        self
       end
 
-      ##
-      # (add|sub|mul|div|replace)(Colorable color)
-      # (add|sub|mul|div|replace)(Array<Integer>[:red, :green, :blue] values)
-      # (add|sub|mul|div|replace)(Array<Integer>[:red, :green, :blue, :alpha] values)
-      # (add|sub|mul|div|replace)(Numeric i)
-      {add: :+, sub: :-, mul: :*, div: :/, replace: ''}.map do |(word, sym)|
-        str = sym.empty? ? "arg.%1$s * delta" : "((self.%1$s_r #{sym} arg.%1$s_r * delta) * 255).to_i"
-        ary_str = sym.empty? ? "%1$s * delta" : "((self.%2$s_r #{sym} (%1$s / 255.0) * delta) * 255).to_i"
-        module_eval(%Q(
-          def #{word}!(arg)
-            case arg
-            when Array
-              if arg.size >= 3
-                delta = (arg[3] || 255) / 255.0
-                self.red   = #{ary_str % ['arg[0]', 'red']}
-                self.green = #{ary_str % ['arg[1]', 'green']}
-                self.blue  = #{ary_str % ['arg[2]', 'blue']}
-              else
-                raise(ArgumentError, "Expected Array of size 3 or 4 but recieved \%d" % arg.size)
-              end
-            when ColorMath
-              delta = arg.alpha_r
-              self.red   = #{str % 'red'}
-              self.green = #{str % 'green'}
-              self.blue  = #{str % 'blue'}
-            when Numeric
-              self.red   #{sym}= arg
-              self.green #{sym}= arg
-              self.blue  #{sym}= arg
-            else
-              raise(TypeError,
-                    "Expected type #{self.to_s} or Numeric but recieved #{'#{arg.class}'}")
-            end
-            return self
-          end
+      def mul!(arg)
+        ary = Convert.ColorArray4(arg)
+        self.red   = self.red   * ((ary[0] * ary[3]) / 255)
+        self.green = self.green * ((ary[1] * ary[3]) / 255)
+        self.blue  = self.blue  * ((ary[2] * ary[3]) / 255)
+        self
+      end
 
-          def #{word}(arg)
-            dup.#{word}!(arg)
-          end
-        ))
+      def div!(arg)
+        ary = Convert.ColorArray4(arg)
+        self.red   = self.red   / ((ary[0] * ary[3]) / 255).max(1)
+        self.green = self.green / ((ary[1] * ary[3]) / 255).max(1)
+        self.blue  = self.blue  / ((ary[2] * ary[3]) / 255).max(1)
+        self
       end
 
       ##
       # negate!
       def negate!
-        self.red   = 0xFF - self.red
-        self.blue  = 0xFF - self.blue
-        self.green = 0xFF - self.green
+        self.red   = self.red ^ 255
+        self.blue  = self.blue ^ 255
+        self.green = self.green ^ 255
         return self
       end
 
@@ -111,6 +88,26 @@ module MACL
       def affirm!
         # nothing
         return self
+      end
+
+      def lerp(trg_color, r)
+        dup.lerp!(trg_color, r)
+      end
+
+      def add(arg)
+        dup.add!(arg)
+      end
+
+      def sub(arg)
+        dup.sub!(arg)
+      end
+
+      def mul(arg)
+        dup.mul!(arg)
+      end
+
+      def div(arg)
+        dup.div!(arg)
       end
 
       ##
@@ -125,10 +122,10 @@ module MACL
         dup.affirm!
       end
 
-      alias :+ :add
-      alias :- :sub
-      alias :* :mul
-      alias :/ :div
+      alias :+  :add
+      alias :-  :sub
+      alias :*  :mul
+      alias :/  :div
 
       alias :-@ :negate
       alias :+@ :affirm

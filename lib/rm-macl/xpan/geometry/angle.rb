@@ -1,10 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/geometry/angle.rb
 #   by IceDragon
-#   dc ??/??/2012
-#   dc 03/03/2013
-# vr 0.0.1
-require File.join(File.dirname(__FILE__), 'path')
+require 'rm-macl/macl-core'
+require 'rm-macl/xpan/geometry/path'
 
 module MACL
   module Geometry

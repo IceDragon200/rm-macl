@@ -1,0 +1,33 @@
+#
+# rm-macl/test/xpan/edst/data/sample.edst
+# This is a sample file for the EDST Markup
+GROUP:_
+{
+  %tag Value
+  %%nested_tag
+  {
+
+  }
+
+  SAMPLE:DIALOGUE
+  {
+    Basically edst will ignore multiple whitespaces and newlines, in the end
+    the stream will be flattened into 1 line in a sense.
+
+    However double lines will be split into seperate paragraphs.
+
+      @ IceDragon "This is the common syntax for conversional stuff"
+
+    In addition to the conversional stuff, you may break it over any number of
+    lines to fit your needs, pretty handy :D
+
+      @ IceDragon "So
+                   this
+                   is
+                   perfectly
+                   legal"
+
+
+    #Out of curiousity, I wonder if 100% works as itended
+  }
+}

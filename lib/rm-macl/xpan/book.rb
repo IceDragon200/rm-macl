@@ -1,9 +1,9 @@
 #
 # rm-macl/lib/rm-macl/xpan/book.rb
-#
-#   Hash Helper
+#   by IceDragon
+# Hash Helper class
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   class Book
 
     DEFAULT_ORDER = [:word, :words, :regexp, :exword, :exwords, :exregexp]

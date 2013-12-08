@@ -1,1 +1,7 @@
 require_relative 'common'
+require_relative 'core_ext/test-suite'
+require_relative 'fallback/test-suite'
+require_relative 'mixin/test-suite'
+require_relative 'rgss3-ext/test-suite'
+require_relative 'vxa-ext/test-suite'
+require_relative 'xpan/test-suite'

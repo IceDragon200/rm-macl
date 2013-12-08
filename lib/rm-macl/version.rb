@@ -3,6 +3,8 @@
 #
 module MACL
 
-  VERSION = '3.0.0'.freeze
+  ##
+  # current version of the rm-macl
+  VERSION = '3.2.0'.freeze
 
 end

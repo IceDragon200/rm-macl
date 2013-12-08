@@ -1,2 +1,7 @@
-mkgem
+.mkgem
+.gemmy
+.instgem
+.directory
 doc
+build
+*.gem

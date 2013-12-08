@@ -1,7 +1,7 @@
 #
-# rm-macl/lib/rm-macl/xpan/colorv.rb
-#
-#   Using normalized floats instead of bytes
+# rm-macl/lib/rm-macl/xpan/color_vector.rb
+#   by IceDragon
+# Using normalized floats instead of bytes
 #
 # CHANGES
 #   27/03/2013 (vr 1.3.0)
@@ -21,7 +21,7 @@
 #     new-alias
 #       to_color32 -> to_color
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   class ColorVector
 
     attr_reader :red, :green, :blue, :alpha

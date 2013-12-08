@@ -1,6 +1,6 @@
 #
 # rm-macl/lib/rm-macl/xpan/vector/tool.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
 module MACL
   class Vector
@@ -20,7 +20,16 @@ module MACL
                          (vec1.z - vec2.z) ** 2)
       end
 
+      ##
+      # ::distance4(Vector3 v1, Vector3 v2)
+      def self::distance4(vec1, vec2)
+        return Math.sqrt((vec1.w - vec2.w) ** 2 +
+                         (vec1.x - vec2.x) ** 2 +
+                         (vec1.y - vec2.y) ** 2 +
+                         (vec1.z - vec2.z) ** 2)
+      end
+
     end
   end
 end
-MACL.register('macl/xpan/vector/tool', '0.2.0')
+MACL.register('macl/xpan/vector/tool', '0.3.0')

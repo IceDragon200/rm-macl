@@ -1,8 +1,8 @@
 #
 # rm-macl/lib/rm-macl/xpan/parcer.rb
-#
+#   by IceDragon
 require 'rm-macl/macl-core'
-module MACL
+module MACL #:nodoc:
   module Parcer
 
     @@data_types = {}
@@ -15,13 +15,13 @@ module MACL
       @@data_types
     end
 
-    add_data_type 'string' , 'str'  do |args|args.map!(&:to_s) end
-    add_data_type 'integer', 'int'  do |args|args.map!(&:to_i) end
-    add_data_type 'boolean', 'bool' do |args|args.map!{|s|str2bool(s)} end
-    add_data_type 'percent', 'perc' do |args|args.map!{|s|str2prate(s)} end
-    add_data_type 'rate'   , 'rt'   do |args|args.map!{|s|str2rate(s)} end
-    add_data_type 'float'  , 'flt'  do |args|args.map!(&:to_f) end
-    add_data_type 'hex'             do |args|args.map!(&:hex) end
+    add_data_type('string' , 'str')  { |args| args.map!(&:to_s) }
+    add_data_type('integer', 'int')  { |args| args.map!(&:to_i) }
+    add_data_type('boolean', 'bool') { |args| args.map!{ |s| str2bool(s) } }
+    add_data_type('percent', 'perc') { |args| args.map!{ |s| str2prate(s) } }
+    add_data_type('rate'   , 'rt')   { |args| args.map!{ |s| str2rate(s) } }
+    add_data_type('float'  , 'flt')  { |args| args.map!(&:to_f) }
+    add_data_type('hex')             { |args| args.map!(&:hex) }
 
     STRS_TRUE  = ["TRUE" ,"YES","ON" ,"T","Y"]
     STRS_FALSE = ["FALSE","NO" ,"OFF","F","N"]

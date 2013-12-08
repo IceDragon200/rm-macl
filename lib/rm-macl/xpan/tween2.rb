@@ -1,12 +1,13 @@
 #
 # rm-macl/lib/rm-macl/xpan/tween2.rb
-#
-#   CHANGELOG
+#   by IceDragon
+# CHANGELOG
 #     vr 1.1.0
 #       added #source(index) and #target(index)
 require 'rm-macl/macl-core'
+require 'rm-macl/xpan/convert'
 require 'rm-macl/xpan/easer'
-module MACL
+module MACL #:nodoc:
   class Tween2
 
     attr_reader :pairs, :tickmax, :easer, :result
@@ -48,12 +49,7 @@ module MACL
     ##
     # setup_easer(Object obj)
     def setup_easer(obj)
-      @easer =  case obj
-                when Symbol      then MACL::Easer.get_easer(obj)
-                when MACL::Easer then obj
-                else raise(TypeError,
-                           "Expected type Easer or Symbol but received #{obj}")
-                end
+      @easer = MACL::Convert.Easer(obj)
     end
 
     ##
@@ -117,6 +113,15 @@ module MACL
 
     def target(index=0)
       @pairs[index][1]
+    end
+
+    ### Tween 1 Interfacing
+    def value(index=0)
+      @result[index]
+    end
+
+    def values
+      return @result
     end
 
     private :init_members, :update_result
