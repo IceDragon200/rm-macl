@@ -68,7 +68,8 @@ class Numeric
   # reflect(Numeric wall1, Numeric wall2)
   #   modulates (self) within the range of wall1...wall2
   def reflect(wall1, wall2)
-    wall1 + self % (wall2 - wall1)
+    d = (wall2 - wall1).abs
+    return ((self / d) % 2) == 0 ? wall1 + (self % d) : wall2 - (self % d)
   end
 
 end
