@@ -73,4 +73,4 @@ class Numeric
   end
 
 end
-MACL.register('macl/core_ext/numeric', '1.4.0')
+MACL.register('macl/core_ext/numeric', '1.4.1')
