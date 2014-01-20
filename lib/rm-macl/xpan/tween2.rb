@@ -15,14 +15,12 @@ module MACL #:nodoc:
     attr_accessor :tick, :tickdelta
 
     ##
-    # initialize(int tickmax, Easer easer, Array<Array<int>[2]> pairs)
-    # initialize(int tickmax, Symbol easer, Array<Array<int>[2]> pairs)
+    # initialize(int tickmax, Easer easer, Array<Array<Numeric>[2]> pairs)
+    # initialize(int tickmax, Symbol easer, Array<Array<Numeric>[2]> pairs)
     #   easer is expected to be either a Symbol or a MACL::Easer
-    def initialize(tickmax, easer=:linear, *pairs)
+    def initialize(tickmax, easer, *pairs)
       init_members
-      setup_tick(tickmax)
-      setup_easer(easer)
-      setup_pairs(*pairs)
+      setup(tickmax, easer, pairs)
       refresh_result
     end
 
@@ -38,6 +36,15 @@ module MACL #:nodoc:
 
       @start_values = nil
       @end_values = nil
+    end
+
+    ##
+    # setup(int tickmax, Easer easer, Array<Array<Numeric>[2]> pairs)
+    # setup(int tickmax, Symbol easer, Array<Array<Numeric>[2]> pairs)
+    def setup(tickmax, easer, *pairs)
+      setup_tick(tickmax)
+      setup_easer(easer)
+      setup_pairs(*pairs)
     end
 
     ##
