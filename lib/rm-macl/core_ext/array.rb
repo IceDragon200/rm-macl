@@ -1,27 +1,8 @@
 ﻿#
 # rm-macl/lib/rm-macl/core_ext/array.rb
 #   by IceDragon
-#require 'rm-macl/macl-core'
+require 'rm-macl/macl-core'
 class Array
-
-  ##
-  # offset!(Object obj) -> Object*
-  # offset!(Object obj, Boolean reverse) -> Object*
-  #   Removes the first element, and pushes the (obj) unto the end
-  #   if reverse
-  #   Removes the last element, and pushes the (obj) unto the beginning
-  def offset!(obj, reverse=false)
-    reverse ? (res = self.pop; self.unshift(obj)) :
-              (res = self.shift; self.push(obj))
-    res
-  end unless method_defined? :offset!
-
-  ##
-  # offset(Object obj, Boolean reverse)
-  #   see #offset!
-  def offset(obj, reverse=false)
-    dup.tap { |o| o.offset!(obj, reverse) }
-  end unless method_defined? :offset
 
   ##
   # pad!(newsize, padding_obj)    |
@@ -76,20 +57,6 @@ class Array
     dup.tap { |o| o.uniq_arrays!(groups) }
   end
 
-  ##
-  # rotate!(int n) -> self
-  def rotate!(n=1)
-    return self if empty?
-    concat(slice!(0, n % size))
-  end unless method_defined? :rotate!
-
-  ##
-  # rotate(int n) -> Array<Object*>
-  #   see #rotate!
-  def rotate(n=1)
-    dup.rotate!(n)
-  end unless method_defined? :rotate
-
   def remove_n(obj, n=1)
     i = 0 ; n.times { (i = self.index(obj)) ? self.delete_at(i) : break }; self
   end
@@ -107,4 +74,4 @@ class Array
   alias :pick :sample unless method_defined? :pick
 
 end
-MACL.register('macl/core_ext/array', '1.4.0') if defined?(MACL.register)
+MACL.register('macl/core_ext/array', '1.5.0')
