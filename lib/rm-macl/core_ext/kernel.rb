@@ -61,7 +61,7 @@ module Kernel
     else
       obj.to_range
     end
-  end
+  end unless method_defined? :Range
 
 end
 MACL.register('macl/core_ext/kernel', '1.3.0')
