@@ -10,7 +10,7 @@ require 'rm-macl/xpan/easer'
 module MACL #:nodoc:
   class Tween2
 
-    attr_reader :pairs, :tickmax, :easer, :result
+    attr_reader :pairs, :ticksmax, :easer, :result
     attr_reader :start_values, :end_values # Legacy Tween interfacing
     attr_accessor :tick, :tickdelta
 
@@ -18,18 +18,18 @@ module MACL #:nodoc:
     # initialize(int tickmax, Easer easer, Array<Array<Numeric>[2]> pairs)
     # initialize(int tickmax, Symbol easer, Array<Array<Numeric>[2]> pairs)
     #   easer is expected to be either a Symbol or a MACL::Easer
-    def initialize(tickmax, easer, *pairs)
+    def initialize(ticksmax, easer, *pairs)
       init_members
-      setup(tickmax, easer, pairs)
+      setup(ticksmax, easer, *pairs)
       refresh_result
     end
 
     ##
     # init_members
     def init_members
-      @tickdelta = 1
-      @tick    = 0
-      @tickmax = 1
+      @ticksdelta = 1
+      @ticks    = 0
+      @ticksmax = 1
       @easer   = nil
       @result  = nil
       @pairs   = nil
@@ -50,7 +50,7 @@ module MACL #:nodoc:
     ##
     # setup_tick(int tickmax)
     def setup_tick(tickmax)
-      @tickmax = tickmax.to_i
+      @ticksmax = tickmax.to_i
     end
 
     ##
@@ -74,12 +74,12 @@ module MACL #:nodoc:
 
     def update_tick
       if active?
-        @tick = [[@tick + @tickdelta, 0].max, @tickmax].min
+        @ticks = [[@ticks + @ticksdelta, 0].max, @ticksmax].min
       end
     end
 
     def update_result
-      t = @tick / @tickmax.to_f
+      t = @ticks / @ticksmax.to_f
       @pairs.each_with_index do |(alpha, zeta), i|
         @result[i] = @easer.ease(t, alpha, zeta, 1.0)
       end
@@ -95,20 +95,20 @@ module MACL #:nodoc:
     end
 
     def reset_tick
-      @tick = @tickdelta > 0 ? 0 : @tickmax
+      @ticks = @ticksdelta > 0 ? 0 : @ticksmax
     end
 
     def active?
-      return @tickdelta > 0 ? (@tick < @tickmax) : (@tick > 0)
+      return @ticksdelta > 0 ? (@ticks < @ticksmax) : (@ticks > 0)
     end
 
     def to_a
       ary = []
-      old_ticks = @tick
+      old_ticks = @ticks
       reset_tick
       update_result
       (ary << result; update) until !active?
-      @tick = old_ticks
+      @ticks = old_ticks
       update_result
       return ary
     end
