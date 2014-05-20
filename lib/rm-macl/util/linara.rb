@@ -87,7 +87,7 @@ module MACL #:nodoc:
         begin
           func.call
           try_log do |log|
-            str = "[SUCCESS] [%03s %0-40s]"
+            str = "[SUCCESS] [%04s %0-40s]"
             load_str = str % [priority, id]
             log.puts(load_str)
           end
@@ -96,7 +96,7 @@ module MACL #:nodoc:
           @last_exception = ex
           if continue_on_failure?
             try_log do |log|
-              str = "[FAILURE] [%03s %0-40s]"
+              str = "[FAILURE] [%04s %0-40s]"
               excep_str = ex.inspect
               backtrc   = ex.backtrace.join("\n")
               load_str  = str % [priority, id]
