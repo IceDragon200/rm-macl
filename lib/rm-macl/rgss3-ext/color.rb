@@ -2,7 +2,6 @@
 # rm-macl/lib/rm-macl/rgss-core-ex/color.rb
 #   by IceDragon
 require 'rm-macl/macl-core'
-require 'rm-macl/core_ext/module'
 class Color
 
   ##
@@ -90,6 +89,39 @@ class Color
     return { red: red, green: green, blue: blue, alpha: alpha }
   end unless method_defined?(:to_h)
 
+  ###
+  # @return [String]
+  ###
+  def to_hex_s
+    "%06x" % to_rgb24
+  end
+
+  ###
+  # @return [String]
+  ###
+  def to_hex_opaque_s
+    "%06x" % opaque.to_rgb24
+  end
+
+  ###
+  # @return [self]
+  ###
+  def opaque!
+    a = self.alpha.to_f / 255.0
+    self.red   = self.red   * a
+    self.green = self.green * a
+    self.blue  = self.blue  * a
+    self.alpha = 255
+    self
+  end
+
+  ###
+  # @return [Color]
+  ###
+  def opaque
+    dup.opaque!
+  end
+
   ##
   # ::argb32(Integer pixeli) -> Color
   #   pixeli 0xAARRGGBB
@@ -128,15 +160,13 @@ class Color
                ((pixeli >> 0) & 0xF) * 0x10) # blue
   end
 
+  def self.random
+    new(rand(0x100), rand(0x100), rand(0x100), 0x100)
+  end
+
   # interfacing for Color/Tone
   alias :to_a_na :to_rgb24_a unless method_defined?(:to_a_na)
   alias :to_a_ng :to_a_na unless method_defined?(:to_a_ng)
-
-  tcast_set(Numeric)                 { |n| new(n, n, n, 255) }
-  tcast_set(Array)                   { |a| new(a[0], a[1], a[2], a[3] || 255) }
-  tcast_set(Tone)                    { |t| new(t.red, t.green, t.blue) }
-  tcast_set(self)                    { |s| new(s) }
-  tcast_set(:default)                { |s| s.to_color }
 
 end
 MACL.register('macl/rgss3-ext/color', '1.4.1')
