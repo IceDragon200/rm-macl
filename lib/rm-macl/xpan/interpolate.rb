@@ -22,7 +22,7 @@ module MACL #:nodoc:
       wpoints = points
       until wpoints.size <= 2
         for i in 0...(wpoints.size-1)
-          pnt = MACL::Vector2F.new(0, 0)
+          pnt = MACL::Vector2.new(0, 0)
           lerp(pnt, wpoints[i], wpoints[i+1], t)
           result_points << pnt
         end

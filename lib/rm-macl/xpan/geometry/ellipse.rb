@@ -68,7 +68,7 @@ module MACL
 
       def calc_point_from_angle(angle)
         opangle = Math::PI * (angle - @angle_offset) / 180.0
-        return MACL::Vector2I.new(@cx + @radius_x * Math.cos(opangle),
+        return MACL::Vector2.new(@cx + @radius_x * Math.cos(opangle),
                                   @cy + @radius_y * Math.sin(opangle))
       end
 
