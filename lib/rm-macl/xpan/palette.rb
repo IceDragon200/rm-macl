@@ -22,6 +22,7 @@ module MACL #:nodoc:
       @colors = {}
       @can_replace_color = true
       @name = ''
+      yield self if block_given?
     end
 
     ##
@@ -138,4 +139,4 @@ module MACL #:nodoc:
 
   end
 end # /MACL
-MACL.register('macl/xpan/palette', '2.3.1') if defined?(MACL.register)
+MACL.register('macl/xpan/palette', '2.3.2') if defined?(MACL.register)
