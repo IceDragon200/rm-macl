@@ -17,4 +17,4 @@ require 'rm-macl/core_ext'
 require 'rm-macl/util'
 require 'rm-macl/xpan'
 require 'rm-macl/rgss3-ext'
-MACL.register('macl', MACL::VERSION)
+MACL.register('macl', MACL::Version::STRING)

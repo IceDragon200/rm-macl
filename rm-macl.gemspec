@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.summary     = "Extensions for RMVXA and RGSS3"
   s.description = %q(A method and class library for extending RPG Maker VXA and RGSS3)
   s.date        = %q(2013-09-16)
-  s.version     = MACL::VERSION
+  s.version     = MACL::Version::STRING
   s.homepage    = %q{https://github.com/IceDragon200/rm-macl}
   s.license     = 'MIT'
 
