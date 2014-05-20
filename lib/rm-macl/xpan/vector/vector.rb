@@ -8,6 +8,8 @@ require 'rm-macl/xpan/type-stub'
 module MACL
   class Vector
 
+    PI180 = 180.0 / Math::PI
+
     include Enumerable
     include Comparable
 
